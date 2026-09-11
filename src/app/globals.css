@@ -1,0 +1,70 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f7f7f5;
+  --foreground: #0b1117;
+
+  --surface-dark: #071017;
+  --surface-darker: #040a0f;
+  --surface-light: #f7f7f5;
+
+  --text-primary: #101418;
+  --text-secondary: #66717c;
+  --text-on-dark: #f7f8f8;
+  --text-on-dark-muted: #9aa6af;
+
+  --border-light: #dfe3e6;
+  --border-dark: rgba(255, 255, 255, 0.14);
+
+  --accent: #ff5a1f;
+  --accent-hover: #ff6a33;
+
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+
+  --container-width: 1480px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100vh;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-inter), Arial, Helvetica, sans-serif;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button {
+  font: inherit;
+}
+
+::selection {
+  background: var(--accent);
+  color: #ffffff;
+}
