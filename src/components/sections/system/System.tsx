@@ -1,17 +1,8 @@
 "use client";
 
-import {
-  ArrowRight,
-  BarChart3,
-  Clock3,
-  TrendingUp,
-  Zap,
-} from "lucide-react";
+import { ArrowRight, BarChart3, Clock3, TrendingUp, Zap } from "lucide-react";
 
-import {
-  motion,
-  useReducedMotion,
-} from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 
 import { SystemDiagram } from "@/components/sections/system/SystemDiagram";
 import { Container } from "@/components/ui/Container";
@@ -197,7 +188,6 @@ export function System() {
             }}
             className="max-w-[620px]"
           >
-
             {/* HEADLINE */}
             <h2
               className="
@@ -219,10 +209,7 @@ export function System() {
               <br />
               better when
               <br />
-
-              <span className="text-[#FF5A1F]">
-                the system is connected.
-              </span>
+              <span className="text-[#FF5A1F]">the system is connected.</span>
             </h2>
 
             {/* DESCRIPTION */}
@@ -256,9 +243,7 @@ export function System() {
                 hidden: {},
                 visible: {
                   transition: {
-                    staggerChildren: reduceMotion
-                      ? 0
-                      : 0.07,
+                    staggerChildren: reduceMotion ? 0 : 0.07,
                   },
                 },
               }}
@@ -322,31 +307,30 @@ export function System() {
               <a
                 href="#work"
                 className="
-                  group
-                  inline-flex
-                  h-[50px]
-                  items-center
-                  justify-center
-                  gap-6
-                  rounded-full
-                  bg-[#071017]
-                  px-7
-                  text-[13px]
-                  font-medium
-                  text-white
-                  shadow-[0_10px_30px_rgba(7,16,23,0.10)]
-                  transition-all
-                  duration-200
-
-                  hover:-translate-y-0.5
-                  hover:bg-[#111D25]
-                "
+    group
+    inline-flex
+    h-[50px]
+    items-center
+    justify-center
+    gap-6
+    rounded-full
+    bg-[#071017]
+    px-7
+    text-[13px]
+    font-medium
+    text-[#FFFFFF]
+    shadow-[0_10px_30px_rgba(7,16,23,0.10)]
+    transition-all
+    duration-200
+    hover:-translate-y-0.5
+    hover:bg-[#111D25]
+  "
               >
-                <span>See what&apos;s possible</span>
+                <span className="text-[#FFFFFF]">See what&apos;s possible</span>
 
                 <ArrowRight
                   size={17}
-                  className="transition-transform duration-200 group-hover:translate-x-1"
+                  className="text-[#FFFFFF] transition-transform duration-200 group-hover:translate-x-1"
                 />
               </a>
 
