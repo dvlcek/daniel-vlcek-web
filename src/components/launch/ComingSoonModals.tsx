@@ -877,14 +877,64 @@ function ContactForm({
     </form>
   );
 }
-
 /* =========================================================
    CAL BOOKING
 ========================================================= */
 
+function buildCalEmbedUrl(
+  value: string,
+): string {
+  try {
+    const url = new URL(value);
+
+    /*
+     * Public Cal links normally look like:
+     *
+     * https://cal.com/username/event
+     *
+     * The optimized embed runs from:
+     *
+     * https://app.cal.com/username/event/embed
+     */
+
+    if (url.hostname === "cal.com") {
+      url.hostname = "app.cal.com";
+    }
+
+    if (url.hostname === "cal.eu") {
+      url.hostname = "app.cal.eu";
+    }
+
+    url.pathname =
+      `${url.pathname.replace(/\/+$/, "")}/embed`;
+
+    url.searchParams.set(
+      "embed",
+      "",
+    );
+
+    url.searchParams.set(
+      "embedType",
+      "inline",
+    );
+
+    url.searchParams.set(
+      "layout",
+      "month_view",
+    );
+
+    return url.toString();
+  } catch {
+    return value;
+  }
+}
+
 function BookingPanel() {
   const calLink =
     process.env.NEXT_PUBLIC_CAL_LINK ?? "";
+
+  const [loaded, setLoaded] =
+    useState(false);
 
   if (!calLink) {
     return (
@@ -940,18 +990,22 @@ function BookingPanel() {
             text-white/42
           "
         >
-          Add NEXT_PUBLIC_CAL_LINK to
-          your environment variables.
+          Booking is temporarily
+          unavailable.
         </p>
       </div>
     );
   }
+
+  const embedUrl =
+    buildCalEmbedUrl(calLink);
 
   return (
     <div
       className="
         bg-[#020608]/50
         p-2
+
         sm:p-3
       "
     >
@@ -968,18 +1022,174 @@ function BookingPanel() {
           bg-[#05090b]
         "
       >
-        <iframe
-          src={calLink}
-          title="Book a free discovery call"
-          loading="lazy"
-          className="
+        {/* ===============================================
+            INSTANT LOADING STATE
+
+            User immediately sees a finished UI instead
+            of an empty / black Cal iframe.
+        =============================================== */}
+
+        <div
+          className={`
+            pointer-events-none
             absolute
             inset-0
+            z-10
+
+            flex
+            items-center
+            justify-center
+
+            bg-[#05090b]
+
+            transition-all
+            duration-500
+
+            ${
+              loaded
+                ? "invisible opacity-0"
+                : "visible opacity-100"
+            }
+          `}
+        >
+          <div
+            className="
+              flex
+              flex-col
+              items-center
+              text-center
+            "
+          >
+            {/* loader */}
+
+            <div
+              className="
+                relative
+                flex
+                h-[62px]
+                w-[62px]
+                items-center
+                justify-center
+              "
+            >
+              <div
+                className="
+                  absolute
+                  inset-0
+                  rounded-full
+                  border
+                  border-white/[0.08]
+                "
+              />
+
+              <motion.div
+                animate={{
+                  rotate: 360,
+                }}
+                transition={{
+                  duration: 2.4,
+                  repeat: Infinity,
+                  ease: "linear",
+                }}
+                className="
+                  absolute
+                  inset-0
+                  rounded-full
+                  border
+                  border-transparent
+                  border-t-[#FF5A1F]/75
+                "
+              />
+
+              <motion.span
+                animate={{
+                  opacity: [
+                    0.5,
+                    1,
+                    0.5,
+                  ],
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+                className="
+                  h-[6px]
+                  w-[6px]
+                  rounded-full
+                  bg-[#FF5A1F]
+                  shadow-[0_0_14px_rgba(255,90,31,0.40)]
+                "
+              />
+            </div>
+
+            <p
+              className="
+                mt-5
+                text-[9px]
+                font-semibold
+                uppercase
+                tracking-[0.24em]
+                text-white/48
+              "
+            >
+              Preparing availability
+            </p>
+
+            <p
+              className="
+                mt-2
+                text-[10px]
+                text-white/24
+              "
+            >
+              This should only take a moment.
+            </p>
+          </div>
+        </div>
+
+        {/* ===============================================
+            CAL EMBED
+
+            IMPORTANT:
+            - /embed endpoint
+            - eager
+            - no lazy loading
+        =============================================== */}
+
+        <iframe
+          src={embedUrl}
+          title="Book a free discovery call"
+
+          loading="eager"
+
+          onLoad={() => {
+            setLoaded(true);
+          }}
+
+          allow="payment"
+
+          className={`
+            absolute
+            inset-0
+
             h-full
             w-full
+
             border-0
+
             bg-[#05090b]
-          "
+
+            transition-opacity
+            duration-500
+
+            ${
+              loaded
+                ? "opacity-100"
+                : "opacity-0"
+            }
+          `}
         />
       </div>
     </div>

@@ -1,0 +1,30 @@
+# Daniel VLKO
+
+> Daniel VLKO is a Software Developer & Automation Architect building scalable digital systems that help businesses operate faster, reduce manual work and scale more efficiently.
+
+Daniel VLKO designs and develops custom software, business automation systems, AI-assisted workflows and digital platforms.
+
+The focus is on practical business outcomes: reducing repetitive work, improving operational efficiency, connecting processes and creating scalable digital infrastructure.
+
+The official website is https://danielvlko.com/.
+
+## Primary
+
+- [Official website](https://danielvlko.com/): Official website of Daniel VLKO, including service positioning, contact options and discovery call booking.
+- [LLM-friendly overview](https://danielvlko.com/index.md): Concise machine-readable overview of Daniel VLKO, capabilities and positioning.
+
+## Capabilities
+
+- Custom software development
+- Business process automation
+- AI-assisted workflows
+- Digital platforms
+- Internal business systems
+- CRM and lead automation
+- Workflow optimization
+- High-performance websites
+- E-commerce systems
+
+## Contact
+
+- [Daniel VLKO](https://danielvlko.com/): Contact Daniel VLKO or book a free discovery call.

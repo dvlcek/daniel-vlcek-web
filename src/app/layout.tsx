@@ -21,6 +21,10 @@ import {
 
 import "./globals.css";
 
+import {
+  ConsoleEasterEgg,
+} from "@/components/site/ConsoleEasterEgg";
+
 export const metadata: Metadata = {
   metadataBase: new URL(
     siteConfig.url,
@@ -146,6 +150,26 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <link
+          rel="preconnect"
+          href="https://app.cal.com"
+        />
+
+        <link
+          rel="dns-prefetch"
+          href="//app.cal.com"
+        />
+
+        <link
+          rel="preconnect"
+          href="https://cal.com"
+        />
+
+        <link
+          rel="dns-prefetch"
+          href="//cal.com"
+        />
+
+        <link
           rel="alternate"
           type="text/markdown"
           href="/index.md"
@@ -158,6 +182,7 @@ export default function RootLayout({
       </head>
 
       <body>
+        <ConsoleEasterEgg />
         {children}
 
         <Analytics />
