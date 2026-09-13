@@ -1,0 +1,195 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+/**
+ * =========================================================
+ * ENUMS
+ * =========================================================
+ */
+
+enum LeadSource {
+  WEBSITE_BOOKING
+  WEBSITE_CONTACT
+  MANUAL
+}
+
+enum LeadStatus {
+  NEW
+  BOOKING_STARTED
+  BOOKED
+  QUALIFIED
+  WON
+  LOST
+  NO_SHOW
+  ARCHIVED
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+  NO_SHOW
+}
+
+enum AvailabilityOverrideType {
+  BLOCK
+  AVAILABLE
+}
+
+/**
+ * =========================================================
+ * CRM LEAD
+ * =========================================================
+ */
+
+model Lead {
+  id String @id @default(cuid())
+
+  name            String
+  email           String
+  emailNormalized String
+
+  company String?
+  website String?
+  phone   String?
+  message String?
+
+  source LeadSource
+  status LeadStatus @default(NEW)
+
+  bookings Booking[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([emailNormalized])
+  @@index([status])
+  @@index([source])
+  @@index([createdAt])
+}
+
+/**
+ * =========================================================
+ * BOOKING
+ * =========================================================
+ */
+
+model Booking {
+  id String @id @default(cuid())
+
+  leadId String
+  lead   Lead   @relation(fields: [leadId], references: [id], onDelete: Cascade)
+
+  startsAt DateTime @db.Timestamptz(3)
+  endsAt   DateTime @db.Timestamptz(3)
+
+  timezone String
+
+  status BookingStatus @default(PENDING)
+
+  /**
+   * Unique only while a slot is active.
+   * CONFIRMED/PENDING:
+   * activeSlotKey = startsAt ISO timestamp
+   * CANCELLED:
+   * activeSlotKey = null
+   * This prevents two visitors from booking
+   * the exact same slot at the same time.
+   */
+  activeSlotKey String? @unique
+
+  externalCalendarEventId String?
+
+  cancelTokenHash String? @unique
+
+  reminder24hEmailId String?
+  reminder30mEmailId String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([leadId])
+  @@index([status])
+  @@index([startsAt])
+  @@index([startsAt, endsAt])
+}
+
+/**
+ * =========================================================
+ * WEEKLY AVAILABILITY
+ * weekday:
+ * 0 = Sunday
+ * 1 = Monday
+ * 2 = Tuesday
+ * 3 = Wednesday
+ * 4 = Thursday
+ * 5 = Friday
+ * 6 = Saturday
+ * Times are stored as minutes after midnight.
+ * Example:
+ * 09:30 = 570
+ * 17:00 = 1020
+ * =========================================================
+ */
+
+model AvailabilityRule {
+  id String @id @default(cuid())
+
+  weekday Int
+
+  startMinute Int
+  endMinute   Int
+
+  enabled Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([weekday])
+  @@index([enabled])
+}
+
+/**
+ * =========================================================
+ * ONE-OFF AVAILABILITY OVERRIDES
+ * dateKey is stored as YYYY-MM-DD in the booking timezone.
+ * Example whole-day block:
+ * dateKey     = "2026-09-18"
+ * type        = BLOCK
+ * startMinute = null
+ * endMinute   = null
+ * Example partial block:
+ * dateKey     = "2026-09-20"
+ * type        = BLOCK
+ * startMinute = 840
+ * endMinute   = 1020
+ * 840  = 14:00
+ * 1020 = 17:00
+ * =========================================================
+ */
+
+model AvailabilityOverride {
+  id String @id @default(cuid())
+
+  dateKey String
+
+  startMinute Int?
+  endMinute   Int?
+
+  type AvailabilityOverrideType
+
+  note String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([dateKey])
+  @@index([dateKey, type])
+}
