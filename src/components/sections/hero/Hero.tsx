@@ -111,7 +111,7 @@ export function Hero() {
               </Link>
 
               <Link
-                href="#contact"
+                href="/contact"
                 className="
                   inline-flex
                   h-12

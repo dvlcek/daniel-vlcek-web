@@ -11,8 +11,8 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: "Daniel Vlcek — Software Developer & Automation Architect",
-    template: "%s | Daniel Vlcek",
+    default: "Daniel VLKO — Software Developer & Automation Architect",
+    template: "%s | Daniel VLKO",
   },
   description:
     "Custom software, automation and applied AI systems designed to remove manual work, connect operations and help businesses scale.",

@@ -19,7 +19,7 @@ export function Header() {
             href="/"
             className="text-[13px] font-semibold uppercase tracking-[0.28em] text-white"
           >
-            Daniel Vlcek
+            Daniel VLKO
           </Link>
 
           <nav
@@ -38,7 +38,7 @@ export function Header() {
           </nav>
 
           <Link
-            href="#contact"
+            href="/contact"
             className="group flex h-10 items-center gap-4 rounded-full border border-white/30 px-5 text-[13px] font-medium text-white transition-colors duration-200 hover:border-white/60 hover:bg-white/5"
           >
             <span>Let&apos;s Talk</span>

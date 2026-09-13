@@ -54,7 +54,8 @@ export function WhatIBuild() {
       id="services"
       className="relative overflow-hidden bg-[#F6F3EE] text-[#071017]"
     >
-      <Container className="relative py-20 md:py-24 xl:py-28">
+      <Container
+        className="relative pt-20 pb-16 md:pt-24 md:pb-20 xl:pt-28 xl:pb-24">
         {/* top separator */}
         <div className="absolute inset-x-0 top-0 h-px bg-[#071017]/8" />
 
