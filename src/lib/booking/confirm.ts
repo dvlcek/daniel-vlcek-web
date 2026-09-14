@@ -12,22 +12,13 @@ const bookingConfirmSchema = z
     leadId: z
       .string()
       .trim()
-      .min(
-        1,
-        "Missing lead.",
-      )
-      .max(
-        100,
-        "Invalid lead.",
-      ),
+      .min(1, "Missing lead.")
+      .max(100, "Invalid lead."),
 
     startsAt: z
       .string()
       .trim()
-      .min(
-        1,
-        "Please select a time.",
-      ),
+      .min(1, "Please select a time."),
   })
   .strict();
 
@@ -86,16 +77,12 @@ export function parseBookingConfirmation(
     };
   }
 
-  /*
-   * We only accept real absolute timestamps.
-   * Availability API already returns UTC ISO values.
-   */
   const utcStartsAt =
     startsAt.toUTC();
 
   if (
-    utcStartsAt <=
-    DateTime.utc()
+    utcStartsAt.toMillis() <=
+    DateTime.utc().toMillis()
   ) {
     return {
       success: false,
@@ -104,12 +91,6 @@ export function parseBookingConfirmation(
     };
   }
 
-  /*
-   * Basic horizon protection.
-   *
-   * The final availability check happens
-   * against our availability engine.
-   */
   const maximumDate =
     DateTime.now()
       .setZone(
@@ -123,13 +104,28 @@ export function parseBookingConfirmation(
       });
 
   if (
-    utcStartsAt >
-    maximumDate.toUTC()
+    utcStartsAt.toMillis() >
+    maximumDate
+      .toUTC()
+      .toMillis()
   ) {
     return {
       success: false,
       message:
         "This time is outside the booking window.",
+    };
+  }
+
+  const normalizedStartsAt =
+    utcStartsAt.toISO({
+      suppressMilliseconds: true,
+    });
+
+  if (!normalizedStartsAt) {
+    return {
+      success: false,
+      message:
+        "Could not normalize booking time.",
     };
   }
 
@@ -141,10 +137,7 @@ export function parseBookingConfirmation(
         parsed.data.leadId,
 
       startsAt:
-        utcStartsAt.toISO({
-          suppressMilliseconds:
-            true,
-        }) ?? "",
+        normalizedStartsAt,
     },
   };
 }

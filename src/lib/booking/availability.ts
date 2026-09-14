@@ -3,13 +3,17 @@ import {
 } from "luxon";
 
 import {
-  BookingStatus,
   AvailabilityOverrideType,
+  BookingStatus,
 } from "@/generated/prisma/enums";
 
 import {
   bookingConfig,
 } from "@/lib/booking/config";
+
+import {
+  getCalendarProvider,
+} from "@/lib/booking/calendar";
 
 import {
   getDb,
@@ -22,7 +26,6 @@ import {
 export type BookingSlot = {
   startsAt: string;
   endsAt: string;
-
   localTime: string;
 };
 
@@ -30,16 +33,18 @@ export type BookingAvailabilityDay = {
   date: string;
   weekday: string;
   label: string;
-
   slots: BookingSlot[];
 };
 
 export type BookingAvailabilityResult = {
   timezone: string;
-
   slotDurationMinutes: number;
-
   days: BookingAvailabilityDay[];
+};
+
+export type GetBookingAvailabilityInput = {
+  fromDate?: string;
+  days?: number;
 };
 
 /* =========================================================
@@ -57,259 +62,301 @@ type BusyPeriod = {
 };
 
 /* =========================================================
-   HELPERS
+   DATE HELPERS
 ========================================================= */
 
-function weekdayForDatabase(
+function getDatabaseWeekday(
   date: DateTime,
 ): number {
   /*
    * Luxon:
    * Monday = 1
-   * ...
    * Sunday = 7
    *
-   * Database:
+   * DB:
    * Sunday = 0
    * Monday = 1
-   * ...
-   * Saturday = 6
    */
-  return date.weekday % 7;
+  return date.weekday === 7
+    ? 0
+    : date.weekday;
 }
 
-function normalizeWindows(
-  windows: MinuteWindow[],
-): MinuteWindow[] {
-  const sorted = windows
-    .filter(
-      (window) =>
-        Number.isInteger(
-          window.startMinute,
-        ) &&
-        Number.isInteger(
-          window.endMinute,
-        ) &&
-        window.startMinute >= 0 &&
-        window.endMinute <= 1440 &&
-        window.startMinute <
-          window.endMinute,
-    )
-    .sort(
-      (a, b) =>
-        a.startMinute -
-        b.startMinute,
-    );
-
-  const result: MinuteWindow[] =
-    [];
-
-  for (const current of sorted) {
-    const previous =
-      result[result.length - 1];
-
-    if (
-      !previous ||
-      current.startMinute >
-        previous.endMinute
-    ) {
-      result.push({
-        ...current,
-      });
-
-      continue;
-    }
-
-    previous.endMinute =
-      Math.max(
-        previous.endMinute,
-        current.endMinute,
-      );
-  }
-
-  return result;
-}
-
-/* =========================================================
-   BLOCK WINDOW
-========================================================= */
-
-function subtractWindow(
-  source: MinuteWindow,
-  block: MinuteWindow,
-): MinuteWindow[] {
-  /*
-   * No overlap.
-   */
-  if (
-    block.endMinute <=
-      source.startMinute ||
-    block.startMinute >=
-      source.endMinute
-  ) {
-    return [source];
-  }
-
-  const result: MinuteWindow[] =
-    [];
-
-  /*
-   * Keep portion before block.
-   */
-  if (
-    block.startMinute >
-    source.startMinute
-  ) {
-    result.push({
-      startMinute:
-        source.startMinute,
-
-      endMinute:
-        Math.min(
-          block.startMinute,
-          source.endMinute,
-        ),
-    });
-  }
-
-  /*
-   * Keep portion after block.
-   */
-  if (
-    block.endMinute <
-    source.endMinute
-  ) {
-    result.push({
-      startMinute:
-        Math.max(
-          block.endMinute,
-          source.startMinute,
-        ),
-
-      endMinute:
-        source.endMinute,
-    });
-  }
-
-  return result;
-}
-
-function applyBlockedWindows(
-  windows: MinuteWindow[],
-  blocks: MinuteWindow[],
-): MinuteWindow[] {
-  let result =
-    normalizeWindows(windows);
-
-  for (const block of blocks) {
-    result = result.flatMap(
-      (window) =>
-        subtractWindow(
-          window,
-          block,
-        ),
-    );
-  }
-
-  return normalizeWindows(result);
-}
-
-/* =========================================================
-   DATE LABELS
-========================================================= */
-
-function createDateLabels(
+function getDateKey(
   date: DateTime,
-): {
-  weekday: string;
-  label: string;
-} {
-  return {
-    weekday:
-      date.toFormat(
-        "cccc",
-        {
-          locale: "en",
-        },
-      ),
-
-    label:
-      date.toFormat(
-        "d LLL",
-        {
-          locale: "en",
-        },
-      ),
-  };
-}
-
-/* =========================================================
-   BUSY CHECK
-========================================================= */
-
-function overlapsBusyPeriod(
-  startsAt: DateTime,
-  endsAt: DateTime,
-  busyPeriods: BusyPeriod[],
-): boolean {
-  /*
-   * Treat configured buffers as part
-   * of the reservation footprint.
-   */
-
-  const candidateStart =
-    startsAt.minus({
-      minutes:
-        bookingConfig
-          .bufferBeforeMinutes,
-    });
-
-  const candidateEnd =
-    endsAt.plus({
-      minutes:
-        bookingConfig
-          .bufferAfterMinutes,
-    });
-
-  return busyPeriods.some(
-    (busy) => {
-      const busyStart =
-        busy.startsAt.minus({
-          minutes:
-            bookingConfig
-              .bufferBeforeMinutes,
-        });
-
-      const busyEnd =
-        busy.endsAt.plus({
-          minutes:
-            bookingConfig
-              .bufferAfterMinutes,
-        });
-
-      return (
-        candidateStart <
-          busyEnd &&
-        candidateEnd >
-          busyStart
-      );
-    },
+): string {
+  return date.toFormat(
+    "yyyy-MM-dd",
   );
 }
 
 /* =========================================================
-   GENERATE AVAILABILITY
+   WINDOW HELPERS
+========================================================= */
+
+function normalizeWindow(
+  window: MinuteWindow,
+): MinuteWindow | null {
+  const startMinute =
+    Math.max(
+      0,
+      Math.min(
+        1440,
+        Math.floor(
+          window.startMinute,
+        ),
+      ),
+    );
+
+  const endMinute =
+    Math.max(
+      0,
+      Math.min(
+        1440,
+        Math.floor(
+          window.endMinute,
+        ),
+      ),
+    );
+
+  if (
+    endMinute <= startMinute
+  ) {
+    return null;
+  }
+
+  return {
+    startMinute,
+    endMinute,
+  };
+}
+
+function mergeWindows(
+  windows: MinuteWindow[],
+): MinuteWindow[] {
+  const normalized =
+    windows
+      .map(
+        normalizeWindow,
+      )
+      .filter(
+        (
+          window,
+        ): window is MinuteWindow =>
+          window !== null,
+      )
+      .sort(
+        (a, b) =>
+          a.startMinute -
+          b.startMinute,
+      );
+
+  if (
+    normalized.length === 0
+  ) {
+    return [];
+  }
+
+  const merged: MinuteWindow[] =
+    [
+      {
+        ...normalized[0],
+      },
+    ];
+
+  for (
+    let index = 1;
+    index <
+    normalized.length;
+    index += 1
+  ) {
+    const current =
+      normalized[index];
+
+    const previous =
+      merged[
+        merged.length - 1
+      ];
+
+    if (
+      current.startMinute <=
+      previous.endMinute
+    ) {
+      previous.endMinute =
+        Math.max(
+          previous.endMinute,
+          current.endMinute,
+        );
+
+      continue;
+    }
+
+    merged.push({
+      ...current,
+    });
+  }
+
+  return merged;
+}
+
+function subtractWindow(
+  source: MinuteWindow[],
+  block: MinuteWindow,
+): MinuteWindow[] {
+  const normalizedBlock =
+    normalizeWindow(
+      block,
+    );
+
+  if (!normalizedBlock) {
+    return source;
+  }
+
+  const result: MinuteWindow[] =
+    [];
+
+  for (
+    const window of source
+  ) {
+    /*
+     * No overlap.
+     */
+    if (
+      normalizedBlock.endMinute <=
+        window.startMinute ||
+      normalizedBlock.startMinute >=
+        window.endMinute
+    ) {
+      result.push(
+        window,
+      );
+
+      continue;
+    }
+
+    /*
+     * Keep left side.
+     */
+    if (
+      normalizedBlock.startMinute >
+      window.startMinute
+    ) {
+      result.push({
+        startMinute:
+          window.startMinute,
+
+        endMinute:
+          Math.min(
+            normalizedBlock.startMinute,
+            window.endMinute,
+          ),
+      });
+    }
+
+    /*
+     * Keep right side.
+     */
+    if (
+      normalizedBlock.endMinute <
+      window.endMinute
+    ) {
+      result.push({
+        startMinute:
+          Math.max(
+            normalizedBlock.endMinute,
+            window.startMinute,
+          ),
+
+        endMinute:
+          window.endMinute,
+      });
+    }
+  }
+
+  return mergeWindows(
+    result,
+  );
+}
+
+/* =========================================================
+   BUSY HELPERS
+========================================================= */
+
+function normalizeBusyPeriod(
+  startsAt: Date,
+  endsAt: Date,
+): BusyPeriod | null {
+  const start =
+    DateTime.fromJSDate(
+      startsAt,
+      {
+        zone: "utc",
+      },
+    );
+
+  const end =
+    DateTime.fromJSDate(
+      endsAt,
+      {
+        zone: "utc",
+      },
+    );
+
+  if (
+    !start.isValid ||
+    !end.isValid ||
+    end <= start
+  ) {
+    return null;
+  }
+
+  /*
+   * Apply booking buffers around busy time.
+   *
+   * Example:
+   * Google event 18:00–18:30
+   * bufferAfter = 15
+   *
+   * Effective busy period:
+   * 18:00–18:45
+   */
+  return {
+    startsAt:
+      start.minus({
+        minutes:
+          bookingConfig
+            .bufferBeforeMinutes,
+      }),
+
+    endsAt:
+      end.plus({
+        minutes:
+          bookingConfig
+            .bufferAfterMinutes,
+      }),
+  };
+}
+
+function periodsOverlap(
+  candidateStart: DateTime,
+  candidateEnd: DateTime,
+  busy: BusyPeriod,
+): boolean {
+  return (
+    candidateStart <
+      busy.endsAt &&
+    candidateEnd >
+      busy.startsAt
+  );
+}
+
+/* =========================================================
+   AVAILABILITY
 ========================================================= */
 
 export async function getBookingAvailability(
-  options?: {
-    fromDate?: string;
-    days?: number;
-  },
+  input: GetBookingAvailabilityInput = {},
 ): Promise<BookingAvailabilityResult> {
-  const db =
-    getDb();
-
   const timezone =
     bookingConfig.timezone;
 
@@ -318,240 +365,330 @@ export async function getBookingAvailability(
       timezone,
     );
 
-  /* =======================================================
-     RANGE
-  ======================================================= */
-
-  let startDay =
+  const today =
     now.startOf("day");
 
-  if (options?.fromDate) {
-    const requested =
-      DateTime.fromISO(
-        options.fromDate,
-        {
-          zone: timezone,
-        },
-      ).startOf("day");
+  /* =======================================================
+     REQUESTED RANGE
+  ======================================================= */
 
-    if (requested.isValid) {
-      startDay =
-        requested < now.startOf("day")
-          ? now.startOf("day")
-          : requested;
-    }
+  let requestedStart =
+    input.fromDate
+      ? DateTime.fromISO(
+          input.fromDate,
+          {
+            zone: timezone,
+          },
+        ).startOf(
+          "day",
+        )
+      : today;
+
+  if (
+    !requestedStart.isValid
+  ) {
+    throw new Error(
+      "Invalid availability start date.",
+    );
+  }
+
+  /*
+   * Never allow querying dates
+   * before today.
+   */
+  if (
+    requestedStart <
+    today
+  ) {
+    requestedStart =
+      today;
   }
 
   const requestedDays =
-    options?.days ?? 14;
-
-  const days = Math.min(
     Math.max(
-      Math.floor(
-        requestedDays,
-      ),
       1,
-    ),
-    bookingConfig.bookingHorizonDays,
-  );
+      Math.min(
+        input.days ?? 14,
+        bookingConfig
+          .bookingHorizonDays +
+          1,
+      ),
+    );
 
-  const absoluteHorizon =
-    now
-      .startOf("day")
-      .plus({
-        days:
-          bookingConfig
-            .bookingHorizonDays,
-      });
-
-  let endDay =
-    startDay.plus({
-      days,
+  const horizonEnd =
+    today.plus({
+      days:
+        bookingConfig
+          .bookingHorizonDays,
     });
 
   if (
-    endDay >
-    absoluteHorizon
+    requestedStart >
+    horizonEnd
   ) {
-    endDay =
-      absoluteHorizon;
+    return {
+      timezone,
+
+      slotDurationMinutes:
+        bookingConfig
+          .slotDurationMinutes,
+
+      days: [],
+    };
   }
 
+  const requestedEnd =
+    requestedStart.plus({
+      days:
+        requestedDays - 1,
+    });
+
+  const actualEnd =
+    requestedEnd >
+    horizonEnd
+      ? horizonEnd
+      : requestedEnd;
+
+  const rangeStart =
+    requestedStart.startOf(
+      "day",
+    );
+
+  const rangeEndExclusive =
+    actualEnd
+      .plus({
+        days: 1,
+      })
+      .startOf("day");
+
   /* =======================================================
-     DATABASE DATA
+     DATABASE
   ======================================================= */
 
-  const startKey =
-    startDay.toFormat(
-      "yyyy-MM-dd",
-    );
-
-  const endKey =
-    endDay.toFormat(
-      "yyyy-MM-dd",
-    );
+  const db =
+    getDb();
 
   const [
     rules,
     overrides,
     bookings,
-  ] = await Promise.all([
-    db.availabilityRule.findMany({
-      where: {
-        enabled: true,
-      },
-
-      orderBy: [
-        {
-          weekday: "asc",
-        },
-        {
-          startMinute:
-            "asc",
-        },
-      ],
-    }),
-
-    db.availabilityOverride.findMany({
-      where: {
-        dateKey: {
-          gte: startKey,
-          lt: endKey,
-        },
-      },
-
-      orderBy: {
-        dateKey: "asc",
-      },
-    }),
-
-    db.booking.findMany({
-      where: {
-        status: {
-          in: [
-            BookingStatus.PENDING,
-            BookingStatus.CONFIRMED,
-          ],
+  ] =
+    await Promise.all([
+      db.availabilityRule.findMany({
+        where: {
+          enabled: true,
         },
 
-        startsAt: {
-          lt: endDay
-            .toUTC()
-            .toJSDate(),
+        orderBy: [
+          {
+            weekday: "asc",
+          },
+          {
+            startMinute:
+              "asc",
+          },
+        ],
+      }),
+
+      db.availabilityOverride.findMany({
+        where: {
+          dateKey: {
+            gte:
+              getDateKey(
+                rangeStart,
+              ),
+
+            lte:
+              getDateKey(
+                actualEnd,
+              ),
+          },
         },
 
-        endsAt: {
-          gt: startDay
-            .toUTC()
-            .toJSDate(),
-        },
-      },
+        orderBy: [
+          {
+            dateKey: "asc",
+          },
+          {
+            startMinute:
+              "asc",
+          },
+        ],
+      }),
 
-      select: {
-        startsAt: true,
-        endsAt: true,
-      },
-    }),
-  ]);
+      db.booking.findMany({
+        where: {
+          status: {
+            in: [
+              BookingStatus.PENDING,
+              BookingStatus.CONFIRMED,
+            ],
+          },
+
+          startsAt: {
+            lt:
+              rangeEndExclusive
+                .toUTC()
+                .toJSDate(),
+          },
+
+          endsAt: {
+            gt:
+              rangeStart
+                .toUTC()
+                .toJSDate(),
+          },
+        },
+
+        select: {
+          startsAt: true,
+          endsAt: true,
+        },
+      }),
+    ]);
 
   /* =======================================================
-     BOOKING BUSY PERIODS
+     INTERNAL BOOKING BUSY PERIODS
   ======================================================= */
 
-  const busyPeriods: BusyPeriod[] =
-    bookings.map(
-      (booking) => ({
-        startsAt:
-          DateTime.fromJSDate(
+  const internalBusyPeriods =
+    bookings.flatMap(
+      (
+        booking,
+      ): BusyPeriod[] => {
+        const busy =
+          normalizeBusyPeriod(
             booking.startsAt,
-            {
-              zone: "utc",
-            },
-          ),
-
-        endsAt:
-          DateTime.fromJSDate(
             booking.endsAt,
-            {
-              zone: "utc",
-            },
-          ),
-      }),
+          );
+
+        return busy
+          ? [busy]
+          : [];
+      },
     );
+
+  /* =======================================================
+     GOOGLE CALENDAR BUSY PERIODS
+  ======================================================= */
+
+  const calendarProvider =
+    getCalendarProvider();
+
+  let externalBusyPeriods: BusyPeriod[] =
+    [];
+
+  if (calendarProvider) {
+    /*
+     * Important:
+     *
+     * If Google Calendar is configured but
+     * unreachable, we intentionally allow
+     * this error to propagate.
+     *
+     * Showing zero busy periods on an API
+     * failure could cause a double booking.
+     * Failing closed is safer.
+     */
+    const externalBusy =
+      await calendarProvider.getBusyPeriods(
+        {
+          startsAt:
+            rangeStart
+              .toUTC()
+              .toJSDate(),
+
+          endsAt:
+            rangeEndExclusive
+              .toUTC()
+              .toJSDate(),
+        },
+      );
+
+    externalBusyPeriods =
+      externalBusy.flatMap(
+        (
+          period,
+        ): BusyPeriod[] => {
+          const busy =
+            normalizeBusyPeriod(
+              period.startsAt,
+              period.endsAt,
+            );
+
+          return busy
+            ? [busy]
+            : [];
+        },
+      );
+  }
+
+  const busyPeriods = [
+    ...internalBusyPeriods,
+    ...externalBusyPeriods,
+  ];
 
   /* =======================================================
      MINIMUM NOTICE
   ======================================================= */
 
-  const earliestAllowed =
-    now.plus({
-      minutes:
-        bookingConfig
-          .minimumNoticeMinutes,
-    });
+  const minimumStart =
+    now
+      .plus({
+        minutes:
+          bookingConfig
+            .minimumNoticeMinutes,
+      })
+      .toUTC();
 
   /* =======================================================
      BUILD DAYS
   ======================================================= */
 
-  const resultDays: BookingAvailabilityDay[] =
+  const days: BookingAvailabilityDay[] =
     [];
 
-  for (
-    let index = 0;
-    index < days;
-    index += 1
+  let currentDay =
+    rangeStart;
+
+  while (
+    currentDay <= actualEnd
   ) {
-    const date =
-      startDay.plus({
-        days: index,
-      });
-
-    if (
-      date >=
-      absoluteHorizon
-    ) {
-      break;
-    }
-
     const dateKey =
-      date.toFormat(
-        "yyyy-MM-dd",
+      getDateKey(
+        currentDay,
       );
 
     const weekday =
-      weekdayForDatabase(
-        date,
+      getDatabaseWeekday(
+        currentDay,
       );
 
     /* =====================================================
-       BASE WEEKLY RULES
+       RECURRING WINDOWS
     ===================================================== */
 
-    let windows: MinuteWindow[] =
-      rules
-        .filter(
-          (rule) =>
-            rule.weekday ===
-            weekday,
-        )
-        .map(
-          (rule) => ({
-            startMinute:
-              rule.startMinute,
+    let windows =
+      mergeWindows(
+        rules
+          .filter(
+            (rule) =>
+              rule.weekday ===
+              weekday,
+          )
+          .map(
+            (rule) => ({
+              startMinute:
+                rule.startMinute,
 
-            endMinute:
-              rule.endMinute,
-          }),
-        );
-
-    windows =
-      normalizeWindows(
-        windows,
+              endMinute:
+                rule.endMinute,
+            }),
+          ),
       );
 
     /* =====================================================
-       OVERRIDES FOR THIS DATE
+       OVERRIDES
     ===================================================== */
 
     const dayOverrides =
@@ -561,79 +698,85 @@ export async function getBookingAvailability(
           dateKey,
       );
 
-    const hasWholeDayBlock =
-      dayOverrides.some(
-        (override) =>
-          override.type ===
-            AvailabilityOverrideType.BLOCK &&
-          override.startMinute ===
-            null &&
-          override.endMinute ===
-            null,
-      );
+    /*
+     * BLOCK first.
+     *
+     * AVAILABLE overrides are then able
+     * to reopen a specific period.
+     */
+    for (
+      const override of dayOverrides.filter(
+        (item) =>
+          item.type ===
+          AvailabilityOverrideType.BLOCK,
+      )
+    ) {
+      /*
+       * No start/end = block whole day.
+       */
+      if (
+        override.startMinute ===
+          null ||
+        override.endMinute ===
+          null
+      ) {
+        windows = [];
 
-    if (hasWholeDayBlock) {
-      windows = [];
+        continue;
+      }
+
+      windows =
+        subtractWindow(
+          windows,
+          {
+            startMinute:
+              override.startMinute,
+
+            endMinute:
+              override.endMinute,
+          },
+        );
     }
 
     /*
-     * AVAILABLE overrides can add
-     * extra windows outside the
-     * recurring schedule.
+     * Explicit availability overrides.
      */
-    const availableOverrides =
-      dayOverrides
-        .filter(
-          (override) =>
-            override.type ===
-              AvailabilityOverrideType.AVAILABLE &&
-            override.startMinute !==
-              null &&
-            override.endMinute !==
-              null,
-        )
-        .map(
-          (override) => ({
-            startMinute:
-              override.startMinute!,
-            endMinute:
-              override.endMinute!,
-          }),
-        );
+    for (
+      const override of dayOverrides.filter(
+        (item) =>
+          item.type ===
+          AvailabilityOverrideType.AVAILABLE,
+      )
+    ) {
+      /*
+       * Whole-day AVAILABLE override.
+       */
+      if (
+        override.startMinute ===
+          null ||
+        override.endMinute ===
+          null
+      ) {
+        windows.push({
+          startMinute: 0,
+          endMinute: 1440,
+        });
 
-    windows = normalizeWindows([
-      ...windows,
-      ...availableOverrides,
-    ]);
+        continue;
+      }
 
-    /*
-     * Partial BLOCK overrides are
-     * subtracted last.
-     */
-    const blockedWindows =
-      dayOverrides
-        .filter(
-          (override) =>
-            override.type ===
-              AvailabilityOverrideType.BLOCK &&
-            override.startMinute !==
-              null &&
-            override.endMinute !==
-              null,
-        )
-        .map(
-          (override) => ({
-            startMinute:
-              override.startMinute!,
-            endMinute:
-              override.endMinute!,
-          }),
-        );
+      windows.push({
+        startMinute:
+          override.startMinute,
+
+        endMinute:
+          override.endMinute,
+      });
+    }
 
     windows =
-      applyBlockedWindows(
+      mergeWindows(
         windows,
-        blockedWindows,
       );
 
     /* =====================================================
@@ -643,101 +786,135 @@ export async function getBookingAvailability(
     const slots: BookingSlot[] =
       [];
 
-    for (const window of windows) {
-      for (
-        let minute =
-          window.startMinute;
+    for (
+      const window of windows
+    ) {
+      let slotMinute =
+        window.startMinute;
 
-        minute +
-            bookingConfig
-              .slotDurationMinutes <=
-          window.endMinute;
-
-        minute +=
+      while (
+        slotMinute +
           bookingConfig
-            .slotDurationMinutes
+            .slotDurationMinutes <=
+        window.endMinute
       ) {
-        const startsAt =
-          date
-            .startOf("day")
-            .plus({
-              minutes:
-                minute,
-            });
+        const localStart =
+          currentDay.plus({
+            minutes:
+              slotMinute,
+          });
 
-        const endsAt =
-          startsAt.plus({
+        const localEnd =
+          localStart.plus({
             minutes:
               bookingConfig
                 .slotDurationMinutes,
           });
 
-        /*
-         * Skip slots that violate
-         * minimum notice.
-         */
+        const utcStart =
+          localStart.toUTC();
+
+        const utcEnd =
+          localEnd.toUTC();
+
+        /* ===============================================
+           MINIMUM NOTICE
+        =============================================== */
+
         if (
-          startsAt <
-          earliestAllowed
+          utcStart <
+          minimumStart
         ) {
+          slotMinute +=
+            bookingConfig
+              .slotDurationMinutes;
+
           continue;
         }
 
-        /*
-         * Skip existing bookings.
-         */
+        /* ===============================================
+           BUSY CHECK
+
+           Includes:
+           - website bookings
+           - Google Calendar events
+           - configured buffers
+        =============================================== */
+
+        const hasConflict =
+          busyPeriods.some(
+            (busy) =>
+              periodsOverlap(
+                utcStart,
+                utcEnd,
+                busy,
+              ),
+          );
+
         if (
-          overlapsBusyPeriod(
-            startsAt.toUTC(),
-            endsAt.toUTC(),
-            busyPeriods,
-          )
+          hasConflict
         ) {
+          slotMinute +=
+            bookingConfig
+              .slotDurationMinutes;
+
           continue;
         }
 
-        slots.push({
-          startsAt:
-            startsAt
-              .toUTC()
-              .toISO({
-                suppressMilliseconds:
-                  true,
-              }) ?? "",
+        const startsAt =
+          utcStart.toISO({
+            suppressMilliseconds:
+              true,
+          });
 
-          endsAt:
-            endsAt
-              .toUTC()
-              .toISO({
-                suppressMilliseconds:
-                  true,
-              }) ?? "",
+        const endsAt =
+          utcEnd.toISO({
+            suppressMilliseconds:
+              true,
+          });
 
-          localTime:
-            startsAt.toFormat(
-              "HH:mm",
-            ),
-        });
+        if (
+          startsAt &&
+          endsAt
+        ) {
+          slots.push({
+            startsAt,
+            endsAt,
+
+            localTime:
+              localStart.toFormat(
+                "HH:mm",
+              ),
+          });
+        }
+
+        slotMinute +=
+          bookingConfig
+            .slotDurationMinutes;
       }
     }
 
-    const labels =
-      createDateLabels(
-        date,
-      );
-
-    resultDays.push({
+    days.push({
       date:
         dateKey,
 
       weekday:
-        labels.weekday,
+        currentDay.toFormat(
+          "cccc",
+        ),
 
       label:
-        labels.label,
+        currentDay.toFormat(
+          "d LLL",
+        ),
 
       slots,
     });
+
+    currentDay =
+      currentDay.plus({
+        days: 1,
+      });
   }
 
   return {
@@ -747,7 +924,6 @@ export async function getBookingAvailability(
       bookingConfig
         .slotDurationMinutes,
 
-    days:
-      resultDays,
+    days,
   };
 }

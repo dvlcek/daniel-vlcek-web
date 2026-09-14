@@ -100,9 +100,12 @@ export const BookingScalarFieldEnum = {
   status: 'status',
   activeSlotKey: 'activeSlotKey',
   externalCalendarEventId: 'externalCalendarEventId',
+  externalCalendarUrl: 'externalCalendarUrl',
+  meetingUrl: 'meetingUrl',
   cancelTokenHash: 'cancelTokenHash',
   reminder24hEmailId: 'reminder24hEmailId',
   reminder30mEmailId: 'reminder30mEmailId',
+  scheduleChangedAt: 'scheduleChangedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

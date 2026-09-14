@@ -33,9 +33,12 @@ export type BookingMinAggregateOutputType = {
   status: $Enums.BookingStatus | null
   activeSlotKey: string | null
   externalCalendarEventId: string | null
+  externalCalendarUrl: string | null
+  meetingUrl: string | null
   cancelTokenHash: string | null
   reminder24hEmailId: string | null
   reminder30mEmailId: string | null
+  scheduleChangedAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -49,9 +52,12 @@ export type BookingMaxAggregateOutputType = {
   status: $Enums.BookingStatus | null
   activeSlotKey: string | null
   externalCalendarEventId: string | null
+  externalCalendarUrl: string | null
+  meetingUrl: string | null
   cancelTokenHash: string | null
   reminder24hEmailId: string | null
   reminder30mEmailId: string | null
+  scheduleChangedAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -65,9 +71,12 @@ export type BookingCountAggregateOutputType = {
   status: number
   activeSlotKey: number
   externalCalendarEventId: number
+  externalCalendarUrl: number
+  meetingUrl: number
   cancelTokenHash: number
   reminder24hEmailId: number
   reminder30mEmailId: number
+  scheduleChangedAt: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -83,9 +92,12 @@ export type BookingMinAggregateInputType = {
   status?: true
   activeSlotKey?: true
   externalCalendarEventId?: true
+  externalCalendarUrl?: true
+  meetingUrl?: true
   cancelTokenHash?: true
   reminder24hEmailId?: true
   reminder30mEmailId?: true
+  scheduleChangedAt?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -99,9 +111,12 @@ export type BookingMaxAggregateInputType = {
   status?: true
   activeSlotKey?: true
   externalCalendarEventId?: true
+  externalCalendarUrl?: true
+  meetingUrl?: true
   cancelTokenHash?: true
   reminder24hEmailId?: true
   reminder30mEmailId?: true
+  scheduleChangedAt?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -115,9 +130,12 @@ export type BookingCountAggregateInputType = {
   status?: true
   activeSlotKey?: true
   externalCalendarEventId?: true
+  externalCalendarUrl?: true
+  meetingUrl?: true
   cancelTokenHash?: true
   reminder24hEmailId?: true
   reminder30mEmailId?: true
+  scheduleChangedAt?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -204,9 +222,12 @@ export type BookingGroupByOutputType = {
   status: $Enums.BookingStatus
   activeSlotKey: string | null
   externalCalendarEventId: string | null
+  externalCalendarUrl: string | null
+  meetingUrl: string | null
   cancelTokenHash: string | null
   reminder24hEmailId: string | null
   reminder30mEmailId: string | null
+  scheduleChangedAt: Date
   createdAt: Date
   updatedAt: Date
   _count: BookingCountAggregateOutputType | null
@@ -241,9 +262,12 @@ export type BookingWhereInput = {
   status?: Prisma.EnumBookingStatusFilter<"Booking"> | $Enums.BookingStatus
   activeSlotKey?: Prisma.StringNullableFilter<"Booking"> | string | null
   externalCalendarEventId?: Prisma.StringNullableFilter<"Booking"> | string | null
+  externalCalendarUrl?: Prisma.StringNullableFilter<"Booking"> | string | null
+  meetingUrl?: Prisma.StringNullableFilter<"Booking"> | string | null
   cancelTokenHash?: Prisma.StringNullableFilter<"Booking"> | string | null
   reminder24hEmailId?: Prisma.StringNullableFilter<"Booking"> | string | null
   reminder30mEmailId?: Prisma.StringNullableFilter<"Booking"> | string | null
+  scheduleChangedAt?: Prisma.DateTimeFilter<"Booking"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"Booking"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Booking"> | Date | string
   lead?: Prisma.XOR<Prisma.LeadScalarRelationFilter, Prisma.LeadWhereInput>
@@ -258,9 +282,12 @@ export type BookingOrderByWithRelationInput = {
   status?: Prisma.SortOrder
   activeSlotKey?: Prisma.SortOrderInput | Prisma.SortOrder
   externalCalendarEventId?: Prisma.SortOrderInput | Prisma.SortOrder
+  externalCalendarUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  meetingUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   cancelTokenHash?: Prisma.SortOrderInput | Prisma.SortOrder
   reminder24hEmailId?: Prisma.SortOrderInput | Prisma.SortOrder
   reminder30mEmailId?: Prisma.SortOrderInput | Prisma.SortOrder
+  scheduleChangedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   lead?: Prisma.LeadOrderByWithRelationInput
@@ -279,8 +306,11 @@ export type BookingWhereUniqueInput = Prisma.AtLeast<{
   timezone?: Prisma.StringFilter<"Booking"> | string
   status?: Prisma.EnumBookingStatusFilter<"Booking"> | $Enums.BookingStatus
   externalCalendarEventId?: Prisma.StringNullableFilter<"Booking"> | string | null
+  externalCalendarUrl?: Prisma.StringNullableFilter<"Booking"> | string | null
+  meetingUrl?: Prisma.StringNullableFilter<"Booking"> | string | null
   reminder24hEmailId?: Prisma.StringNullableFilter<"Booking"> | string | null
   reminder30mEmailId?: Prisma.StringNullableFilter<"Booking"> | string | null
+  scheduleChangedAt?: Prisma.DateTimeFilter<"Booking"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"Booking"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Booking"> | Date | string
   lead?: Prisma.XOR<Prisma.LeadScalarRelationFilter, Prisma.LeadWhereInput>
@@ -295,9 +325,12 @@ export type BookingOrderByWithAggregationInput = {
   status?: Prisma.SortOrder
   activeSlotKey?: Prisma.SortOrderInput | Prisma.SortOrder
   externalCalendarEventId?: Prisma.SortOrderInput | Prisma.SortOrder
+  externalCalendarUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  meetingUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   cancelTokenHash?: Prisma.SortOrderInput | Prisma.SortOrder
   reminder24hEmailId?: Prisma.SortOrderInput | Prisma.SortOrder
   reminder30mEmailId?: Prisma.SortOrderInput | Prisma.SortOrder
+  scheduleChangedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.BookingCountOrderByAggregateInput
@@ -317,9 +350,12 @@ export type BookingScalarWhereWithAggregatesInput = {
   status?: Prisma.EnumBookingStatusWithAggregatesFilter<"Booking"> | $Enums.BookingStatus
   activeSlotKey?: Prisma.StringNullableWithAggregatesFilter<"Booking"> | string | null
   externalCalendarEventId?: Prisma.StringNullableWithAggregatesFilter<"Booking"> | string | null
+  externalCalendarUrl?: Prisma.StringNullableWithAggregatesFilter<"Booking"> | string | null
+  meetingUrl?: Prisma.StringNullableWithAggregatesFilter<"Booking"> | string | null
   cancelTokenHash?: Prisma.StringNullableWithAggregatesFilter<"Booking"> | string | null
   reminder24hEmailId?: Prisma.StringNullableWithAggregatesFilter<"Booking"> | string | null
   reminder30mEmailId?: Prisma.StringNullableWithAggregatesFilter<"Booking"> | string | null
+  scheduleChangedAt?: Prisma.DateTimeWithAggregatesFilter<"Booking"> | Date | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Booking"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Booking"> | Date | string
 }
@@ -332,9 +368,12 @@ export type BookingCreateInput = {
   status?: $Enums.BookingStatus
   activeSlotKey?: string | null
   externalCalendarEventId?: string | null
+  externalCalendarUrl?: string | null
+  meetingUrl?: string | null
   cancelTokenHash?: string | null
   reminder24hEmailId?: string | null
   reminder30mEmailId?: string | null
+  scheduleChangedAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
   lead: Prisma.LeadCreateNestedOneWithoutBookingsInput
@@ -349,9 +388,12 @@ export type BookingUncheckedCreateInput = {
   status?: $Enums.BookingStatus
   activeSlotKey?: string | null
   externalCalendarEventId?: string | null
+  externalCalendarUrl?: string | null
+  meetingUrl?: string | null
   cancelTokenHash?: string | null
   reminder24hEmailId?: string | null
   reminder30mEmailId?: string | null
+  scheduleChangedAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -364,9 +406,12 @@ export type BookingUpdateInput = {
   status?: Prisma.EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
   activeSlotKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   externalCalendarEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  externalCalendarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetingUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cancelTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reminder24hEmailId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reminder30mEmailId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scheduleChangedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lead?: Prisma.LeadUpdateOneRequiredWithoutBookingsNestedInput
@@ -381,9 +426,12 @@ export type BookingUncheckedUpdateInput = {
   status?: Prisma.EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
   activeSlotKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   externalCalendarEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  externalCalendarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetingUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cancelTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reminder24hEmailId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reminder30mEmailId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scheduleChangedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -397,9 +445,12 @@ export type BookingCreateManyInput = {
   status?: $Enums.BookingStatus
   activeSlotKey?: string | null
   externalCalendarEventId?: string | null
+  externalCalendarUrl?: string | null
+  meetingUrl?: string | null
   cancelTokenHash?: string | null
   reminder24hEmailId?: string | null
   reminder30mEmailId?: string | null
+  scheduleChangedAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -412,9 +463,12 @@ export type BookingUpdateManyMutationInput = {
   status?: Prisma.EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
   activeSlotKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   externalCalendarEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  externalCalendarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetingUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cancelTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reminder24hEmailId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reminder30mEmailId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scheduleChangedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -428,9 +482,12 @@ export type BookingUncheckedUpdateManyInput = {
   status?: Prisma.EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
   activeSlotKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   externalCalendarEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  externalCalendarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetingUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cancelTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reminder24hEmailId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reminder30mEmailId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scheduleChangedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -454,9 +511,12 @@ export type BookingCountOrderByAggregateInput = {
   status?: Prisma.SortOrder
   activeSlotKey?: Prisma.SortOrder
   externalCalendarEventId?: Prisma.SortOrder
+  externalCalendarUrl?: Prisma.SortOrder
+  meetingUrl?: Prisma.SortOrder
   cancelTokenHash?: Prisma.SortOrder
   reminder24hEmailId?: Prisma.SortOrder
   reminder30mEmailId?: Prisma.SortOrder
+  scheduleChangedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -470,9 +530,12 @@ export type BookingMaxOrderByAggregateInput = {
   status?: Prisma.SortOrder
   activeSlotKey?: Prisma.SortOrder
   externalCalendarEventId?: Prisma.SortOrder
+  externalCalendarUrl?: Prisma.SortOrder
+  meetingUrl?: Prisma.SortOrder
   cancelTokenHash?: Prisma.SortOrder
   reminder24hEmailId?: Prisma.SortOrder
   reminder30mEmailId?: Prisma.SortOrder
+  scheduleChangedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -486,9 +549,12 @@ export type BookingMinOrderByAggregateInput = {
   status?: Prisma.SortOrder
   activeSlotKey?: Prisma.SortOrder
   externalCalendarEventId?: Prisma.SortOrder
+  externalCalendarUrl?: Prisma.SortOrder
+  meetingUrl?: Prisma.SortOrder
   cancelTokenHash?: Prisma.SortOrder
   reminder24hEmailId?: Prisma.SortOrder
   reminder30mEmailId?: Prisma.SortOrder
+  scheduleChangedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -547,9 +613,12 @@ export type BookingCreateWithoutLeadInput = {
   status?: $Enums.BookingStatus
   activeSlotKey?: string | null
   externalCalendarEventId?: string | null
+  externalCalendarUrl?: string | null
+  meetingUrl?: string | null
   cancelTokenHash?: string | null
   reminder24hEmailId?: string | null
   reminder30mEmailId?: string | null
+  scheduleChangedAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -562,9 +631,12 @@ export type BookingUncheckedCreateWithoutLeadInput = {
   status?: $Enums.BookingStatus
   activeSlotKey?: string | null
   externalCalendarEventId?: string | null
+  externalCalendarUrl?: string | null
+  meetingUrl?: string | null
   cancelTokenHash?: string | null
   reminder24hEmailId?: string | null
   reminder30mEmailId?: string | null
+  scheduleChangedAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -607,9 +679,12 @@ export type BookingScalarWhereInput = {
   status?: Prisma.EnumBookingStatusFilter<"Booking"> | $Enums.BookingStatus
   activeSlotKey?: Prisma.StringNullableFilter<"Booking"> | string | null
   externalCalendarEventId?: Prisma.StringNullableFilter<"Booking"> | string | null
+  externalCalendarUrl?: Prisma.StringNullableFilter<"Booking"> | string | null
+  meetingUrl?: Prisma.StringNullableFilter<"Booking"> | string | null
   cancelTokenHash?: Prisma.StringNullableFilter<"Booking"> | string | null
   reminder24hEmailId?: Prisma.StringNullableFilter<"Booking"> | string | null
   reminder30mEmailId?: Prisma.StringNullableFilter<"Booking"> | string | null
+  scheduleChangedAt?: Prisma.DateTimeFilter<"Booking"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"Booking"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Booking"> | Date | string
 }
@@ -622,9 +697,12 @@ export type BookingCreateManyLeadInput = {
   status?: $Enums.BookingStatus
   activeSlotKey?: string | null
   externalCalendarEventId?: string | null
+  externalCalendarUrl?: string | null
+  meetingUrl?: string | null
   cancelTokenHash?: string | null
   reminder24hEmailId?: string | null
   reminder30mEmailId?: string | null
+  scheduleChangedAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -637,9 +715,12 @@ export type BookingUpdateWithoutLeadInput = {
   status?: Prisma.EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
   activeSlotKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   externalCalendarEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  externalCalendarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetingUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cancelTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reminder24hEmailId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reminder30mEmailId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scheduleChangedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -652,9 +733,12 @@ export type BookingUncheckedUpdateWithoutLeadInput = {
   status?: Prisma.EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
   activeSlotKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   externalCalendarEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  externalCalendarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetingUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cancelTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reminder24hEmailId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reminder30mEmailId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scheduleChangedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -667,9 +751,12 @@ export type BookingUncheckedUpdateManyWithoutLeadInput = {
   status?: Prisma.EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
   activeSlotKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   externalCalendarEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  externalCalendarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetingUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cancelTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reminder24hEmailId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reminder30mEmailId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scheduleChangedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -685,9 +772,12 @@ export type BookingSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   status?: boolean
   activeSlotKey?: boolean
   externalCalendarEventId?: boolean
+  externalCalendarUrl?: boolean
+  meetingUrl?: boolean
   cancelTokenHash?: boolean
   reminder24hEmailId?: boolean
   reminder30mEmailId?: boolean
+  scheduleChangedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   lead?: boolean | Prisma.LeadDefaultArgs<ExtArgs>
@@ -702,9 +792,12 @@ export type BookingSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   status?: boolean
   activeSlotKey?: boolean
   externalCalendarEventId?: boolean
+  externalCalendarUrl?: boolean
+  meetingUrl?: boolean
   cancelTokenHash?: boolean
   reminder24hEmailId?: boolean
   reminder30mEmailId?: boolean
+  scheduleChangedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   lead?: boolean | Prisma.LeadDefaultArgs<ExtArgs>
@@ -719,9 +812,12 @@ export type BookingSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   status?: boolean
   activeSlotKey?: boolean
   externalCalendarEventId?: boolean
+  externalCalendarUrl?: boolean
+  meetingUrl?: boolean
   cancelTokenHash?: boolean
   reminder24hEmailId?: boolean
   reminder30mEmailId?: boolean
+  scheduleChangedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   lead?: boolean | Prisma.LeadDefaultArgs<ExtArgs>
@@ -736,14 +832,17 @@ export type BookingSelectScalar = {
   status?: boolean
   activeSlotKey?: boolean
   externalCalendarEventId?: boolean
+  externalCalendarUrl?: boolean
+  meetingUrl?: boolean
   cancelTokenHash?: boolean
   reminder24hEmailId?: boolean
   reminder30mEmailId?: boolean
+  scheduleChangedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type BookingOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "leadId" | "startsAt" | "endsAt" | "timezone" | "status" | "activeSlotKey" | "externalCalendarEventId" | "cancelTokenHash" | "reminder24hEmailId" | "reminder30mEmailId" | "createdAt" | "updatedAt", ExtArgs["result"]["booking"]>
+export type BookingOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "leadId" | "startsAt" | "endsAt" | "timezone" | "status" | "activeSlotKey" | "externalCalendarEventId" | "externalCalendarUrl" | "meetingUrl" | "cancelTokenHash" | "reminder24hEmailId" | "reminder30mEmailId" | "scheduleChangedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["booking"]>
 export type BookingInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   lead?: boolean | Prisma.LeadDefaultArgs<ExtArgs>
 }
@@ -766,21 +865,20 @@ export type $BookingPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     endsAt: Date
     timezone: string
     status: $Enums.BookingStatus
-    /**
-     * *
-     *    * Unique only while a slot is active.
-     *    * CONFIRMED/PENDING:
-     *    * activeSlotKey = startsAt ISO timestamp
-     *    * CANCELLED:
-     *    * activeSlotKey = null
-     *    * This prevents two visitors from booking
-     *    * the exact same slot at the same time.
-     */
     activeSlotKey: string | null
     externalCalendarEventId: string | null
+    externalCalendarUrl: string | null
+    meetingUrl: string | null
     cancelTokenHash: string | null
     reminder24hEmailId: string | null
     reminder30mEmailId: string | null
+    /**
+     * * When the actual appointment schedule was last changed.
+     *    *
+     *    * Unlike updatedAt this is NOT affected by reminder
+     *    * delivery, metadata updates or other DB writes.
+     */
+    scheduleChangedAt: Date
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["booking"]>
@@ -1215,9 +1313,12 @@ export interface BookingFieldRefs {
   readonly status: Prisma.FieldRef<"Booking", 'BookingStatus'>
   readonly activeSlotKey: Prisma.FieldRef<"Booking", 'String'>
   readonly externalCalendarEventId: Prisma.FieldRef<"Booking", 'String'>
+  readonly externalCalendarUrl: Prisma.FieldRef<"Booking", 'String'>
+  readonly meetingUrl: Prisma.FieldRef<"Booking", 'String'>
   readonly cancelTokenHash: Prisma.FieldRef<"Booking", 'String'>
   readonly reminder24hEmailId: Prisma.FieldRef<"Booking", 'String'>
   readonly reminder30mEmailId: Prisma.FieldRef<"Booking", 'String'>
+  readonly scheduleChangedAt: Prisma.FieldRef<"Booking", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"Booking", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Booking", 'DateTime'>
 }

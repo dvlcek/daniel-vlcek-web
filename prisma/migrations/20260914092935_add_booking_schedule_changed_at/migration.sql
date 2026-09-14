@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Booking" ADD COLUMN     "scheduleChangedAt" TIMESTAMPTZ(3) NOT NULL DEFAULT CURRENT_TIMESTAMP;

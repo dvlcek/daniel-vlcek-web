@@ -82,7 +82,7 @@ model Lead {
  */
 
 model Booking {
-  id String @id @default(cuid())
+  id     String @id @default(cuid())
 
   leadId String
   lead   Lead   @relation(fields: [leadId], references: [id], onDelete: Cascade)
@@ -94,23 +94,24 @@ model Booking {
 
   status BookingStatus @default(PENDING)
 
-  /**
-   * Unique only while a slot is active.
-   * CONFIRMED/PENDING:
-   * activeSlotKey = startsAt ISO timestamp
-   * CANCELLED:
-   * activeSlotKey = null
-   * This prevents two visitors from booking
-   * the exact same slot at the same time.
-   */
   activeSlotKey String? @unique
 
   externalCalendarEventId String?
+  externalCalendarUrl     String?
+  meetingUrl              String?
 
   cancelTokenHash String? @unique
 
   reminder24hEmailId String?
   reminder30mEmailId String?
+
+  /*
+   * When the actual appointment schedule was last changed.
+   *
+   * Unlike updatedAt this is NOT affected by reminder
+   * delivery, metadata updates or other DB writes.
+   */
+  scheduleChangedAt DateTime @default(now()) @db.Timestamptz(3)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
