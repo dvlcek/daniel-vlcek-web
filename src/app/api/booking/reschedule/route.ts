@@ -16,10 +16,6 @@ import {
 } from "@/generated/prisma/enums";
 
 import {
-  getBookingAvailability,
-} from "@/lib/booking/availability";
-
-import {
   getCalendarProvider,
 } from "@/lib/booking/calendar";
 
@@ -30,6 +26,10 @@ import {
 import {
   buildBookingManageUrl,
 } from "@/lib/booking/manage-url";
+
+import {
+  validateRescheduleSlot,
+} from "@/lib/booking/reschedule-availability";
 
 import {
   verifyBookingAccessToken,
@@ -115,7 +115,8 @@ function hasErrorCode(
   if (
     typeof error !==
       "object" ||
-    error === null ||
+    error ===
+      null ||
     !("code" in error)
   ) {
     return false;
@@ -126,7 +127,8 @@ function hasErrorCode(
       error as {
         code?: unknown;
       }
-    ).code === code
+    ).code ===
+    code
   );
 }
 
@@ -193,7 +195,8 @@ export async function POST(
     getDb();
 
   try {
-    let body: unknown;
+    let body:
+      unknown;
 
     try {
       body =
@@ -201,7 +204,8 @@ export async function POST(
     } catch {
       return noStoreJson(
         {
-          ok: false,
+          ok:
+            false,
 
           message:
             "Invalid request.",
@@ -220,7 +224,8 @@ export async function POST(
     ) {
       return noStoreJson(
         {
-          ok: false,
+          ok:
+            false,
 
           message:
             "Invalid reschedule request.",
@@ -250,14 +255,23 @@ export async function POST(
         include: {
           lead: {
             select: {
-              id: true,
+              id:
+                true,
 
-              name: true,
-              email: true,
+              name:
+                true,
 
-              company: true,
-              website: true,
-              message: true,
+              email:
+                true,
+
+              company:
+                true,
+
+              website:
+                true,
+
+              message:
+                true,
             },
           },
         },
@@ -269,7 +283,8 @@ export async function POST(
     ) {
       return noStoreJson(
         {
-          ok: false,
+          ok:
+            false,
 
           message:
             "This booking link is invalid or no longer available.",
@@ -298,7 +313,8 @@ export async function POST(
     ) {
       return noStoreJson(
         {
-          ok: false,
+          ok:
+            false,
 
           message:
             "This booking link is invalid or no longer available.",
@@ -317,7 +333,8 @@ export async function POST(
     ) {
       return noStoreJson(
         {
-          ok: false,
+          ok:
+            false,
 
           message:
             "This booking can no longer be rescheduled.",
@@ -339,7 +356,8 @@ export async function POST(
 
       return noStoreJson(
         {
-          ok: false,
+          ok:
+            false,
 
           message:
             "This booking cannot currently be rescheduled.",
@@ -366,27 +384,13 @@ export async function POST(
     ) {
       return noStoreJson(
         {
-          ok: false,
+          ok:
+            false,
 
           message:
             "Invalid booking time.",
         },
         400,
-      );
-    }
-
-    if (
-      requestedStart.toMillis() <=
-      DateTime.utc().toMillis()
-    ) {
-      return noStoreJson(
-        {
-          ok: false,
-
-          message:
-            "This time is no longer available.",
-        },
-        409,
       );
     }
 
@@ -408,7 +412,8 @@ export async function POST(
       currentStart.toMillis()
     ) {
       return noStoreJson({
-        ok: true,
+        ok:
+          true,
 
         booking: {
           id:
@@ -433,55 +438,34 @@ export async function POST(
     }
 
     /* =====================================================
-       LIVE AVAILABILITY
+       RESCHEDULE-SPECIFIC AVAILABILITY
+
+       Unlike normal availability this excludes:
+       - this booking from internal DB busy periods
+       - this booking's exact Google Calendar event
+
+       All other Google events remain blocking.
     ===================================================== */
 
-    const localDate =
-      requestedStart
-        .setZone(
-          bookingConfig.timezone,
-        )
-        .toFormat(
-          "yyyy-MM-dd",
-        );
+    const validatedSlot =
+      await validateRescheduleSlot({
+        bookingId:
+          booking.id,
 
-    const availability =
-      await getBookingAvailability({
-        fromDate:
-          localDate,
+        externalCalendarEventId:
+          booking.externalCalendarEventId,
 
-        days:
-          1,
+        requestedStartsAt:
+          requestedStart.toJSDate(),
       });
 
-    const selectedSlot =
-      availability.days
-        .flatMap(
-          (
-            day,
-          ) =>
-            day.slots,
-        )
-        .find(
-          (
-            slot,
-          ) =>
-            DateTime.fromISO(
-              slot.startsAt,
-              {
-                zone:
-                  "utc",
-              },
-            ).toMillis() ===
-            requestedStart.toMillis(),
-        );
-
     if (
-      !selectedSlot
+      !validatedSlot
     ) {
       return noStoreJson(
         {
-          ok: false,
+          ok:
+            false,
 
           message:
             "This time is no longer available. Please choose another slot.",
@@ -490,13 +474,9 @@ export async function POST(
       );
     }
 
-    /* =====================================================
-       NORMALIZE
-    ===================================================== */
-
     const newStart =
-      DateTime.fromISO(
-        selectedSlot.startsAt,
+      DateTime.fromJSDate(
+        validatedSlot.startsAt,
         {
           zone:
             "utc",
@@ -504,8 +484,8 @@ export async function POST(
       );
 
     const newEnd =
-      DateTime.fromISO(
-        selectedSlot.endsAt,
+      DateTime.fromJSDate(
+        validatedSlot.endsAt,
         {
           zone:
             "utc",
@@ -518,7 +498,8 @@ export async function POST(
     ) {
       return noStoreJson(
         {
-          ok: false,
+          ok:
+            false,
 
           message:
             "Could not validate the selected time.",
@@ -538,7 +519,8 @@ export async function POST(
     ) {
       return noStoreJson(
         {
-          ok: false,
+          ok:
+            false,
 
           message:
             "Could not prepare the new booking time.",
@@ -567,7 +549,13 @@ export async function POST(
       booking.meetingUrl;
 
     /* =====================================================
-       PHASE 1 — RESERVE SLOT
+       PHASE 1 — RESERVE NEW SLOT
+
+       Recheck internal DB in a transaction.
+
+       Buffers are included so another simultaneous website
+       booking cannot claim an adjacent protected period
+       between availability validation and reservation.
     ===================================================== */
 
     try {
@@ -592,12 +580,24 @@ export async function POST(
 
                 startsAt: {
                   lt:
-                    newEnd.toJSDate(),
+                    newEnd
+                      .plus({
+                        minutes:
+                          bookingConfig
+                            .bufferBeforeMinutes,
+                      })
+                      .toJSDate(),
                 },
 
                 endsAt: {
                   gt:
-                    newStart.toJSDate(),
+                    newStart
+                      .minus({
+                        minutes:
+                          bookingConfig
+                            .bufferAfterMinutes,
+                      })
+                      .toJSDate(),
                 },
               },
 
@@ -659,7 +659,8 @@ export async function POST(
       ) {
         return noStoreJson(
           {
-            ok: false,
+            ok:
+              false,
 
             message:
               "This time was just booked. Please choose another slot.",
@@ -711,7 +712,7 @@ export async function POST(
     }
 
     /* =====================================================
-       PHASE 2 — GOOGLE CALENDAR
+       PHASE 2 — UPDATE GOOGLE CALENDAR
     ===================================================== */
 
     let calendarUpdated =
@@ -797,7 +798,8 @@ export async function POST(
 
       return noStoreJson(
         {
-          ok: false,
+          ok:
+            false,
 
           message:
             "The calendar could not be updated. Your original booking is still active.",
@@ -807,17 +809,22 @@ export async function POST(
     }
 
     /* =====================================================
-       PHASE 3 — FINALIZE
+       PHASE 3 — FINALIZE DATABASE
     ===================================================== */
 
     let updatedBooking:
       | {
-          id: string;
+          id:
+            string;
 
-          startsAt: Date;
-          endsAt: Date;
+          startsAt:
+            Date;
 
-          timezone: string;
+          endsAt:
+            Date;
+
+          timezone:
+            string;
 
           status:
             BookingStatus;
@@ -858,13 +865,15 @@ export async function POST(
               originalMeetingUrl,
 
             /*
-             * New schedule lifecycle.
+             * New reminder lifecycle begins from this
+             * schedule change.
              */
             scheduleChangedAt:
               new Date(),
 
             /*
-             * Previous occurrence reminders no longer apply.
+             * Reminder state from the previous occurrence
+             * must never carry over.
              */
             reminder24hEmailId:
               null,
@@ -1066,7 +1075,8 @@ export async function POST(
 
     return noStoreJson(
       {
-        ok: false,
+        ok:
+          false,
 
         message:
           "Could not reschedule the booking. Please try again.",

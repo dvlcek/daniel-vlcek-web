@@ -11,6 +11,12 @@ export type GetBusyPeriodsInput = {
   endsAt: Date;
 };
 
+export type GetBusyPeriodsExcludingEventInput =
+  GetBusyPeriodsInput & {
+    excludeExternalEventId:
+      string;
+  };
+
 export type CalendarAttendee = {
   name?: string;
   email: string;
@@ -58,6 +64,25 @@ export type CalendarEventResult = {
 export interface CalendarProvider {
   getBusyPeriods(
     input: GetBusyPeriodsInput,
+  ): Promise<TimePeriod[]>;
+
+  /*
+   * Used by rescheduling.
+   *
+   * A normal FreeBusy response cannot tell us which busy
+   * period belongs to the booking currently being moved.
+   *
+   * Providers that support event-level visibility can
+   * exclude the booking's own event while keeping every
+   * other real calendar conflict active.
+   *
+   * Optional by design:
+   * providers without support fail closed in the
+   * reschedule validator.
+   */
+  getBusyPeriodsExcludingEvent?(
+    input:
+      GetBusyPeriodsExcludingEventInput,
   ): Promise<TimePeriod[]>;
 
   createEvent(

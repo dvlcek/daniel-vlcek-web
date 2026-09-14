@@ -1,11 +1,20 @@
-import { randomUUID } from "node:crypto";
+import {
+  randomUUID,
+} from "node:crypto";
 
-import { google } from "googleapis";
+import {
+  google,
+} from "googleapis";
+
+import {
+  DateTime,
+} from "luxon";
 
 import type {
   CalendarEventResult,
   CalendarProvider,
   CreateCalendarEventInput,
+  GetBusyPeriodsExcludingEventInput,
   GetBusyPeriodsInput,
   UpdateCalendarEventInput,
 } from "@/lib/booking/calendar/provider";
@@ -27,16 +36,20 @@ type GoogleCalendarConfig = {
 
 function getGoogleCalendarConfig(): GoogleCalendarConfig {
   const clientId =
-    process.env.GOOGLE_CALENDAR_CLIENT_ID;
+    process.env
+      .GOOGLE_CALENDAR_CLIENT_ID;
 
   const clientSecret =
-    process.env.GOOGLE_CALENDAR_CLIENT_SECRET;
+    process.env
+      .GOOGLE_CALENDAR_CLIENT_SECRET;
 
   const refreshToken =
-    process.env.GOOGLE_CALENDAR_REFRESH_TOKEN;
+    process.env
+      .GOOGLE_CALENDAR_REFRESH_TOKEN;
 
   const calendarId =
-    process.env.GOOGLE_CALENDAR_ID ??
+    process.env
+      .GOOGLE_CALENDAR_ID ??
     "primary";
 
   if (!clientId) {
@@ -74,7 +87,8 @@ function createGoogleAuth() {
     clientId,
     clientSecret,
     refreshToken,
-  } = getGoogleCalendarConfig();
+  } =
+    getGoogleCalendarConfig();
 
   const auth =
     new google.auth.OAuth2(
@@ -91,6 +105,61 @@ function createGoogleAuth() {
 }
 
 /* =========================================================
+   DATE HELPERS
+========================================================= */
+
+function parseGoogleEventDate({
+  dateTime,
+  date,
+  timezone,
+}: {
+  dateTime:
+    | string
+    | null
+    | undefined;
+
+  date:
+    | string
+    | null
+    | undefined;
+
+  timezone:
+    string;
+}): Date | null {
+  if (dateTime) {
+    const parsed =
+      new Date(
+        dateTime,
+      );
+
+    return Number.isNaN(
+      parsed.getTime(),
+    )
+      ? null
+      : parsed;
+  }
+
+  if (!date) {
+    return null;
+  }
+
+  const parsed =
+    DateTime.fromISO(
+      date,
+      {
+        zone:
+          timezone,
+      },
+    ).startOf(
+      "day",
+    );
+
+  return parsed.isValid
+    ? parsed.toJSDate()
+    : null;
+}
+
+/* =========================================================
    PROVIDER
 ========================================================= */
 
@@ -99,7 +168,8 @@ export class GoogleCalendarProvider
 {
   private readonly calendar;
 
-  private readonly calendarId: string;
+  private readonly calendarId:
+    string;
 
   constructor() {
     const {
@@ -112,7 +182,9 @@ export class GoogleCalendarProvider
 
     this.calendar =
       google.calendar({
-        version: "v3",
+        version:
+          "v3",
+
         auth:
           createGoogleAuth(),
       });
@@ -120,6 +192,8 @@ export class GoogleCalendarProvider
 
   /* =======================================================
      FREE / BUSY
+
+     Standard customer-facing availability.
   ======================================================= */
 
   async getBusyPeriods(
@@ -149,10 +223,13 @@ export class GoogleCalendarProvider
       ];
 
     const busy =
-      calendarData?.busy ?? [];
+      calendarData?.busy ??
+      [];
 
     return busy.flatMap(
-      (period) => {
+      (
+        period,
+      ): TimePeriod[] => {
         if (
           !period.start ||
           !period.end
@@ -176,7 +253,146 @@ export class GoogleCalendarProvider
           ) ||
           Number.isNaN(
             endsAt.getTime(),
-          )
+          ) ||
+          endsAt <=
+            startsAt
+        ) {
+          return [];
+        }
+
+        return [
+          {
+            startsAt,
+            endsAt,
+          },
+        ];
+      },
+    );
+  }
+
+  /* =======================================================
+     BUSY PERIODS EXCLUDING ONE EVENT
+
+     Used only when rescheduling an existing booking.
+
+     Important:
+     We intentionally use events.list instead of FreeBusy
+     here.
+
+     FreeBusy removes event identity. If the current booking
+     overlaps another real event, blindly subtracting the
+     current time range could incorrectly make occupied time
+     appear available.
+
+     Event-level results allow us to remove ONLY the exact
+     Google event belonging to the booking being moved.
+  ======================================================= */
+
+  async getBusyPeriodsExcludingEvent(
+    input:
+      GetBusyPeriodsExcludingEventInput,
+  ): Promise<TimePeriod[]> {
+    const response =
+      await this.calendar.events.list({
+        calendarId:
+          this.calendarId,
+
+        timeMin:
+          input.startsAt.toISOString(),
+
+        timeMax:
+          input.endsAt.toISOString(),
+
+        singleEvents:
+          true,
+
+        showDeleted:
+          false,
+
+        orderBy:
+          "startTime",
+
+        maxResults:
+          2500,
+      });
+
+    const calendarTimezone =
+      response.data.timeZone ??
+      "UTC";
+
+    const events =
+      response.data.items ??
+      [];
+
+    return events.flatMap(
+      (
+        event,
+      ): TimePeriod[] => {
+        /*
+         * Remove only the Google event belonging to the
+         * booking currently being rescheduled.
+         */
+        if (
+          event.id ===
+          input.excludeExternalEventId
+        ) {
+          return [];
+        }
+
+        /*
+         * Cancelled and transparent events do not block
+         * booking availability.
+         */
+        if (
+          event.status ===
+            "cancelled" ||
+          event.transparency ===
+            "transparent"
+        ) {
+          return [];
+        }
+
+        const startTimezone =
+          event.start?.timeZone ??
+          calendarTimezone;
+
+        const endTimezone =
+          event.end?.timeZone ??
+          calendarTimezone;
+
+        const startsAt =
+          parseGoogleEventDate({
+            dateTime:
+              event.start
+                ?.dateTime,
+
+            date:
+              event.start
+                ?.date,
+
+            timezone:
+              startTimezone,
+          });
+
+        const endsAt =
+          parseGoogleEventDate({
+            dateTime:
+              event.end
+                ?.dateTime,
+
+            date:
+              event.end
+                ?.date,
+
+            timezone:
+              endTimezone,
+          });
+
+        if (
+          !startsAt ||
+          !endsAt ||
+          endsAt <=
+            startsAt
         ) {
           return [];
         }
@@ -194,15 +410,10 @@ export class GoogleCalendarProvider
   /* =======================================================
      CREATE EVENT
 
-     IMPORTANT:
-     Client is intentionally NOT added as Google attendee.
+     Google Calendar is infrastructure only.
 
-     Google Calendar is infrastructure only:
-     - stores Daniel's event
-     - creates Google Meet
-     - blocks availability
-
-     Customer communication is handled by Resend.
+     The customer is intentionally NOT added as a Google
+     attendee. Resend owns customer communication.
   ======================================================= */
 
   async createEvent(
@@ -240,22 +451,17 @@ export class GoogleCalendarProvider
           },
 
           /*
-           * No attendees.
-           *
-           * This prevents Google from becoming
-           * the customer-facing invitation layer.
+           * No customer attendees.
            */
-
           conferenceData: {
             createRequest: {
               requestId:
                 randomUUID(),
 
-              conferenceSolutionKey:
-                {
-                  type:
-                    "hangoutsMeet",
-                },
+              conferenceSolutionKey: {
+                type:
+                  "hangoutsMeet",
+              },
             },
           },
 
@@ -280,11 +486,13 @@ export class GoogleCalendarProvider
         eventId,
 
       htmlUrl:
-        response.data.htmlLink ??
+        response.data
+          .htmlLink ??
         undefined,
 
       meetingUrl:
-        response.data.hangoutLink ??
+        response.data
+          .hangoutLink ??
         undefined,
     };
   }
@@ -337,8 +545,7 @@ export class GoogleCalendarProvider
               : undefined,
 
           /*
-           * Again: no attendees.
-           * Resend owns customer communication.
+           * Again: no customer attendees.
            */
         },
       });
@@ -357,11 +564,13 @@ export class GoogleCalendarProvider
         eventId,
 
       htmlUrl:
-        response.data.htmlLink ??
+        response.data
+          .htmlLink ??
         undefined,
 
       meetingUrl:
-        response.data.hangoutLink ??
+        response.data
+          .hangoutLink ??
         undefined,
     };
   }
@@ -371,7 +580,8 @@ export class GoogleCalendarProvider
   ======================================================= */
 
   async cancelEvent(
-    externalEventId: string,
+    externalEventId:
+      string,
   ): Promise<void> {
     await this.calendar.events.delete({
       calendarId:

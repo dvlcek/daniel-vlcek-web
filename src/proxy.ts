@@ -1,89 +1,180 @@
-import type { NextRequest } from "next/server";
-import { NextResponse } from "next/server";
+import {
+  NextRequest,
+  NextResponse,
+} from "next/server";
 
-const LAUNCH_ROUTE = "/coming-soon";
+/* =========================================================
+   PUBLIC ROUTE GATE
 
-export function proxy(request: NextRequest) {
-  /*
-   * Production:
-   * SITE_MODE=coming-soon
-   *
-   * Development / Preview:
-   * SITE_MODE missing or anything else
-   */
-  if (process.env.SITE_MODE !== "coming-soon") {
+   The main website is temporarily hidden behind
+   /coming-soon.
+
+   These routes must remain directly accessible:
+
+   - /coming-soon
+   - /admin
+   - /booking/manage
+   - /api/*
+   - Next.js internal assets
+   - static/public assets
+========================================================= */
+
+export function proxy(
+  request: NextRequest,
+) {
+  const {
+    pathname,
+  } =
+    request.nextUrl;
+
+  /* =======================================================
+     NEXT INTERNAL
+  ======================================================= */
+
+  if (
+    pathname.startsWith(
+      "/_next",
+    )
+  ) {
     return NextResponse.next();
   }
 
-  const pathname = request.nextUrl.pathname;
+  /* =======================================================
+     API
 
-  /*
-   * Prevent rewrite loop.
-   */
-  if (pathname === LAUNCH_ROUTE) {
+     Includes:
+     - booking
+     - contact
+     - admin auth/actions
+     - cron worker
+  ======================================================= */
+
+  if (
+    pathname.startsWith(
+      "/api/",
+    )
+  ) {
     return NextResponse.next();
   }
 
-  if (pathname === "/contact") {
+  /* =======================================================
+     COMING SOON PAGE
+
+     Must not rewrite itself.
+  ======================================================= */
+
+  if (
+    pathname ===
+      "/coming-soon" ||
+    pathname.startsWith(
+      "/coming-soon/",
+    )
+  ) {
     return NextResponse.next();
   }
 
-  /*
-   * Keep API routes available.
-   *
-   * This allows the temporary contact modal
-   * to continue using your existing API.
-   */
-  if (pathname.startsWith("/api/")) {
+  /* =======================================================
+     ADMIN CONTROL CENTER
+
+     Authentication is handled inside /admin itself.
+  ======================================================= */
+
+  if (
+    pathname ===
+      "/admin" ||
+    pathname.startsWith(
+      "/admin/",
+    )
+  ) {
     return NextResponse.next();
   }
 
-  /*
-   * Next.js internal files.
-   */
-  if (pathname.startsWith("/_next/")) {
+  /* =======================================================
+     CUSTOMER BOOKING MANAGEMENT
+
+     Required for links coming from confirmation
+     and reminder emails.
+  ======================================================= */
+
+  if (
+    pathname ===
+      "/booking/manage" ||
+    pathname.startsWith(
+      "/booking/manage/",
+    )
+  ) {
     return NextResponse.next();
   }
 
-  /*
-   * Public images.
-   */
-  if (pathname.startsWith("/images/")) {
+  /* =======================================================
+     WELL-KNOWN / SEO / BASIC PUBLIC FILES
+  ======================================================= */
+
+  if (
+    pathname ===
+      "/favicon.ico" ||
+    pathname ===
+      "/robots.txt" ||
+    pathname ===
+      "/sitemap.xml"
+  ) {
     return NextResponse.next();
   }
 
-  /*
-   * Allow static files:
-   *
-   * favicon.ico
-   * robots.txt
-   * manifest
-   * fonts
-   * svg
-   * etc.
-   */
-  if (/\.[a-zA-Z0-9]+$/.test(pathname)) {
+  /* =======================================================
+     STATIC PUBLIC FILES
+
+     Files such as:
+     /images/hero/earth.png
+     /fonts/...
+     etc.
+
+     Do not rewrite requests that clearly target a file.
+  ======================================================= */
+
+  const lastSegment =
+    pathname
+      .split("/")
+      .pop() ??
+    "";
+
+  if (
+    lastSegment.includes(
+      ".",
+    )
+  ) {
     return NextResponse.next();
   }
 
-  /*
-   * Rewrite instead of redirect.
-   *
-   * Visitor still sees:
-   *
-   * https://danielvlko.com
-   *
-   * instead of:
-   *
-   * /coming-soon
-   */
-  const url = request.nextUrl.clone();
+  /* =======================================================
+     EVERYTHING ELSE -> COMING SOON
 
-  url.pathname = LAUNCH_ROUTE;
+     The URL stays unchanged in the browser while Next.js
+     renders /coming-soon internally.
+  ======================================================= */
 
-  return NextResponse.rewrite(url);
+  const url =
+    request.nextUrl.clone();
+
+  url.pathname =
+    "/coming-soon";
+
+  return NextResponse.rewrite(
+    url,
+  );
 }
 
+/* =========================================================
+   MATCHER
+
+   Avoid running Proxy for the most common Next.js
+   static/image internals.
+
+   Everything else is evaluated by the logic above.
+========================================================= */
+
 export const config = {
-  matcher: "/:path*",
+  matcher: [
+    "/((?!_next/static|_next/image).*)",
+  ],
 };

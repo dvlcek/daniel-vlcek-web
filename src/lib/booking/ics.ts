@@ -1,3 +1,11 @@
+export type BookingIcsMethod =
+  | "REQUEST"
+  | "CANCEL";
+
+export type BookingIcsStatus =
+  | "CONFIRMED"
+  | "CANCELLED";
+
 export type BookingIcsInput = {
   bookingId: string;
 
@@ -7,26 +15,66 @@ export type BookingIcsInput = {
   endsAt: Date;
 
   organizerEmail: string;
+
+  method?: BookingIcsMethod;
+
+  status?: BookingIcsStatus;
+
+  sequence?: number;
+
+  summary?: string;
+
+  description?: string;
 };
+
+/* =========================================================
+   ESCAPING
+========================================================= */
 
 function escapeIcsText(
   value: string,
 ): string {
   return value
-    .replace(/\\/g, "\\\\")
-    .replace(/\r?\n/g, "\\n")
-    .replace(/,/g, "\\,")
-    .replace(/;/g, "\\;");
+    .replace(
+      /\\/g,
+      "\\\\",
+    )
+    .replace(
+      /\r?\n/g,
+      "\\n",
+    )
+    .replace(
+      /,/g,
+      "\\,",
+    )
+    .replace(
+      /;/g,
+      "\\;",
+    );
 }
+
+/* =========================================================
+   DATE
+========================================================= */
 
 function formatUtcDate(
   date: Date,
 ): string {
   return date
     .toISOString()
-    .replace(/[-:]/g, "")
-    .replace(/\.\d{3}Z$/, "Z");
+    .replace(
+      /[-:]/g,
+      "",
+    )
+    .replace(
+      /\.\d{3}Z$/,
+      "Z",
+    );
 }
+
+/* =========================================================
+   LINE FOLDING
+========================================================= */
 
 function foldIcsLine(
   line: string,
@@ -41,7 +89,8 @@ function foldIcsLine(
     return line;
   }
 
-  const parts: string[] =
+  const parts:
+    string[] =
     [];
 
   let remaining =
@@ -73,30 +122,89 @@ function foldIcsLine(
   );
 }
 
+/* =========================================================
+   ICS
+========================================================= */
+
 export function createBookingIcs(
   input: BookingIcsInput,
 ): string {
   const now =
     new Date();
 
+  const method =
+    input.method ??
+    "REQUEST";
+
+  const status =
+    input.status ??
+    (
+      method ===
+      "CANCEL"
+        ? "CANCELLED"
+        : "CONFIRMED"
+    );
+
+  /*
+   * RFC5545 SEQUENCE should increase whenever the same
+   * UID is modified.
+   *
+   * Using current Unix seconds gives us a naturally
+   * increasing integer across:
+   *
+   * initial confirmation
+   * reschedule
+   * cancellation
+   */
+  const sequence =
+    input.sequence ??
+    Math.floor(
+      Date.now() /
+        1000,
+    );
+
   const uid =
     `booking-${input.bookingId}@danielvlko.com`;
 
+  const summary =
+    input.summary ??
+    "Discovery Call — Daniel VLKO";
+
   const description =
-    [
-      "Daniel VLKO Discovery Call",
-      "",
-      "Your Google Meet link will be sent 30 minutes before the call.",
-      "",
-      "https://danielvlko.com",
-    ].join("\n");
+    input.description ??
+    (
+      method ===
+      "CANCEL"
+        ? [
+            "Daniel VLKO Discovery Call",
+            "",
+            "This discovery call has been cancelled.",
+            "",
+            "https://danielvlko.com",
+          ].join(
+            "\n",
+          )
+        : [
+            "Daniel VLKO Discovery Call",
+            "",
+            "Your Google Meet link will be sent 30 minutes before the call.",
+            "",
+            "https://danielvlko.com",
+          ].join(
+            "\n",
+          )
+    );
 
   const lines = [
     "BEGIN:VCALENDAR",
+
     "VERSION:2.0",
+
     "PRODID:-//Daniel VLKO//Booking System//EN",
+
     "CALSCALE:GREGORIAN",
-    "METHOD:REQUEST",
+
+    `METHOD:${method}`,
 
     "BEGIN:VEVENT",
 
@@ -114,10 +222,10 @@ export function createBookingIcs(
       input.endsAt,
     )}`,
 
-    "SEQUENCE:0",
+    `SEQUENCE:${sequence}`,
 
     `SUMMARY:${escapeIcsText(
-      "Discovery Call — Daniel VLKO",
+      summary,
     )}`,
 
     `DESCRIPTION:${escapeIcsText(
@@ -132,10 +240,12 @@ export function createBookingIcs(
 
     `ATTENDEE;RSVP=FALSE:mailto:${input.clientEmail}`,
 
-    "STATUS:CONFIRMED",
+    `STATUS:${status}`,
+
     "TRANSP:OPAQUE",
 
     "END:VEVENT",
+
     "END:VCALENDAR",
   ];
 
@@ -144,7 +254,9 @@ export function createBookingIcs(
       .map(
         foldIcsLine,
       )
-      .join("\r\n") +
+      .join(
+        "\r\n",
+      ) +
     "\r\n"
   );
 }

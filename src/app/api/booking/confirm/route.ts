@@ -401,13 +401,15 @@ export async function POST(
     /* =====================================================
        MANAGEMENT TOKEN
 
-       Raw token:
-       - returned to current browser session
-       - later can also be included in branded email links
+       The raw token exists only inside this server request.
 
-       Database stores only its SHA-256 hash.
+       It is used to build the secure Manage booking URL
+       included in the branded confirmation email.
+
+       It is NOT returned in the public API response.
+
+       The database stores only its SHA-256 hash.
     ===================================================== */
-
     const {
       token:
         manageToken,
@@ -849,15 +851,15 @@ export async function POST(
       /* ===================================================
          SUCCESS
 
-         manageToken is intentionally returned to this
-         browser session so our custom success state can:
+         Security boundary:
 
-         - Cancel booking
-         - Reschedule booking
+         - booking details may be returned
+         - email delivery status may be returned
+         - raw management token MUST stay server-side
 
-         Database never exposes the token hash.
+         Management access is delivered through the secure
+         email link instead of the booking API response.
       =================================================== */
-
       return noStoreJson(
         {
           ok: true,
@@ -886,9 +888,6 @@ export async function POST(
              * the 30-minute reminder.
              */
           },
-
-          manageToken,
-
           confirmationEmailSent,
         },
         201,
