@@ -23,7 +23,7 @@ export function HeroBackground() {
   const scale = useTransform(
     scrollYProgress,
     [0, 0.55, 1],
-    [1.06, 1.11, 1.2],
+    [1.06, 1.15, 1.3],
   );
 
   const y = useTransform(

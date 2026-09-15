@@ -3,34 +3,40 @@ import {
   NextResponse,
 } from "next/server";
 
-/* =========================================================
-   PUBLIC ROUTE GATE
-
-   The main website is temporarily hidden behind
-   /coming-soon.
-
-   These routes must remain directly accessible:
-
-   - /coming-soon
-   - /admin
-   - /booking/manage
-   - /api/*
-   - Next.js internal assets
-   - static/public assets
-========================================================= */
-
+/**
+ * Coming Soon gate
+ *
+ * Local development:
+ *   COMING_SOON_ENABLED=false
+ *   -> full real website is available.
+ *
+ * Production:
+ *   env missing / true
+ *   -> public website is redirected to /coming-soon.
+ *
+ * Admin, APIs and booking management always remain accessible.
+ */
 export function proxy(
   request: NextRequest,
 ) {
-  const {
-    pathname,
-  } =
-    request.nextUrl;
+  const pathname =
+    request.nextUrl.pathname;
 
-  /* =======================================================
-     NEXT INTERNAL
-  ======================================================= */
+  const comingSoonEnabled =
+    process.env.COMING_SOON_ENABLED !==
+    "false";
 
+  /*
+   * When Coming Soon is disabled,
+   * expose the complete application.
+   */
+  if (!comingSoonEnabled) {
+    return NextResponse.next();
+  }
+
+  /*
+   * Next.js internals.
+   */
   if (
     pathname.startsWith(
       "/_next",
@@ -39,16 +45,9 @@ export function proxy(
     return NextResponse.next();
   }
 
-  /* =======================================================
-     API
-
-     Includes:
-     - booking
-     - contact
-     - admin auth/actions
-     - cron worker
-  ======================================================= */
-
+  /*
+   * API routes must always work.
+   */
   if (
     pathname.startsWith(
       "/api/",
@@ -57,12 +56,9 @@ export function proxy(
     return NextResponse.next();
   }
 
-  /* =======================================================
-     COMING SOON PAGE
-
-     Must not rewrite itself.
-  ======================================================= */
-
+  /*
+   * Coming Soon page itself.
+   */
   if (
     pathname ===
       "/coming-soon" ||
@@ -73,12 +69,9 @@ export function proxy(
     return NextResponse.next();
   }
 
-  /* =======================================================
-     ADMIN CONTROL CENTER
-
-     Authentication is handled inside /admin itself.
-  ======================================================= */
-
+  /*
+   * Private admin.
+   */
   if (
     pathname ===
       "/admin" ||
@@ -89,13 +82,9 @@ export function proxy(
     return NextResponse.next();
   }
 
-  /* =======================================================
-     CUSTOMER BOOKING MANAGEMENT
-
-     Required for links coming from confirmation
-     and reminder emails.
-  ======================================================= */
-
+  /*
+   * Customer booking management.
+   */
   if (
     pathname ===
       "/booking/manage" ||
@@ -106,10 +95,9 @@ export function proxy(
     return NextResponse.next();
   }
 
-  /* =======================================================
-     WELL-KNOWN / SEO / BASIC PUBLIC FILES
-  ======================================================= */
-
+  /*
+   * SEO / browser metadata.
+   */
   if (
     pathname ===
       "/favicon.ico" ||
@@ -121,38 +109,29 @@ export function proxy(
     return NextResponse.next();
   }
 
-  /* =======================================================
-     STATIC PUBLIC FILES
-
-     Files such as:
-     /images/hero/earth.png
-     /fonts/...
-     etc.
-
-     Do not rewrite requests that clearly target a file.
-  ======================================================= */
-
-  const lastSegment =
-    pathname
-      .split("/")
-      .pop() ??
-    "";
-
+  /*
+   * Static assets.
+   *
+   * Examples:
+   * .png
+   * .webp
+   * .svg
+   * .jpg
+   * .woff2
+   * .json
+   */
   if (
-    lastSegment.includes(
-      ".",
+    /\.[a-zA-Z0-9]+$/.test(
+      pathname,
     )
   ) {
     return NextResponse.next();
   }
 
-  /* =======================================================
-     EVERYTHING ELSE -> COMING SOON
-
-     The URL stays unchanged in the browser while Next.js
-     renders /coming-soon internally.
-  ======================================================= */
-
+  /*
+   * Everything else is temporarily hidden
+   * behind the Coming Soon page.
+   */
   const url =
     request.nextUrl.clone();
 
@@ -163,15 +142,6 @@ export function proxy(
     url,
   );
 }
-
-/* =========================================================
-   MATCHER
-
-   Avoid running Proxy for the most common Next.js
-   static/image internals.
-
-   Everything else is evaluated by the logic above.
-========================================================= */
 
 export const config = {
   matcher: [

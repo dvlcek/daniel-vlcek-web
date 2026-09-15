@@ -85,13 +85,14 @@ export function WhatIBuild() {
           }}
           className="mx-auto max-w-[950px] text-center"
         >
-          <div className="flex items-center justify-center gap-4">
+          {/* EYELINER  */}
+          {/* <div className="flex items-center justify-center gap-4">
             <span className="h-px w-8 bg-[#FF5A1F]" />
 
             <span className="text-[9px] font-semibold uppercase tracking-[0.36em] text-[#64727E]">
               What I Build
             </span>
-          </div>
+          </div> */}
 
           <h2
             className="

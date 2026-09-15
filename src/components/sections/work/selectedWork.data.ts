@@ -58,7 +58,7 @@ export const featuredCaseStudy: WorkCaseStudy = {
   description:
     "A custom platform bringing customers, operations, payments and day-to-day workflows into one structured system — designed around how the business actually runs.",
 
-  image: "/images/work/business-platform.png",
+  image: "/images/work/main.webp",
 
   imageAlt:
     "Custom business platform dashboard showing operations, customers and business data",

@@ -20,66 +20,80 @@ export function Hero() {
         {/* ====================================================
             HERO CONTENT
         ==================================================== */}
-
         <div
           className="
             flex
             min-h-[100dvh]
             justify-center
             pt-[21vh]
-
             sm:pt-[20vh]
             lg:pt-[18vh]
             xl:pt-[17vh]
           "
         >
-          <div className="mx-auto w-full max-w-[850px] text-center">
+          <div className="mx-auto w-full max-w-[900px] text-center">
+            {/* Positioning */}
+            <p
+              className="
+                mb-5
+                text-[10px]
+                font-medium
+                uppercase
+                tracking-[0.3em]
+                text-white/42
+                sm:text-[11px]
+              "
+            >
+              Web Development
+              <span className="mx-3 text-white/20">·</span>
+              Automation Systems
+            </p>
+
+            {/* Headline */}
             <h1
               className="
                 text-[42px]
-                font-medium
                 leading-[0.98]
                 tracking-[-0.055em]
-
-                sm:text-[54px]
-                lg:text-[64px]
-                xl:text-[70px]
+                sm:text-[60px]
+                lg:text-[68px]
+                xl:text-[78px]
               "
               style={{
                 textShadow:
                   "0 4px 18px rgba(0,0,0,0.72), 0 14px 50px rgba(0,0,0,0.48)",
               }}
             >
-              I turn operational chaos
+              Build the next version
               <br />
-              into systems that{" "}
+              of{" "}
               <span className="text-[var(--accent)]">
-                scale.
+                your business.
               </span>
             </h1>
 
+            {/* Supporting copy */}
             <p
               className="
                 mx-auto
                 mt-6
-                max-w-[670px]
+                max-w-[560px]
                 text-[15px]
                 leading-6
                 text-white/62
-
                 sm:text-[16px]
               "
               style={{
                 textShadow: "0 3px 14px rgba(0,0,0,0.8)",
               }}
             >
-              Custom software, automation and applied AI that remove manual
-              work, connect operations and make your business easier to run.
+              High-converting websites, custom software and automation for companies that want to grow, operate faster and stop being held back by outdated systems.
             </p>
 
+            {/* CTA */}
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <Link
-                href="#work"
+                href="/contact"
                 className="
                   group
                   inline-flex
@@ -100,18 +114,22 @@ export function Hero() {
                   hover:shadow-[0_12px_35px_rgba(255,90,31,0.20)]
                 "
               >
-                <span>View My Work</span>
+                <span>Book a strategy call</span>
 
                 <span
                   aria-hidden="true"
-                  className="transition-transform duration-200 group-hover:translate-x-1"
+                  className="
+                    transition-transform
+                    duration-200
+                    group-hover:translate-x-1
+                  "
                 >
                   →
                 </span>
               </Link>
 
               <Link
-                href="/contact"
+                href="/work"
                 className="
                   inline-flex
                   h-12
@@ -132,7 +150,7 @@ export function Hero() {
                   hover:bg-white/[0.04]
                 "
               >
-                Let&apos;s Talk
+                View my work
               </Link>
             </div>
           </div>
