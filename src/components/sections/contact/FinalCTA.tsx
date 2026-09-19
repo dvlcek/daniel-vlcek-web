@@ -451,7 +451,7 @@ function ClosingBackground() {
         "
       >
         <Image
-          src="/images/footer/earth.webp"
+          src="/images/hero/earth.webp"
           alt=""
           fill
           sizes="100vw"

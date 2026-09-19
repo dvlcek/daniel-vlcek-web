@@ -62,7 +62,7 @@ export function HeroBackground() {
         }}
       >
         <Image
-          src="/images/hero/earth.webp"
+          src="/images/hero/hero2.webp"
           alt=""
           fill
           priority

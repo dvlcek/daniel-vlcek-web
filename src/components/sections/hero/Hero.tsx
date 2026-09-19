@@ -4,6 +4,16 @@ import { HeroBackground } from "@/components/sections/hero/HeroBackground";
 import { Container } from "@/components/ui/Container";
 
 export function Hero() {
+  const platforms = [
+    "amazon",
+    "Google",
+    "OpenAI",
+    "stripe",
+    "shopify",
+    "aws",
+    "n8n",
+  ];
+
   return (
     <section
       className="
@@ -26,7 +36,9 @@ export function Hero() {
             min-h-[100dvh]
             justify-center
             pt-[21vh]
+            pb-[170px]
             sm:pt-[20vh]
+            sm:pb-[180px]
             lg:pt-[18vh]
             xl:pt-[17vh]
           "
@@ -115,7 +127,6 @@ export function Hero() {
                 "
               >
                 <span>Book a strategy call</span>
-
                 <span
                   aria-hidden="true"
                   className="
@@ -156,6 +167,111 @@ export function Hero() {
           </div>
         </div>
       </Container>
+
+      {/* ====================================================
+          BOTTOM TRUST / LOGOS STRIP
+      ==================================================== */}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20">
+        <Container className="relative">
+          <div className="relative pb-6 sm:pb-8">
+            {/* shadow / glow behind */}
+            <div
+              className="
+                absolute
+                inset-x-[8%]
+                bottom-2
+                h-[88px]
+                rounded-[999px]
+                bg-black/70
+                blur-3xl
+                sm:inset-x-[12%]
+              "
+            />
+
+            <div className="relative mx-auto w-full max-w-[1120px]">
+              {/* clean label */}
+              <div className="mb-4 flex items-center justify-center gap-4">
+                <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/12 to-white/12" />
+                <p
+                  className="
+                    shrink-0
+                    text-[10px]
+                    font-medium
+                    uppercase
+                    tracking-[0.34em]
+                    text-white/52
+                    sm:text-[11px]
+                  "
+                >
+                  TRUSTED WORKFLOWS
+                </p>
+                <div className="h-px flex-1 bg-gradient-to-l from-transparent via-white/12 to-white/12" />
+              </div>
+
+              {/* logos / names row */}
+              <div
+                className="
+                  rounded-[28px]
+                  border
+                  border-white/[0.10]
+                  bg-black/18
+                  px-4
+                  py-4
+                  shadow-[0_18px_60px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.04)]
+                  backdrop-blur-[10px]
+                  sm:px-7
+                "
+              >
+                <div
+                  className="
+                    flex
+                    flex-wrap
+                    items-center
+                    justify-center
+                    gap-y-3
+                    text-white/92
+                  "
+                >
+                  {platforms.map((platform, index) => (
+                    <div
+                      key={platform}
+                      className="flex items-center justify-center"
+                    >
+                      <span
+                        className={`
+                          px-4
+                          text-[18px]
+                          leading-none
+                          tracking-[-0.02em]
+                          sm:px-5
+                          ${
+                            platform === "amazon" ||
+                            platform === "stripe" ||
+                            platform === "shopify" ||
+                            platform === "aws" ||
+                            platform === "n8n"
+                              ? "font-medium lowercase"
+                              : "font-medium"
+                          }
+                        `}
+                        style={{
+                          textShadow: "0 2px 14px rgba(0,0,0,0.45)",
+                        }}
+                      >
+                        {platform}
+                      </span>
+
+                      {index !== platforms.length - 1 && (
+                        <span className="hidden h-5 w-px bg-white/12 sm:block" />
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </Container>
+      </div>
     </section>
   );
 }

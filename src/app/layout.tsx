@@ -1,67 +1,53 @@
-import type {
-  Metadata,
-  Viewport,
-} from "next";
+import type { Metadata, Viewport } from "next";
+import type { ReactNode } from "react";
+import { Geist } from "next/font/google";
 
-import type {
-  ReactNode,
-} from "react";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
-import {
-  Analytics,
-} from "@vercel/analytics/next";
-
-import {
-  SpeedInsights,
-} from "@vercel/speed-insights/next";
-
-import {
-  siteConfig,
-} from "@/lib/site";
+import { ConsoleEasterEgg } from "@/components/site/ConsoleEasterEgg";
+import { siteConfig } from "@/lib/site";
 
 import "./globals.css";
 
-import {
-  ConsoleEasterEgg,
-} from "@/components/site/ConsoleEasterEgg";
+/* =========================================================
+   FONT
+========================================================= */
+
+const geist = Geist({
+  subsets: ["latin"],
+  variable: "--font-primary",
+  display: "swap",
+  fallback: ["Arial", "Helvetica", "sans-serif"],
+});
+
+/* =========================================================
+   METADATA
+========================================================= */
 
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    siteConfig.url,
-  ),
+  metadataBase: new URL(siteConfig.url),
 
   title: {
-    default:
-      siteConfig.title,
-
-    template:
-      `%s | ${siteConfig.name}`,
+    default: siteConfig.title,
+    template: `%s | ${siteConfig.name}`,
   },
 
-  description:
-    siteConfig.description,
+  description: siteConfig.description,
 
-  applicationName:
-    siteConfig.name,
+  applicationName: siteConfig.name,
 
   authors: [
     {
-      name:
-        siteConfig.name,
-
-      url:
-        siteConfig.url,
+      name: siteConfig.name,
+      url: siteConfig.url,
     },
   ],
 
-  creator:
-    siteConfig.name,
+  creator: siteConfig.name,
+  publisher: siteConfig.name,
 
-  publisher:
-    siteConfig.name,
-
-  category:
-    "technology",
+  category: "technology",
 
   alternates: {
     canonical: "/",
@@ -69,77 +55,55 @@ export const metadata: Metadata = {
 
   openGraph: {
     type: "website",
-
-    locale:
-      siteConfig.locale,
-
+    locale: siteConfig.locale,
     url: "/",
-
-    siteName:
-      siteConfig.name,
-
-    title:
-      siteConfig.title,
-
-    description:
-      siteConfig.description,
+    siteName: siteConfig.name,
+    title: siteConfig.title,
+    description: siteConfig.description,
   },
 
   twitter: {
-    card:
-      "summary_large_image",
-
-    title:
-      siteConfig.title,
-
-    description:
-      siteConfig.description,
+    card: "summary_large_image",
+    title: siteConfig.title,
+    description: siteConfig.description,
   },
 
   robots: {
     index: true,
-
     follow: true,
 
     googleBot: {
       index: true,
-
       follow: true,
-
-      "max-image-preview":
-        "large",
-
+      "max-image-preview": "large",
       "max-snippet": -1,
-
-      "max-video-preview":
-        -1,
+      "max-video-preview": -1,
     },
   },
 
   formatDetection: {
     email: false,
-
     address: false,
-
     telephone: false,
   },
 };
 
+/* =========================================================
+   VIEWPORT
+========================================================= */
+
 export const viewport: Viewport = {
-  width:
-    "device-width",
-
+  width: "device-width",
   initialScale: 1,
+  viewportFit: "cover",
 
-  viewportFit:
-    "cover",
-
-  colorScheme:
-    "dark",
-
-  themeColor:
-    "#020608",
+  colorScheme: "dark",
+  themeColor: "#020608",
 };
+
+/* =========================================================
+   ROOT LAYOUT
+========================================================= */
 
 export default function RootLayout({
   children,
@@ -147,28 +111,8 @@ export default function RootLayout({
   children: ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={geist.variable}>
       <head>
-        <link
-          rel="preconnect"
-          href="https://app.cal.com"
-        />
-
-        <link
-          rel="dns-prefetch"
-          href="//app.cal.com"
-        />
-
-        <link
-          rel="preconnect"
-          href="https://cal.com"
-        />
-
-        <link
-          rel="dns-prefetch"
-          href="//cal.com"
-        />
-
         <link
           rel="alternate"
           type="text/markdown"
@@ -183,10 +127,10 @@ export default function RootLayout({
 
       <body>
         <ConsoleEasterEgg />
+
         {children}
 
         <Analytics />
-
         <SpeedInsights />
       </body>
     </html>

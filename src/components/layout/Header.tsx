@@ -6,11 +6,11 @@ import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 
 const navigation = [
-  { label: "Work", href: "#work", id: "work" },
-  { label: "Services", href: "#services", id: "services" },
-  { label: "About", href: "#about", id: "about" },
-  { label: "Process", href: "#process", id: "process" },
-  { label: "Insights", href: "#insights", id: "insights" },
+  { label: "Work", href: "/work", id: "work" },
+  { label: "Services", href: "/services", id: "services" },
+  { label: "About", href: "/about", id: "about" },
+  { label: "Process", href: "/process", id: "process" },
+  { label: "Insights", href: "/insights", id: "insights" },
 ];
 
 export function Header() {
