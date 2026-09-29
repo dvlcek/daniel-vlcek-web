@@ -4,62 +4,67 @@ import { motion, useReducedMotion } from "motion/react";
 
 import { AnimatedStat } from "@/components/sections/problem/AnimatedStat";
 import { ProblemSignal } from "@/components/sections/problem/ProblemSignal";
-import { Container } from "@/components/ui/Container";
 
 const problems = [
   {
-    type: "scattered" as const,
-    title: "Scattered tools",
+    type: "experience" as const,
+    title: "Slow digital experience",
     description:
-      "Work lives across too many apps, making it harder to see the full picture.",
+      "Slow, outdated experiences create friction before a customer ever reaches the decision point.",
   },
   {
     type: "manual" as const,
-    title: "Manual work",
+    title: "Manual workflows",
     description:
-      "Repetitive tasks take time away from work that actually moves the business forward.",
+      "Repetitive tasks, follow-ups and data entry consume time that should go into growth.",
   },
   {
-    type: "data" as const,
-    title: "Disconnected data",
+    type: "systems" as const,
+    title: "Disconnected systems",
     description:
-      "Information is split across tools and teams, creating inconsistent results.",
+      "Sales, operations and customer data live in separate tools instead of one connected flow.",
   },
   {
-    type: "decisions" as const,
-    title: "Slow decisions",
+    type: "opportunities" as const,
+    title: "Lost opportunities",
     description:
-      "Without clear visibility, getting the right answer takes longer than it should.",
+      "Leads wait, follow-ups slip and important actions still depend on someone remembering.",
   },
   {
-    type: "potential" as const,
-    title: "Lost potential",
+    type: "visibility" as const,
+    title: "No real visibility",
     description:
-      "Good people spend time working around the system instead of creating impact.",
+      "Fragmented data makes it harder to see what is working, what is not and where money is leaking.",
   },
 ];
 
 const stats = [
   {
-    value: 55,
+    value: 8.4,
+    prefix: "+",
     suffix: "%",
-    decimals: 0,
-    description: "find it hard to track down information",
-    source: "Atlassian State of Teams 2024",
+    decimals: 1,
+    label: "retail conversion lift",
+    description: "observed with a 0.1s faster mobile experience",
+    source: "Deloitte / Google · Milliseconds Make Millions",
   },
   {
-    value: 50,
-    suffix: "%",
-    decimals: 0,
-    description: "have discovered another team doing the same work",
-    source: "Atlassian State of Teams 2024",
-  },
-  {
-    value: 3.6,
+    value: 4.9,
+    prefix: "",
     suffix: "h",
     decimals: 1,
-    description: "lost per week to unnecessary meetings",
-    source: "Asana Anatomy of Work 2023",
+    label: "potentially saved / person / week",
+    description: "with improved work processes",
+    source: "Asana · Anatomy of Work 2023",
+  },
+  {
+    value: 85,
+    prefix: "",
+    suffix: "%",
+    decimals: 0,
+    label: "expect consistent interactions",
+    description: "across different departments",
+    source: "Salesforce · State of the Connected Customer",
   },
 ];
 
@@ -71,30 +76,45 @@ export function Problem() {
       id="problem"
       className="relative overflow-hidden bg-[#03070b] text-white"
     >
-      {/* ==================================================
-          SECTION AMBIENT
-      ================================================== */}
+      {/* =====================================================
+          SUBTLE TOP AMBIENT
+      ===================================================== */}
 
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 h-[420px]"
+        className="pointer-events-none absolute inset-x-0 top-0 h-[340px]"
         style={{
           background:
-            "radial-gradient(ellipse at 50% 0%, rgba(34,72,92,0.07), transparent 65%)",
+            "radial-gradient(ellipse at 50% 0%, rgba(32,63,78,0.055), transparent 68%)",
         }}
       />
+
+      {/* =====================================================
+          MAIN CONTENT
+      ===================================================== */}
 
       <div
-        aria-hidden="true"
-        className="pointer-events-none absolute left-1/2 top-[430px] h-[360px] w-[1100px] -translate-x-1/2"
-        style={{
-          background:
-            "radial-gradient(ellipse at center, rgba(255,90,31,0.032), transparent 68%)",
-          filter: "blur(8px)",
-        }}
-      />
+        className="
+          relative
+          z-10
+          mx-auto
+          w-full
+          max-w-[1480px]
+          px-5
+          pb-[132px]
+          pt-24
 
-      <Container className="relative py-20 md:py-24 xl:py-[112px]">
+          sm:px-7
+
+          md:px-10
+          md:pb-[145px]
+          md:pt-28
+
+          xl:px-12
+          xl:pb-[155px]
+          xl:pt-[124px]
+        "
+      >
         {/* ==================================================
             HEADER
         ================================================== */}
@@ -105,7 +125,7 @@ export function Problem() {
               ? false
               : {
                   opacity: 0,
-                  y: 18,
+                  y: 16,
                 }
           }
           whileInView={{
@@ -120,21 +140,24 @@ export function Problem() {
             duration: 0.65,
             ease: [0.22, 1, 0.36, 1],
           }}
-          className="relative mx-auto max-w-[930px] text-center"
+          className="mx-auto max-w-[1040px] text-center"
         >
           <h2
             className="
-              text-[34px]
+              text-[38px]
               font-medium
-              leading-[1.04]
-              tracking-[-0.05em]
+              leading-[1.015]
+              tracking-[-0.052em]
 
-              sm:text-[42px]
-              md:text-[48px]
-              xl:text-[52px]
+              sm:text-[46px]
+
+              md:text-[54px]
+
+              xl:text-[60px]
             "
           >
             Most businesses don&apos;t lack potential.
+
             <br className="hidden md:block" />
 
             <span className="md:hidden"> </span>
@@ -149,224 +172,144 @@ export function Problem() {
             className="
               mx-auto
               mt-5
-              max-w-[680px]
+              max-w-[720px]
               text-[14px]
-              leading-6
-              text-white/38
+              leading-[1.7]
+              text-white/42
 
               sm:text-[15px]
+
+              xl:text-[16px]
             "
           >
-            Scattered tools, manual work and disconnected data create friction,
-            slow decisions and quietly limit growth.
+            Slow digital experiences, manual workflows and disconnected data
+            quietly cost companies time, visibility and revenue.
           </p>
         </motion.div>
 
         {/* ==================================================
-            PROBLEM CARDS AREA
+            CARDS
         ================================================== */}
 
-        <div className="relative mt-14 md:mt-16 xl:mt-[72px]">
-          {/* Soft glow underneath cards */}
-
-          <div
-            aria-hidden="true"
-            className="
-              pointer-events-none
-              absolute
-              left-1/2
-              top-1/2
-              h-[260px]
-              w-[92%]
-              -translate-x-1/2
-              -translate-y-1/2
-              rounded-[100%]
-              opacity-70
-              blur-[80px]
-            "
-            style={{
-              background:
-                "radial-gradient(ellipse at center, rgba(255,255,255,0.027), transparent 70%)",
-            }}
-          />
-
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{
-              once: true,
-              amount: 0.2,
-            }}
-            variants={{
-              hidden: {},
-              visible: {
-                transition: {
-                  delayChildren: 0.12,
-                  staggerChildren: reduceMotion ? 0 : 0.075,
-                },
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{
+            once: true,
+            amount: 0.18,
+          }}
+          variants={{
+            hidden: {},
+            visible: {
+              transition: {
+                delayChildren: 0.1,
+                staggerChildren: reduceMotion ? 0 : 0.065,
               },
-            }}
-            className="
-              relative
-              grid
-              gap-4
+            },
+          }}
+          className="
+            mx-auto
+            mt-16
+            grid
+            max-w-[1360px]
+            gap-4
 
-              sm:grid-cols-2
+            sm:grid-cols-2
 
-              lg:grid-cols-3
+            lg:grid-cols-3
 
-              xl:grid-cols-5
-              xl:gap-[14px]
-            "
-          >
-            {problems.map((problem) => (
-              <motion.article
-                key={problem.title}
-                variants={{
-                  hidden: reduceMotion
-                    ? {}
-                    : {
-                        opacity: 0,
-                        y: 24,
-                        scale: 0.985,
-                      },
-
-                  visible: {
-                    opacity: 1,
-                    y: 0,
-                    scale: 1,
-
-                    transition: {
-                      duration: 0.58,
-                      ease: [0.22, 1, 0.36, 1],
+            xl:mt-[72px]
+            xl:grid-cols-5
+            xl:gap-4
+          "
+        >
+          {problems.map((problem) => (
+            <motion.article
+              key={problem.title}
+              variants={{
+                hidden: reduceMotion
+                  ? {}
+                  : {
+                      opacity: 0,
+                      y: 18,
                     },
+
+                visible: {
+                  opacity: 1,
+                  y: 0,
+
+                  transition: {
+                    duration: 0.55,
+                    ease: [0.22, 1, 0.36, 1],
                   },
-                }}
-                whileHover={
-                  reduceMotion
-                    ? undefined
-                    : {
-                        y: -6,
-                        transition: {
-                          duration: 0.25,
-                          ease: [0.22, 1, 0.36, 1],
-                        },
-                      }
-                }
+                },
+              }}
+              whileHover={
+                reduceMotion
+                  ? undefined
+                  : {
+                      y: -3,
+                    }
+              }
+              transition={{
+                duration: 0.22,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+              className="
+                group
+                relative
+                min-h-[250px]
+                overflow-hidden
+                rounded-[18px]
+                border
+                border-white/[0.055]
+                bg-white/[0.012]
+                px-6
+                pb-7
+                pt-6
+
+                transition-[border-color,background-color]
+                duration-300
+
+                hover:border-white/[0.09]
+                hover:bg-white/[0.018]
+              "
+            >
+              <ProblemSignal type={problem.type} />
+
+              <h3
                 className="
-                  group
-                  relative
-                  min-w-0
-                  overflow-hidden
-                  rounded-[20px]
-                  px-5
-                  pb-6
-                  pt-5
+                  mt-4
+                  text-[15px]
+                  font-medium
+                  leading-[1.25]
+                  tracking-[-0.025em]
+                  text-white/92
+
+                  xl:text-[16px]
                 "
-                style={{
-                  background:
-                    "linear-gradient(145deg, rgba(255,255,255,0.028) 0%, rgba(255,255,255,0.012) 42%, rgba(255,255,255,0.005) 100%)",
-
-                  boxShadow:
-                    "0 20px 55px rgba(0,0,0,0.32), 0 6px 18px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.045)",
-                }}
               >
-                {/* Card internal depth */}
+                {problem.title}
+              </h3>
 
-                <div
-                  aria-hidden="true"
-                  className="
-                    pointer-events-none
-                    absolute
-                    inset-0
-                    rounded-[20px]
-                    ring-1
-                    ring-inset
-                    ring-white/[0.045]
-                    transition-colors
-                    duration-300
-                    group-hover:ring-white/[0.075]
-                  "
-                />
+              <p
+                className="
+                  mt-3
+                  text-[12px]
+                  leading-[1.72]
+                  text-white/40
 
-                {/* Accent ambient glow */}
-
-                <div
-                  aria-hidden="true"
-                  className="
-                    pointer-events-none
-                    absolute
-                    -left-10
-                    -top-12
-                    h-[140px]
-                    w-[140px]
-                    rounded-full
-                    opacity-0
-                    blur-[45px]
-                    transition-opacity
-                    duration-500
-                    group-hover:opacity-100
-                  "
-                  style={{
-                    background: "rgba(255,90,31,0.08)",
-                  }}
-                />
-
-                {/* Hover accent line */}
-
-                {/* <div
-                  aria-hidden="true"
-                  className="
-                    pointer-events-none
-                    absolute
-                    left-5
-                    right-5
-                    top-0
-                    h-px
-                    opacity-0
-                    transition-opacity
-                    duration-300
-                    group-hover:opacity-100
-                  "
-                  style={{
-                    background:
-                      "linear-gradient(90deg, transparent, rgba(255,90,31,0.55), transparent)",
-                  }}
-                /> */}
-
-                <div className="relative">
-                  <ProblemSignal type={problem.type} />
-
-                  <h3
-                    className="
-                      mt-3
-                      text-[15px]
-                      font-medium
-                      tracking-[-0.025em]
-                      text-white/92
-                    "
-                  >
-                    {problem.title}
-                  </h3>
-
-                  <p
-                    className="
-                      mt-2.5
-                      text-[12px]
-                      leading-[1.7]
-                      text-white/36
-                    "
-                  >
-                    {problem.description}
-                  </p>
-                </div>
-              </motion.article>
-            ))}
-          </motion.div>
-        </div>
+                  xl:text-[13px]
+                "
+              >
+                {problem.description}
+              </p>
+            </motion.article>
+          ))}
+        </motion.div>
 
         {/* ==================================================
-            FLOATING DIVIDER
+            DIVIDER
         ================================================== */}
 
         <motion.div
@@ -375,7 +318,7 @@ export function Problem() {
               ? false
               : {
                   opacity: 0,
-                  scaleX: 0.92,
+                  scaleX: 0.96,
                 }
           }
           whileInView={{
@@ -387,21 +330,19 @@ export function Problem() {
             amount: 0.5,
           }}
           transition={{
-            duration: 0.8,
+            duration: 0.7,
             ease: [0.22, 1, 0.36, 1],
           }}
           className="
             mx-auto
-            mt-16
+            mt-[68px]
             h-px
             w-full
-            max-w-[1080px]
-
-            md:mt-[72px]
+            max-w-[1220px]
           "
           style={{
             background:
-              "linear-gradient(90deg, transparent, rgba(255,255,255,0.085) 18%, rgba(255,255,255,0.085) 82%, transparent)",
+              "linear-gradient(90deg, transparent, rgba(255,255,255,0.075) 10%, rgba(255,255,255,0.075) 90%, transparent)",
           }}
         />
 
@@ -415,7 +356,7 @@ export function Problem() {
               ? false
               : {
                   opacity: 0,
-                  y: 18,
+                  y: 14,
                 }
           }
           whileInView={{
@@ -424,26 +365,41 @@ export function Problem() {
           }}
           viewport={{
             once: true,
-            amount: 0.5,
+            amount: 0.4,
           }}
           transition={{
             duration: 0.65,
             delay: 0.08,
             ease: [0.22, 1, 0.36, 1],
           }}
-          className="relative mt-10 md:mt-12"
+          className="
+            mx-auto
+            mt-8
+            max-w-[1220px]
+
+            md:mt-9
+          "
         >
-          <div className="grid gap-10 md:grid-cols-3 md:gap-0">
+          <div
+            className="
+              grid
+              gap-10
+
+              md:grid-cols-3
+              md:gap-0
+            "
+          >
             {stats.map((stat, index) => (
               <div
-                key={stat.description}
+                key={stat.label}
                 className="
                   relative
                   flex
-                  min-h-[130px]
+                  min-h-[178px]
                   flex-col
                   items-center
                   justify-center
+                  px-6
                   text-center
                 "
               >
@@ -455,7 +411,7 @@ export function Problem() {
                       left-0
                       top-1/2
                       hidden
-                      h-[82px]
+                      h-[100px]
                       w-px
                       -translate-y-1/2
 
@@ -463,24 +419,27 @@ export function Problem() {
                     "
                     style={{
                       background:
-                        "linear-gradient(to bottom, transparent, rgba(255,255,255,0.09), transparent)",
+                        "linear-gradient(to bottom, transparent, rgba(255,255,255,0.085), transparent)",
                     }}
                   />
                 )}
 
                 <p
                   className="
-                    text-[40px]
+                    text-[50px]
                     font-medium
                     leading-none
-                    tracking-[-0.055em]
+                    tracking-[-0.06em]
                     text-white
 
-                    lg:text-[44px]
+                    md:text-[54px]
+
+                    xl:text-[58px]
                   "
                 >
                   <AnimatedStat
                     value={stat.value}
+                    prefix={stat.prefix}
                     suffix={stat.suffix}
                     decimals={stat.decimals}
                   />
@@ -488,73 +447,51 @@ export function Problem() {
 
                 <p
                   className="
-                    mx-auto
-                    mt-3
-                    max-w-[230px]
+                    mt-4
                     text-[12px]
-                    leading-5
-                    text-white/40
+                    font-medium
+                    leading-[1.4]
+                    tracking-[-0.015em]
+                    text-white/72
+
+                    sm:text-[13px]
+
+                    xl:text-[14px]
+                  "
+                >
+                  {stat.label}
+                </p>
+
+                <p
+                  className="
+                    mx-auto
+                    mt-2
+                    max-w-[270px]
+                    text-[11px]
+                    leading-[1.55]
+                    text-white/36
+
+                    xl:text-[12px]
                   "
                 >
                   {stat.description}
                 </p>
 
-                <p className="mt-2 text-[8px] text-white/16">
+                <p
+                  className="
+                    mt-3
+                    text-[9px]
+                    leading-none
+                    text-white/22
+                  "
+                >
                   {stat.source}
                 </p>
               </div>
             ))}
           </div>
         </motion.div>
-
-        {/* ==================================================
-            FOOTER
-        ================================================== */}
-
-        <motion.div
-          initial={
-            reduceMotion
-              ? false
-              : {
-                  opacity: 0,
-                }
-          }
-          whileInView={{
-            opacity: 1,
-          }}
-          viewport={{
-            once: true,
-          }}
-          transition={{
-            duration: 0.7,
-            delay: 0.15,
-          }}
-          className="relative mt-12 md:mt-14"
-        >
-          <div
-            aria-hidden="true"
-            className="h-px w-full"
-            style={{
-              background:
-                "linear-gradient(90deg, transparent, rgba(255,255,255,0.045) 12%, rgba(255,255,255,0.045) 88%, transparent)",
-            }}
-          />
-
-          <div
-            className="
-              mt-5
-              flex
-              flex-col
-              gap-2
-
-              sm:flex-row
-              sm:items-center
-              sm:justify-between
-            "
-          >
-          </div>
-        </motion.div>
-      </Container>
+      </div>
     </section>
   );
 }

@@ -3,17 +3,39 @@ import Link from "next/link";
 import { HeroBackground } from "@/components/sections/hero/HeroBackground";
 import { Container } from "@/components/ui/Container";
 
-export function Hero() {
-  const platforms = [
-    "amazon",
-    "Google",
-    "OpenAI",
-    "stripe",
-    "shopify",
-    "aws",
-    "n8n",
-  ];
+/* =========================================================
+   PLATFORM LOGOS
+========================================================= */
 
+const platforms = [
+  {
+    name: "Google",
+    src: "/images/brands/google-wordmark.svg",
+    imageClassName: "h-[20px] sm:h-[22px]",
+  },
+  {
+    name: "OpenAI",
+    src: "/images/brands/openai-wordmark.svg",
+    imageClassName: "h-[45px] sm:h-[50px]",
+  },
+  {
+    name: "Stripe",
+    src: "/images/brands/stripe-wordmark.svg",
+    imageClassName: "h-[29px] sm:h-[32px]",
+  },
+  {
+    name: "AWS",
+    src: "/images/brands/aws-wordmark.svg",
+    imageClassName: "h-[40px] sm:h-[45px]",
+  },
+  {
+    name: "n8n",
+    src: "/images/brands/n8n-logo-white.svg",
+    imageClassName: "h-[23px] sm:h-[26px]",
+  },
+] as const;
+
+export function Hero() {
   return (
     <section
       className="
@@ -35,15 +57,15 @@ export function Hero() {
             flex
             min-h-[100dvh]
             justify-center
+            pb-[190px]
             pt-[21vh]
-            pb-[170px]
+            sm:pb-[200px]
             sm:pt-[20vh]
-            sm:pb-[180px]
             lg:pt-[18vh]
             xl:pt-[17vh]
           "
         >
-          <div className="mx-auto w-full max-w-[900px] text-center">
+          <div className="mx-auto w-full max-w-[960px] text-center">
             {/* Positioning */}
             <p
               className="
@@ -51,13 +73,13 @@ export function Hero() {
                 text-[10px]
                 font-medium
                 uppercase
-                tracking-[0.3em]
-                text-white/42
+                tracking-[0.26em]
+                text-white/50
                 sm:text-[11px]
               "
             >
               Web Development
-              <span className="mx-3 text-white/20">·</span>
+              <span className="mx-3 text-white/22">·</span>
               Automation Systems
             </p>
 
@@ -65,15 +87,16 @@ export function Hero() {
             <h1
               className="
                 text-[42px]
-                leading-[0.98]
-                tracking-[-0.055em]
+                font-normal
+                leading-[0.97]
+                tracking-[-0.04em]
                 sm:text-[60px]
-                lg:text-[68px]
-                xl:text-[78px]
+                lg:text-[72px]
+                xl:text-[82px]
               "
               style={{
                 textShadow:
-                  "0 4px 18px rgba(0,0,0,0.72), 0 14px 50px rgba(0,0,0,0.48)",
+                  "0 4px 20px rgba(0,0,0,0.72), 0 16px 56px rgba(0,0,0,0.52)",
               }}
             >
               Build the next version
@@ -88,18 +111,22 @@ export function Hero() {
             <p
               className="
                 mx-auto
-                mt-6
-                max-w-[560px]
+                mt-7
+                max-w-[600px]
                 text-[15px]
-                leading-6
-                text-white/62
+                font-normal
+                leading-[1.6]
+                tracking-[-0.005em]
+                text-white/64
                 sm:text-[16px]
               "
               style={{
-                textShadow: "0 3px 14px rgba(0,0,0,0.8)",
+                textShadow: "0 3px 16px rgba(0,0,0,0.82)",
               }}
             >
-              High-converting websites, custom software and automation for companies that want to grow, operate faster and stop being held back by outdated systems.
+              High-converting websites, custom software and automation for
+              companies that want to grow, operate faster and stop being held
+              back by outdated systems.
             </p>
 
             {/* CTA */}
@@ -127,6 +154,7 @@ export function Hero() {
                 "
               >
                 <span>Book a strategy call</span>
+
                 <span
                   aria-hidden="true"
                   className="
@@ -148,17 +176,18 @@ export function Hero() {
                   justify-center
                   rounded-full
                   border
-                  border-white/[0.22]
+                  border-white/[0.16]
                   bg-black/10
                   px-7
                   text-sm
                   font-medium
-                  text-white
+                  text-white/88
                   backdrop-blur-sm
                   transition-colors
                   duration-200
-                  hover:border-white/40
+                  hover:border-white/30
                   hover:bg-white/[0.04]
+                  hover:text-white
                 "
               >
                 View my work
@@ -169,105 +198,146 @@ export function Hero() {
       </Container>
 
       {/* ====================================================
-          BOTTOM TRUST / LOGOS STRIP
+          PLATFORM LOGOS
       ==================================================== */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20">
+      <div
+        className="
+          pointer-events-none
+          absolute
+          inset-x-0
+          bottom-[26px]
+          z-20
+          sm:bottom-[30px]
+        "
+      >
+        {/* Dark fade over lower Earth */}
+        <div
+          className="
+            absolute
+            inset-x-0
+            bottom-[-30px]
+            h-[190px]
+            bg-gradient-to-t
+            from-[#020609]
+            via-[#020609]/66
+            to-transparent
+          "
+        />
+
+        {/* Soft shadow behind entire logo strip */}
+        <div
+          className="
+            absolute
+            bottom-[-35px]
+            left-1/2
+            h-[135px]
+            w-[82%]
+            max-w-[1100px]
+            -translate-x-1/2
+            rounded-full
+            bg-black/70
+            blur-[50px]
+          "
+        />
+
         <Container className="relative">
-          <div className="relative pb-6 sm:pb-8">
-            {/* shadow / glow behind */}
+          <div className="mx-auto w-full max-w-[1040px]">
+            {/* Label */}
             <div
               className="
-                absolute
-                inset-x-[8%]
-                bottom-2
-                h-[88px]
-                rounded-[999px]
-                bg-black/70
-                blur-3xl
-                sm:inset-x-[12%]
+                mb-5
+                flex
+                items-center
+                justify-center
+                gap-5
               "
-            />
-
-            <div className="relative mx-auto w-full max-w-[1120px]">
-              {/* clean label */}
-              <div className="mb-4 flex items-center justify-center gap-4">
-                <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/12 to-white/12" />
-                <p
-                  className="
-                    shrink-0
-                    text-[10px]
-                    font-medium
-                    uppercase
-                    tracking-[0.34em]
-                    text-white/52
-                    sm:text-[11px]
-                  "
-                >
-                  TRUSTED WORKFLOWS
-                </p>
-                <div className="h-px flex-1 bg-gradient-to-l from-transparent via-white/12 to-white/12" />
-              </div>
-
-              {/* logos / names row */}
+            >
               <div
                 className="
-                  rounded-[28px]
-                  border
-                  border-white/[0.10]
-                  bg-black/18
-                  px-4
-                  py-4
-                  shadow-[0_18px_60px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.04)]
-                  backdrop-blur-[10px]
-                  sm:px-7
+                  h-px
+                  w-[80px]
+                  bg-gradient-to-r
+                  from-transparent
+                  to-white/[0.10]
+                  sm:w-[150px]
+                "
+              />
+
+              <p
+                className="
+                  shrink-0
+                  text-[9px]
+                  font-medium
+                  uppercase
+                  tracking-[0.32em]
+                  text-white/36
+                  sm:text-[10px]
                 "
               >
+                Platforms I build with
+              </p>
+
+              <div
+                className="
+                  h-px
+                  w-[80px]
+                  bg-gradient-to-l
+                  from-transparent
+                  to-white/[0.10]
+                  sm:w-[150px]
+                "
+              />
+            </div>
+
+            {/* Logos */}
+            <div
+              className="
+                mx-auto
+                flex
+                max-w-[900px]
+                flex-wrap
+                items-center
+                justify-center
+                gap-x-9
+                gap-y-4
+                sm:gap-x-12
+                lg:flex-nowrap
+                lg:justify-between
+              "
+            >
+              {platforms.map((platform) => (
                 <div
+                  key={platform.name}
                   className="
                     flex
-                    flex-wrap
+                    h-[36px]
+                    min-w-[78px]
                     items-center
                     justify-center
-                    gap-y-3
-                    text-white/92
+                    sm:min-w-[90px]
                   "
                 >
-                  {platforms.map((platform, index) => (
-                    <div
-                      key={platform}
-                      className="flex items-center justify-center"
-                    >
-                      <span
-                        className={`
-                          px-4
-                          text-[18px]
-                          leading-none
-                          tracking-[-0.02em]
-                          sm:px-5
-                          ${
-                            platform === "amazon" ||
-                            platform === "stripe" ||
-                            platform === "shopify" ||
-                            platform === "aws" ||
-                            platform === "n8n"
-                              ? "font-medium lowercase"
-                              : "font-medium"
-                          }
-                        `}
-                        style={{
-                          textShadow: "0 2px 14px rgba(0,0,0,0.45)",
-                        }}
-                      >
-                        {platform}
-                      </span>
-
-                      {index !== platforms.length - 1 && (
-                        <span className="hidden h-5 w-px bg-white/12 sm:block" />
-                      )}
-                    </div>
-                  ))}
+                  <img
+                    src={platform.src}
+                    alt={platform.name}
+                    draggable={false}
+                    loading="eager"
+                    decoding="async"
+                    className={`
+                      block
+                      w-auto
+                      max-w-[118px]
+                      select-none
+                      object-contain
+                      opacity-[0.62]
+                      ${platform.imageClassName}
+                    `}
+                    style={{
+                      filter: "brightness(0) invert(1)",
+                    }}
+                  />
                 </div>
-              </div>
+              ))}
             </div>
           </div>
         </Container>

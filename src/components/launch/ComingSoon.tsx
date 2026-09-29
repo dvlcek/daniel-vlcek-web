@@ -4,7 +4,7 @@ import Image from "next/image";
 
 import {
   ArrowRight,
-  Code2,
+  Braces,
   Sparkles,
   Workflow,
 } from "lucide-react";
@@ -22,8 +22,6 @@ import {
   CalWarmup,
 } from "@/components/contact/CalWarmup";
 
-
-
 /* =========================================================
    SERVICES
 ========================================================= */
@@ -32,28 +30,28 @@ const services = [
   {
     label: "Custom Software",
     description:
-      "Tailored digital systems built around real business needs.",
-    icon: Code2,
+      "Digital systems built around real business requirements.",
+    icon: Braces,
   },
   {
     label: "Automation Systems",
     description:
-      "Streamline operations and reduce repetitive manual work.",
+      "Processes designed to reduce repetitive manual work.",
     icon: Workflow,
   },
   {
     label: "AI Workflows",
     description:
-      "Apply AI where it creates real operational leverage.",
+      "AI applied where it creates measurable operational leverage.",
     icon: Sparkles,
   },
 ] as const;
 
 /* =========================================================
-   STATUS SIGNAL
+   STATUS MARK
 ========================================================= */
 
-function RefinementSignal({
+function StatusMark({
   reducedMotion,
 }: {
   reducedMotion: boolean;
@@ -63,169 +61,40 @@ function RefinementSignal({
       className="
         relative
         flex
-        h-[112px]
-        w-[112px]
+        h-[88px]
+        w-[88px]
         shrink-0
         items-center
         justify-center
       "
     >
-      {/* soft ambient glow */}
-
-      <motion.div
-        animate={
-          reducedMotion
-            ? undefined
-            : {
-                opacity: [
-                  0.04,
-                  0.1,
-                  0.04,
-                ],
-                scale: [
-                  0.94,
-                  1.06,
-                  0.94,
-                ],
-              }
-        }
-        transition={{
-          duration: 5.6,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-        className="
-          absolute
-          inset-3
-          rounded-full
-          bg-[#FF5A1F]
-          blur-[34px]
-        "
-      />
-
-      {/* outer ring */}
-
-      <motion.div
-        animate={
-          reducedMotion
-            ? undefined
-            : {
-                opacity: [
-                  0.11,
-                  0.23,
-                  0.11,
-                ],
-                scale: [
-                  0.985,
-                  1.035,
-                  0.985,
-                ],
-              }
-        }
-        transition={{
-          duration: 5.8,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
+      <div
         className="
           absolute
           inset-0
           rounded-full
           border
-          border-white/[0.13]
+          border-white/[0.07]
         "
       />
 
-      {/* middle ring */}
-
-      <motion.div
-        animate={
-          reducedMotion
-            ? undefined
-            : {
-                opacity: [
-                  0.14,
-                  0.32,
-                  0.14,
-                ],
-                scale: [
-                  1,
-                  1.045,
-                  1,
-                ],
-              }
-        }
-        transition={{
-          duration: 4.9,
-          delay: 0.35,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
+      <div
         className="
           absolute
           inset-[17px]
           rounded-full
           border
-          border-white/[0.15]
+          border-white/[0.09]
         "
       />
-
-      {/* inner ring */}
 
       <motion.div
         animate={
           reducedMotion
             ? undefined
             : {
-                opacity: [
-                  0.18,
-                  0.4,
-                  0.18,
-                ],
-                scale: [
-                  1,
-                  1.055,
-                  1,
-                ],
-              }
-        }
-        transition={{
-          duration: 4.2,
-          delay: 0.75,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-        className="
-          absolute
-          inset-[34px]
-          rounded-full
-          border
-          border-[#FF5A1F]/35
-        "
-      />
-
-      {/* center dot */}
-
-      <motion.div
-        animate={
-          reducedMotion
-            ? undefined
-            : {
-                scale: [
-                  0.92,
-                  1.08,
-                  0.92,
-                ],
-                opacity: [
-                  0.75,
-                  1,
-                  0.75,
-                ],
-                boxShadow: [
-                  "0 0 0 rgba(255,90,31,0)",
-                  "0 0 22px rgba(255,90,31,0.45)",
-                  "0 0 0 rgba(255,90,31,0)",
-                ],
+                opacity: [0.5, 1, 0.5],
+                scale: [0.92, 1.08, 0.92],
               }
         }
         transition={{
@@ -234,63 +103,14 @@ function RefinementSignal({
           ease: "easeInOut",
         }}
         className="
-          relative
-          z-10
-          h-[8px]
-          w-[8px]
+          h-[7px]
+          w-[7px]
           rounded-full
           bg-[#FF5A1F]
+          shadow-[0_0_18px_rgba(255,90,31,0.45)]
         "
       />
     </div>
-  );
-}
-
-/* =========================================================
-   GLASS HIGHLIGHTS
-========================================================= */
-
-function GlassHighlights() {
-  return (
-    <>
-      <div
-        className="
-          pointer-events-none
-          absolute
-          inset-0
-          rounded-[inherit]
-          bg-[linear-gradient(145deg,rgba(255,255,255,0.055)_0%,rgba(255,255,255,0.012)_29%,rgba(255,255,255,0)_62%)]
-        "
-      />
-
-      <div
-        className="
-          pointer-events-none
-          absolute
-          inset-x-8
-          top-0
-          h-px
-          bg-gradient-to-r
-          from-transparent
-          via-white/[0.20]
-          to-transparent
-        "
-      />
-
-      <div
-        className="
-          pointer-events-none
-          absolute
-          -right-20
-          -top-20
-          h-48
-          w-48
-          rounded-full
-          bg-white/[0.018]
-          blur-[60px]
-        "
-      />
-    </>
   );
 }
 
@@ -311,7 +131,7 @@ export function ComingSoon() {
         relative
         min-h-[100dvh]
         overflow-x-hidden
-        bg-[#020608]
+        bg-[#020405]
         text-white
 
         lg:h-[100dvh]
@@ -320,7 +140,7 @@ export function ComingSoon() {
       "
     >
       {/* =====================================================
-          EARTH BACKGROUND
+          BACKGROUND
       ===================================================== */}
 
       <div
@@ -332,7 +152,7 @@ export function ComingSoon() {
         "
       >
         <Image
-          src="/images/hero/earth.png"
+          src="/images/hero/pp.jpg"
           alt=""
           fill
           priority
@@ -340,94 +160,68 @@ export function ComingSoon() {
           className="
             object-cover
 
-            object-[64%_42%]
+            object-[63%_45%]
 
-            sm:object-[58%_45%]
+            sm:object-[58%_46%]
             md:object-[54%_48%]
-            lg:object-[50%_50%]
+            lg:object-[50%_51%]
           "
         />
 
-        {/* global cinematic control */}
+        {/* top darkness */}
 
         <div
           className="
             absolute
             inset-0
-            bg-[linear-gradient(180deg,rgba(1,5,8,0.62)_0%,rgba(1,5,8,0.18)_38%,rgba(1,5,8,0.015)_63%,rgba(1,5,8,0.34)_100%)]
+            bg-[linear-gradient(180deg,rgba(1,3,4,0.78)_0%,rgba(1,3,4,0.42)_30%,rgba(1,3,4,0.08)_55%,rgba(1,3,4,0.18)_100%)]
           "
         />
 
-        {/* hero readability */}
+        {/* readability behind hero */}
 
         <div
           className="
             absolute
             left-1/2
-            top-[8%]
-            h-[500px]
+            top-[11%]
+            h-[420px]
             w-[920px]
             -translate-x-1/2
             rounded-full
-            bg-black/34
-            blur-[155px]
+            bg-black/35
+            blur-[150px]
           "
         />
 
-        {/* bottom depth */}
+        {/* depth behind cards */}
 
         <div
           className="
             absolute
             inset-x-0
             bottom-0
-            h-[30%]
+            h-[32%]
             bg-gradient-to-b
             from-transparent
-            via-[#020608]/22
-            to-[#020608]/86
+            via-[#020405]/20
+            to-[#020405]/88
           "
         />
 
-        {/* subtle orange ambient */}
+        {/* subtle edge vignette */}
 
-        <motion.div
-          animate={
-            reducedMotion
-              ? undefined
-              : {
-                  opacity: [
-                    0.62,
-                    1,
-                    0.62,
-                  ],
-                  scale: [
-                    0.96,
-                    1.04,
-                    0.96,
-                  ],
-                }
-          }
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
+        <div
           className="
             absolute
-            bottom-[23%]
-            left-[7%]
-            h-[220px]
-            w-[420px]
-            rounded-full
-            bg-[#FF5A1F]/[0.045]
-            blur-[120px]
+            inset-0
+            bg-[radial-gradient(circle_at_center,transparent_45%,rgba(0,0,0,0.28)_100%)]
           "
         />
       </div>
 
       {/* =====================================================
-          PAGE CONTENT
+          CONTENT
       ===================================================== */}
 
       <div
@@ -463,9 +257,9 @@ export function ComingSoon() {
             items-center
             justify-between
             border-b
-            border-white/[0.05]
+            border-white/[0.045]
 
-            sm:h-[80px]
+            sm:h-[78px]
           "
         >
           <motion.span
@@ -474,7 +268,7 @@ export function ComingSoon() {
                 ? false
                 : {
                     opacity: 0,
-                    y: -8,
+                    y: -5,
                   }
             }
             animate={{
@@ -483,19 +277,14 @@ export function ComingSoon() {
             }}
             transition={{
               duration: 0.7,
-              ease: [
-                0.22,
-                1,
-                0.36,
-                1,
-              ],
+              ease: [0.22, 1, 0.36, 1],
             }}
             className="
               text-[10px]
               font-semibold
               uppercase
               tracking-[0.34em]
-              text-white/92
+              text-white/90
 
               sm:text-[11px]
             "
@@ -511,7 +300,6 @@ export function ComingSoon() {
                 ? undefined
                 : {
                     y: -1,
-                    scale: 1.015,
                   }
             }
             whileTap={
@@ -526,28 +314,27 @@ export function ComingSoon() {
               hidden
               h-[40px]
               items-center
-              justify-center
               gap-5
               rounded-full
               border
-              border-white/[0.13]
-              bg-black/[0.20]
+              border-white/[0.12]
+              bg-black/15
               px-5
-              text-[9px]
-              font-semibold
-              text-white/68
-              backdrop-blur-2xl
-              transition-colors
+              text-[10px]
+              font-medium
+              text-white/70
+              backdrop-blur-xl
+              transition-all
               duration-300
 
-              hover:border-white/[0.26]
-              hover:bg-white/[0.04]
+              hover:border-white/[0.22]
+              hover:bg-white/[0.025]
               hover:text-white
 
               sm:inline-flex
             "
           >
-            Book a free discovery call
+            Book a discovery call
 
             <ArrowRight
               size={13}
@@ -576,7 +363,7 @@ export function ComingSoon() {
             sm:pb-7
 
             lg:min-h-0
-            lg:pb-[clamp(18px,2.4vh,30px)]
+            lg:pb-[clamp(20px,2.5vh,30px)]
           "
         >
           {/* =================================================
@@ -589,7 +376,7 @@ export function ComingSoon() {
                 ? false
                 : {
                     opacity: 0,
-                    y: 18,
+                    y: 16,
                   }
             }
             animate={{
@@ -597,20 +384,15 @@ export function ComingSoon() {
               y: 0,
             }}
             transition={{
-              duration: 0.85,
-              ease: [
-                0.22,
-                1,
-                0.36,
-                1,
-              ],
+              duration: 0.9,
+              ease: [0.22, 1, 0.36, 1],
             }}
             className="
               mx-auto
               my-12
               flex
               w-full
-              max-w-[960px]
+              max-w-[980px]
               flex-col
               items-center
               text-center
@@ -620,70 +402,52 @@ export function ComingSoon() {
               lg:my-auto
             "
           >
-            {/* categories */}
+            {/* eyebrow */}
 
-            <motion.div
-              initial={
-                reducedMotion
-                  ? false
-                  : {
-                      opacity: 0,
-                    }
-              }
-              animate={{
-                opacity: 1,
-              }}
-              transition={{
-                duration: 0.7,
-                delay: 0.12,
-              }}
+            <div
               className="
-                mb-5
+                mb-6
                 flex
-                flex-wrap
                 items-center
                 justify-center
-                gap-x-3
-                gap-y-2
+                gap-3
                 text-[7px]
                 font-medium
                 uppercase
-                tracking-[0.32em]
-                text-white/37
+                tracking-[0.34em]
+                text-white/32
 
-                sm:mb-6
-                sm:gap-x-4
                 sm:text-[8px]
               "
             >
               <span>Software</span>
 
-              <span className="text-[#FF5A1F]/55">
+              <span className="text-[#FF5A1F]/60">
                 /
               </span>
 
               <span>Automation</span>
 
-              <span className="text-[#FF5A1F]/55">
+              <span className="text-[#FF5A1F]/60">
                 /
               </span>
 
-              <span>AI Solutions</span>
-            </motion.div>
+              <span>AI Systems</span>
+            </div>
 
             {/* heading */}
 
             <h1
               className="
-                max-w-[930px]
-                text-[clamp(2.8rem,10vw,4.2rem)]
+                max-w-[950px]
+                text-[clamp(2.85rem,10vw,4.35rem)]
                 font-medium
-                leading-[0.975]
-                tracking-[-0.06em]
+                leading-[0.97]
+                tracking-[-0.058em]
 
-                sm:text-[clamp(3.8rem,7vw,5.4rem)]
+                sm:text-[clamp(4rem,7.2vw,5.6rem)]
 
-                lg:text-[clamp(4rem,6.2vh,5.75rem)]
+                lg:text-[clamp(4.25rem,6.35vh,5.9rem)]
               "
             >
               Scalable digital systems
@@ -696,36 +460,19 @@ export function ComingSoon() {
               </span>
             </h1>
 
-            {/* text */}
+            {/* primary description */}
 
-            <motion.p
-              initial={
-                reducedMotion
-                  ? false
-                  : {
-                      opacity: 0,
-                      y: 8,
-                    }
-              }
-              animate={{
-                opacity: 1,
-                y: 0,
-              }}
-              transition={{
-                duration: 0.7,
-                delay: 0.18,
-              }}
+            <p
               className="
                 mt-6
-                max-w-[665px]
+                max-w-[680px]
                 text-[12.5px]
                 leading-[1.72]
-                text-white/52
+                text-white/50
 
                 sm:text-[14px]
 
-                lg:mt-[clamp(18px,2.2vh,27px)]
-                lg:text-[clamp(12.5px,1.32vh,14.5px)]
+                lg:mt-[clamp(20px,2.4vh,28px)]
               "
             >
               I build custom software,
@@ -734,33 +481,27 @@ export function ComingSoon() {
               businesses that want to operate
               smarter and scale with less
               friction.
-              <br className="hidden sm:block" />
-              <span className="sm:hidden">
-                {" "}
-              </span>
+            </p>
+
+            {/* website status copy */}
+
+            <p
+              className="
+                mt-2
+                text-[11px]
+                leading-relaxed
+                text-white/32
+
+                sm:text-[12px]
+              "
+            >
               The full website is currently
               being rebuilt and refined.
-            </motion.p>
+            </p>
 
             {/* actions */}
 
-            <motion.div
-              initial={
-                reducedMotion
-                  ? false
-                  : {
-                      opacity: 0,
-                      y: 10,
-                    }
-              }
-              animate={{
-                opacity: 1,
-                y: 0,
-              }}
-              transition={{
-                duration: 0.7,
-                delay: 0.24,
-              }}
+            <div
               className="
                 mt-7
                 flex
@@ -773,7 +514,7 @@ export function ComingSoon() {
                 sm:w-auto
                 sm:flex-row
 
-                lg:mt-[clamp(20px,2.7vh,31px)]
+                lg:mt-[clamp(22px,2.8vh,32px)]
               "
             >
               <motion.button
@@ -784,7 +525,6 @@ export function ComingSoon() {
                     ? undefined
                     : {
                         y: -2,
-                        scale: 1.012,
                       }
                 }
                 whileTap={
@@ -808,20 +548,20 @@ export function ComingSoon() {
                   text-[11px]
                   font-semibold
                   text-white
-                  shadow-[0_16px_50px_rgba(255,90,31,0.20)]
-                  transition-[background-color,box-shadow]
+                  shadow-[0_16px_42px_rgba(255,90,31,0.18)]
+                  transition-all
                   duration-300
 
-                  hover:bg-[#ff672e]
-                  hover:shadow-[0_20px_62px_rgba(255,90,31,0.29)]
+                  hover:bg-[#ff652b]
+                  hover:shadow-[0_18px_48px_rgba(255,90,31,0.24)]
 
                   sm:w-auto
-                  sm:min-w-[232px]
+                  sm:min-w-[220px]
 
                   lg:text-[12px]
                 "
               >
-                Book a free discovery call
+                Book a discovery call
 
                 <ArrowRight
                   size={15}
@@ -843,7 +583,6 @@ export function ComingSoon() {
                     ? undefined
                     : {
                         y: -2,
-                        scale: 1.012,
                       }
                 }
                 whileTap={
@@ -863,22 +602,22 @@ export function ComingSoon() {
                   gap-8
                   rounded-full
                   border
-                  border-white/[0.18]
-                  bg-black/[0.20]
+                  border-white/[0.14]
+                  bg-black/15
                   px-7
                   text-[11px]
-                  font-semibold
-                  text-white/82
-                  backdrop-blur-2xl
-                  transition-[background-color,border-color,color]
+                  font-medium
+                  text-white/70
+                  backdrop-blur-xl
+                  transition-all
                   duration-300
 
-                  hover:border-white/[0.34]
-                  hover:bg-white/[0.045]
+                  hover:border-white/[0.26]
+                  hover:bg-white/[0.025]
                   hover:text-white
 
                   sm:w-auto
-                  sm:min-w-[162px]
+                  sm:min-w-[154px]
 
                   lg:text-[12px]
                 "
@@ -896,11 +635,11 @@ export function ComingSoon() {
                   "
                 />
               </motion.button>
-            </motion.div>
+            </div>
           </motion.div>
 
           {/* =================================================
-              CARDS
+              INFORMATION
           ================================================= */}
 
           <motion.div
@@ -909,7 +648,7 @@ export function ComingSoon() {
                 ? false
                 : {
                     opacity: 0,
-                    y: 18,
+                    y: 14,
                   }
             }
             animate={{
@@ -918,13 +657,8 @@ export function ComingSoon() {
             }}
             transition={{
               duration: 0.85,
-              delay: 0.14,
-              ease: [
-                0.22,
-                1,
-                0.36,
-                1,
-              ],
+              delay: 0.12,
+              ease: [0.22, 1, 0.36, 1],
             }}
             className="
               mx-auto
@@ -933,457 +667,304 @@ export function ComingSoon() {
               max-w-[1100px]
               gap-3
 
-              lg:grid-cols-[1.08fr_0.92fr]
+              lg:grid-cols-[1.12fr_0.88fr]
               lg:gap-4
             "
           >
             {/* ===============================================
-                SERVICES
+                WHAT I DO
             =============================================== */}
 
-            <motion.section
-              whileHover={
-                reducedMotion
-                  ? undefined
-                  : {
-                      y: -2,
-                    }
-              }
-              transition={{
-                duration: 0.3,
-                ease: "easeOut",
-              }}
+            <section
               className="
-                group/card
                 relative
                 overflow-hidden
-                rounded-[20px]
+                rounded-[18px]
                 border
-                border-white/[0.095]
-                bg-black/[0.61]
+                border-white/[0.085]
+                bg-[#050708]/80
                 p-5
-                shadow-[0_26px_90px_rgba(0,0,0,0.43)]
-                backdrop-blur-[34px]
-                backdrop-saturate-[1.12]
-                transition-[border-color,background-color]
-                duration-500
-
-                hover:border-white/[0.145]
-                hover:bg-black/[0.66]
+                shadow-[0_22px_70px_rgba(0,0,0,0.30)]
+                backdrop-blur-[24px]
 
                 sm:p-6
-
-                lg:p-[clamp(20px,2.4vh,28px)]
               "
             >
-              <GlassHighlights />
+              <div
+                className="
+                  absolute
+                  inset-x-7
+                  top-0
+                  h-px
+                  bg-gradient-to-r
+                  from-transparent
+                  via-white/[0.14]
+                  to-transparent
+                "
+              />
 
-              <div className="relative z-10">
-                <p
-                  className="
-                    text-[8px]
-                    font-semibold
-                    uppercase
-                    tracking-[0.3em]
-                    text-white/38
+              <p
+                className="
+                  text-[8px]
+                  font-semibold
+                  uppercase
+                  tracking-[0.31em]
+                  text-white/34
 
-                    lg:text-[9px]
-                  "
-                >
-                  What I do
-                </p>
+                  lg:text-[9px]
+                "
+              >
+                What I do
+              </p>
 
-                <div
-                  className="
-                    mt-5
-                    grid
-                    divide-y
-                    divide-white/[0.07]
+              <div
+                className="
+                  mt-5
+                  grid
+                  divide-y
+                  divide-white/[0.06]
 
-                    sm:grid-cols-3
-                    sm:divide-x
-                    sm:divide-y-0
-                  "
-                >
-                  {services.map(
-                    (
-                      service,
-                      index,
-                    ) => {
-                      const Icon =
-                        service.icon;
+                  sm:grid-cols-3
+                  sm:divide-x
+                  sm:divide-y-0
+                "
+              >
+                {services.map(
+                  (
+                    service,
+                    index,
+                  ) => {
+                    const Icon =
+                      service.icon;
 
-                      return (
-                        <motion.div
-                          key={
-                            service.label
+                    return (
+                      <div
+                        key={
+                          service.label
+                        }
+                        className={`
+                          flex
+                          gap-4
+                          py-5
+
+                          first:pt-0
+                          last:pb-0
+
+                          sm:block
+                          sm:px-5
+                          sm:py-0
+
+                          ${
+                            index === 0
+                              ? "sm:pl-0"
+                              : ""
                           }
-                          whileHover={
-                            reducedMotion
-                              ? undefined
-                              : {
-                                  y: -2,
-                                }
+
+                          ${
+                            index ===
+                            services.length -
+                              1
+                              ? "sm:pr-0"
+                              : ""
                           }
-                          className={`
-                            group/service
+                        `}
+                      >
+                        <div
+                          className="
                             flex
-                            gap-4
-                            py-5
-
-                            first:pt-0
-                            last:pb-0
-
-                            sm:block
-                            sm:px-5
-                            sm:py-0
-
-                            ${
-                              index === 0
-                                ? "sm:pl-0"
-                                : ""
-                            }
-
-                            ${
-                              index ===
-                              services.length -
-                                1
-                                ? "sm:pr-0"
-                                : ""
-                            }
-                          `}
+                            h-7
+                            w-7
+                            shrink-0
+                            items-center
+                            justify-center
+                            text-[#FF5A1F]
+                          "
                         >
-                          <motion.div
-                            whileHover={
-                              reducedMotion
-                                ? undefined
-                                : {
-                                    scale: 1.08,
-                                  }
+                          <Icon
+                            size={16}
+                            strokeWidth={1.55}
+                          />
+                        </div>
+
+                        <div
+                          className="
+                            min-w-0
+
+                            sm:mt-3.5
+                          "
+                        >
+                          <h2
+                            className="
+                              text-[12.5px]
+                              font-medium
+                              leading-[1.35]
+                              tracking-[-0.02em]
+                              text-white/88
+
+                              lg:text-[13.5px]
+                            "
+                          >
+                            {
+                              service.label
                             }
-                            className="
-                              flex
-                              h-8
-                              w-8
-                              shrink-0
-                              items-center
-                              justify-center
-                              rounded-full
-                              border
-                              border-[#FF5A1F]/20
-                              bg-[#FF5A1F]/[0.035]
-                              transition-colors
-                              duration-300
+                          </h2>
 
-                              group-hover/service:border-[#FF5A1F]/35
-                              group-hover/service:bg-[#FF5A1F]/[0.07]
+                          <p
+                            className="
+                              mt-1.5
+                              max-w-[180px]
+                              text-[9.5px]
+                              leading-[1.6]
+                              text-white/32
+
+                              lg:text-[10.5px]
                             "
                           >
-                            <Icon
-                              size={16}
-                              strokeWidth={1.55}
-                              className="
-                                text-[#FF5A1F]
-                              "
-                            />
-                          </motion.div>
-
-                          <div
-                            className="
-                              min-w-0
-
-                              sm:mt-4
-                            "
-                          >
-                            <h2
-                              className="
-                                text-[12.5px]
-                                font-medium
-                                leading-[1.35]
-                                tracking-[-0.02em]
-                                text-white/90
-                                transition-colors
-                                duration-300
-
-                                group-hover/service:text-white
-
-                                lg:text-[13.5px]
-                              "
-                            >
-                              {
-                                service.label
-                              }
-                            </h2>
-
-                            <p
-                              className="
-                                mt-1.5
-                                max-w-[175px]
-                                text-[9.5px]
-                                leading-[1.55]
-                                text-white/33
-                                transition-colors
-                                duration-300
-
-                                group-hover/service:text-white/45
-
-                                lg:text-[10.5px]
-                              "
-                            >
-                              {
-                                service.description
-                              }
-                            </p>
-                          </div>
-                        </motion.div>
-                      );
-                    },
-                  )}
-                </div>
+                            {
+                              service.description
+                            }
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  },
+                )}
               </div>
-            </motion.section>
+            </section>
 
             {/* ===============================================
                 WEBSITE STATUS
             =============================================== */}
 
-            <motion.section
-              whileHover={
-                reducedMotion
-                  ? undefined
-                  : {
-                      y: -2,
-                    }
-              }
-              transition={{
-                duration: 0.3,
-                ease: "easeOut",
-              }}
+            <section
               className="
-                group/card
                 relative
                 overflow-hidden
-                rounded-[20px]
+                rounded-[18px]
                 border
-                border-white/[0.095]
-                bg-black/[0.61]
+                border-white/[0.085]
+                bg-[#050708]/80
                 p-5
-                shadow-[0_26px_90px_rgba(0,0,0,0.43)]
-                backdrop-blur-[34px]
-                backdrop-saturate-[1.12]
-                transition-[border-color,background-color]
-                duration-500
-
-                hover:border-white/[0.145]
-                hover:bg-black/[0.66]
+                shadow-[0_22px_70px_rgba(0,0,0,0.30)]
+                backdrop-blur-[24px]
 
                 sm:p-6
-
-                lg:p-[clamp(20px,2.4vh,28px)]
               "
             >
-              <GlassHighlights />
+              <div
+                className="
+                  absolute
+                  inset-x-7
+                  top-0
+                  h-px
+                  bg-gradient-to-r
+                  from-transparent
+                  via-white/[0.14]
+                  to-transparent
+                "
+              />
 
-              <div className="relative z-10">
-                <p
-                  className="
-                    text-[8px]
-                    font-semibold
-                    uppercase
-                    tracking-[0.3em]
-                    text-white/38
+              <p
+                className="
+                  text-[8px]
+                  font-semibold
+                  uppercase
+                  tracking-[0.31em]
+                  text-white/34
 
-                    lg:text-[9px]
-                  "
-                >
-                  Website status
-                </p>
+                  lg:text-[9px]
+                "
+              >
+                Website status
+              </p>
 
-                <div
-                  className="
-                    mt-4
-                    flex
-                    flex-col
-                    gap-5
+              <div
+                className="
+                  mt-4
+                  flex
+                  flex-col
+                  gap-5
 
-                    sm:flex-row
-                    sm:items-center
-                    sm:gap-7
-                  "
-                >
-                  <RefinementSignal
-                    reducedMotion={
-                      reducedMotion
-                    }
-                  />
+                  sm:flex-row
+                  sm:items-center
+                  sm:gap-6
+                "
+              >
+                <StatusMark
+                  reducedMotion={
+                    reducedMotion
+                  }
+                />
+
+                <div className="min-w-0">
+                  <h2
+                    className="
+                      text-[15px]
+                      font-medium
+                      tracking-[-0.025em]
+                      text-white/90
+
+                      sm:text-[16px]
+                    "
+                  >
+                    Currently being refined.
+                  </h2>
+
+                  <p
+                    className="
+                      mt-2
+                      max-w-[360px]
+                      text-[10.5px]
+                      leading-[1.7]
+                      text-white/35
+
+                      sm:text-[11.5px]
+                    "
+                  >
+                    I&apos;m rebuilding the
+                    website to better reflect
+                    the systems I build, how I
+                    work and the results I
+                    focus on.
+                  </p>
 
                   <div
                     className="
-                      min-w-0
-                      flex-1
+                      mt-4
+                      flex
+                      items-center
+                      gap-2.5
                     "
                   >
-                    <h2
+                    <span
                       className="
-                        text-[15px]
+                        h-[5px]
+                        w-[5px]
+                        rounded-full
+                        bg-[#FF5A1F]
+                        shadow-[0_0_10px_rgba(255,90,31,0.45)]
+                      "
+                    />
+
+                    <span
+                      className="
+                        text-[8px]
                         font-medium
-                        tracking-[-0.025em]
-                        text-white/92
-
-                        sm:text-[16px]
-                      "
-                    >
-                      Currently being
-                      refined.
-                    </h2>
-
-                    <p
-                      className="
-                        mt-2
-                        max-w-[420px]
-                        text-[10.5px]
-                        leading-[1.7]
+                        uppercase
+                        tracking-[0.22em]
                         text-white/38
-
-                        sm:text-[11.5px]
                       "
                     >
-                      I&apos;m rebuilding
-                      and refining the
-                      website to better
-                      reflect the systems
-                      I build, the way I
-                      work and the results
-                      I focus on.
-                    </p>
-
-                    <p
-                      className="
-                        mt-2
-                        max-w-[420px]
-                        text-[10.5px]
-                        leading-[1.7]
-                        text-white/38
-
-                        sm:text-[11.5px]
-                      "
-                    >
-                      The full experience
-                      is still in progress,
-                      but I&apos;m currently
-                      open to new projects
-                      and conversations.
-                    </p>
-
-                    {/* availability */}
-
-                    <div
-                      className="
-                        mt-4
-                        flex
-                        items-center
-                        gap-2.5
-                      "
-                    >
-                      <motion.span
-                        animate={
-                          reducedMotion
-                            ? undefined
-                            : {
-                                opacity: [
-                                  0.55,
-                                  1,
-                                  0.55,
-                                ],
-                                scale: [
-                                  0.9,
-                                  1,
-                                  0.9,
-                                ],
-                              }
-                        }
-                        transition={{
-                          duration: 2.8,
-                          repeat: Infinity,
-                          ease: "easeInOut",
-                        }}
-                        className="
-                          h-[6px]
-                          w-[6px]
-                          rounded-full
-                          bg-[#FF5A1F]
-                          shadow-[0_0_12px_rgba(255,90,31,0.38)]
-                        "
-                      />
-
-                      <span
-                        className="
-                          text-[8px]
-                          font-medium
-                          uppercase
-                          tracking-[0.22em]
-                          text-white/42
-                        "
-                      >
-                        Open for new projects
-                      </span>
-                    </div>
+                      Open for selected projects
+                    </span>
                   </div>
                 </div>
               </div>
-            </motion.section>
+            </section>
           </motion.div>
-
-          {/* =================================================
-              MICRO FOOTER
-          ================================================= */}
-
-          <div
-            className="
-              mx-auto
-              mt-4
-              hidden
-              w-full
-              max-w-[1100px]
-              items-center
-              justify-between
-              border-t
-              border-white/[0.045]
-              pt-4
-
-              lg:flex
-            "
-          >
-            <span
-              className="
-                text-[7px]
-                font-medium
-                uppercase
-                tracking-[0.28em]
-                text-white/20
-              "
-            >
-              Daniel VLKO
-            </span>
-
-            <span
-              className="
-                text-[7px]
-                font-medium
-                uppercase
-                tracking-[0.28em]
-                text-white/20
-              "
-            >
-              Software · Automation · AI
-            </span>
-          </div>
         </section>
       </div>
 
-      {/* =====================================================
-          MODALS
-      ===================================================== */}
       <CalWarmup />
       <ComingSoonModals />
     </main>

@@ -12,10 +12,8 @@ import {
 
 import {
   ArrowRight,
-  CalendarDays,
   Check,
   Loader2,
-  Mail,
   X,
 } from "lucide-react";
 
@@ -52,12 +50,12 @@ const fieldClassName = `
   h-[50px]
   w-full
 
-  rounded-[12px]
+  rounded-[10px]
 
   border
-  border-white/[0.09]
+  border-white/[0.085]
 
-  bg-white/[0.035]
+  bg-white/[0.025]
 
   px-4
 
@@ -69,13 +67,12 @@ const fieldClassName = `
   transition-all
   duration-200
 
-  placeholder:text-white/25
+  placeholder:text-white/22
 
   hover:border-white/[0.14]
 
-  focus:border-[#FF5A1F]/45
-  focus:bg-white/[0.05]
-  focus:shadow-[0_0_0_3px_rgba(255,90,31,0.06)]
+  focus:border-[#FF5A1F]/40
+  focus:bg-white/[0.035]
 `;
 
 const labelClassName = `
@@ -86,9 +83,9 @@ const labelClassName = `
   text-[9px]
   font-semibold
   uppercase
-  tracking-[0.22em]
+  tracking-[0.2em]
 
-  text-white/40
+  text-white/36
 `;
 
 /* =========================================================
@@ -99,175 +96,126 @@ export function ComingSoonModals() {
   const [
     mounted,
     setMounted,
-  ] =
-    useState(false);
+  ] = useState(false);
 
   const [
     modal,
     setModal,
   ] =
-    useState<ModalType>(
-      null,
-    );
+    useState<ModalType>(null);
 
   /* =======================================================
      MOUNT
   ======================================================= */
 
-  useEffect(
-    () => {
-      setMounted(
-        true,
-      );
-    },
-    [],
-  );
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   /* =======================================================
-     BOOKING AVAILABILITY PREFETCH
-
-     Starts loading availability while the visitor is still
-     looking at the landing page.
-
-     The actual confirmation route still performs a fresh
-     server-side validation before reserving anything.
+     BOOKING PREFETCH
   ======================================================= */
 
-  useEffect(
-    () => {
-      preloadBookingAvailability();
-    },
-    [],
-  );
+  useEffect(() => {
+    preloadBookingAvailability();
+  }, []);
 
   /* =======================================================
      GLOBAL TRIGGERS
   ======================================================= */
 
-  useEffect(
-    () => {
-      const handleTrigger =
-        (
-          event:
-            MouseEvent,
-        ) => {
-          const target =
-            event.target instanceof
-            Element
-              ? event.target
-              : null;
+  useEffect(() => {
+    const handleTrigger = (
+      event: MouseEvent,
+    ) => {
+      const target =
+        event.target instanceof Element
+          ? event.target
+          : null;
 
-          if (!target) {
-            return;
-          }
+      if (!target) {
+        return;
+      }
 
-          const contactTrigger =
-            target.closest(
-              "[data-contact-trigger]",
-            );
+      const contactTrigger =
+        target.closest(
+          "[data-contact-trigger]",
+        );
 
-          if (
-            contactTrigger
-          ) {
-            event.preventDefault();
+      if (contactTrigger) {
+        event.preventDefault();
+        setModal("contact");
+        return;
+      }
 
-            setModal(
-              "contact",
-            );
+      const bookTrigger =
+        target.closest(
+          "[data-book-trigger]",
+        );
 
-            return;
-          }
+      if (bookTrigger) {
+        event.preventDefault();
+        setModal("book");
+      }
+    };
 
-          const bookTrigger =
-            target.closest(
-              "[data-book-trigger]",
-            );
+    document.addEventListener(
+      "click",
+      handleTrigger,
+    );
 
-          if (
-            bookTrigger
-          ) {
-            event.preventDefault();
-
-            setModal(
-              "book",
-            );
-          }
-        };
-
-      document.addEventListener(
+    return () => {
+      document.removeEventListener(
         "click",
         handleTrigger,
       );
-
-      return () => {
-        document.removeEventListener(
-          "click",
-          handleTrigger,
-        );
-      };
-    },
-    [],
-  );
+    };
+  }, []);
 
   /* =======================================================
      BODY LOCK + ESCAPE
   ======================================================= */
 
-  useEffect(
-    () => {
-      if (!modal) {
-        return;
+  useEffect(() => {
+    if (!modal) {
+      return;
+    }
+
+    const previousOverflow =
+      document.body.style.overflow;
+
+    document.body.style.overflow =
+      "hidden";
+
+    const handleKeyDown = (
+      event: KeyboardEvent,
+    ) => {
+      if (
+        event.key === "Escape"
+      ) {
+        setModal(null);
       }
+    };
 
-      const previousOverflow =
-        document.body.style
-          .overflow;
+    window.addEventListener(
+      "keydown",
+      handleKeyDown,
+    );
 
+    return () => {
       document.body.style.overflow =
-        "hidden";
+        previousOverflow;
 
-      const handleKeyDown =
-        (
-          event:
-            KeyboardEvent,
-        ) => {
-          if (
-            event.key ===
-            "Escape"
-          ) {
-            setModal(
-              null,
-            );
-          }
-        };
-
-      window.addEventListener(
+      window.removeEventListener(
         "keydown",
         handleKeyDown,
       );
-
-      return () => {
-        document.body.style.overflow =
-          previousOverflow;
-
-        window.removeEventListener(
-          "keydown",
-          handleKeyDown,
-        );
-      };
-    },
-    [
-      modal,
-    ],
-  );
+    };
+  }, [modal]);
 
   if (!mounted) {
     return null;
   }
-
-  /* =======================================================
-     PORTAL
-  ======================================================= */
 
   return createPortal(
     <AnimatePresence>
@@ -275,20 +223,26 @@ export function ComingSoonModals() {
         <motion.div
           key="coming-soon-modal"
           initial={{
-            opacity:
-              0,
+            opacity: 0,
           }}
           animate={{
-            opacity:
-              1,
+            opacity: 1,
           }}
           exit={{
-            opacity:
-              0,
+            opacity: 0,
           }}
           transition={{
-            duration:
-              0.2,
+            duration: 0.18,
+          }}
+          onMouseDown={(
+            event,
+          ) => {
+            if (
+              event.target ===
+              event.currentTarget
+            ) {
+              setModal(null);
+            }
           }}
           className="
             fixed
@@ -301,88 +255,33 @@ export function ComingSoonModals() {
 
             overflow-y-auto
 
-            bg-[#010405]/80
+            bg-black/[0.78]
 
             p-3
 
-            backdrop-blur-[18px]
+            backdrop-blur-[14px]
 
             sm:p-6
           "
-          onMouseDown={(
-            event,
-          ) => {
-            if (
-              event.target ===
-              event.currentTarget
-            ) {
-              setModal(
-                null,
-              );
-            }
-          }}
         >
-          {/* AMBIENT GLOW */}
-
-          <div
-            className="
-              pointer-events-none
-
-              fixed
-              left-1/2
-              top-1/2
-
-              h-[500px]
-              w-[500px]
-
-              -translate-x-1/2
-              -translate-y-1/2
-
-              rounded-full
-
-              bg-[#FF5A1F]/[0.055]
-
-              blur-[150px]
-            "
-          />
-
-          {/* MODAL */}
-
           <motion.div
             initial={{
-              opacity:
-                0,
-
-              y:
-                18,
-
-              scale:
-                0.985,
+              opacity: 0,
+              y: 14,
+              scale: 0.99,
             }}
             animate={{
-              opacity:
-                1,
-
-              y:
-                0,
-
-              scale:
-                1,
+              opacity: 1,
+              y: 0,
+              scale: 1,
             }}
             exit={{
-              opacity:
-                0,
-
-              y:
-                10,
-
-              scale:
-                0.99,
+              opacity: 0,
+              y: 8,
+              scale: 0.995,
             }}
             transition={{
-              duration:
-                0.32,
-
+              duration: 0.28,
               ease: [
                 0.22,
                 1,
@@ -393,11 +292,15 @@ export function ComingSoonModals() {
             role="dialog"
             aria-modal="true"
             aria-label={
-              modal ===
-              "contact"
+              modal === "contact"
                 ? "Contact Daniel VLKO"
-                : "Book a free discovery call"
+                : "Book a discovery call"
             }
+            onMouseDown={(
+              event,
+            ) => {
+              event.stopPropagation();
+            }}
             className={`
               relative
 
@@ -405,157 +308,111 @@ export function ComingSoonModals() {
 
               overflow-hidden
 
-              rounded-[22px]
+              rounded-[18px]
 
               border
-              border-white/[0.10]
+              border-white/[0.09]
 
-              bg-[#071014]/[0.94]
+              bg-[#06090B]/[0.97]
 
-              shadow-[0_35px_120px_rgba(0,0,0,0.65)]
-
-              backdrop-blur-[40px]
+              shadow-[0_30px_100px_rgba(0,0,0,0.65)]
 
               ${
-                modal ===
-                "book"
+                modal === "book"
                   ? "max-w-[780px]"
                   : "max-w-[610px]"
               }
             `}
-            onMouseDown={(
-              event,
-            ) => {
-              event.stopPropagation();
-            }}
           >
-            {/* TOP HIGHLIGHT */}
+            {/* subtle top highlight */}
 
             <div
               className="
                 pointer-events-none
-
                 absolute
-                inset-x-0
+                inset-x-8
                 top-0
-                z-20
-
                 h-px
 
                 bg-gradient-to-r
                 from-transparent
-                via-white/20
+                via-white/[0.16]
                 to-transparent
               "
             />
 
-            {/* HEADER */}
+            {/* =================================================
+                HEADER
+            ================================================= */}
 
             <div
               className="
-                relative
-                z-20
-
                 flex
                 items-start
                 justify-between
-
                 gap-6
 
                 border-b
-                border-white/[0.07]
-
-                bg-[#071014]/80
+                border-white/[0.065]
 
                 px-5
                 py-5
-
-                backdrop-blur-xl
 
                 sm:px-7
                 sm:py-6
               "
             >
               <div>
-                <div
+                <p
                   className="
-                    mb-3
-
-                    flex
-                    items-center
-                    gap-2.5
-
                     text-[8px]
                     font-semibold
                     uppercase
-                    tracking-[0.27em]
-
-                    text-[#FF7040]
+                    tracking-[0.28em]
+                    text-[#FF6A32]/80
                   "
                 >
-                  {modal ===
-                  "contact" ? (
-                    <Mail
-                      size={
-                        12
-                      }
-                      strokeWidth={
-                        1.8
-                      }
-                    />
-                  ) : (
-                    <CalendarDays
-                      size={
-                        12
-                      }
-                      strokeWidth={
-                        1.8
-                      }
-                    />
-                  )}
-
-                  {modal ===
-                  "contact"
+                  {modal === "contact"
                     ? "Contact"
-                    : "Free discovery call"}
-                </div>
+                    : "Discovery call"}
+                </p>
 
                 <h2
                   className="
-                    text-[24px]
+                    mt-3
+
+                    text-[25px]
                     font-medium
-                    leading-[1.1]
+                    leading-[1.08]
                     tracking-[-0.04em]
 
                     text-white
 
-                    sm:text-[29px]
+                    sm:text-[30px]
                   "
                 >
-                  {modal ===
-                  "contact"
+                  {modal === "contact"
                     ? "Let’s talk."
-                    : "Book a free discovery call."}
+                    : "Book a discovery call."}
                 </h2>
 
                 <p
                   className="
                     mt-3
 
-                    max-w-[600px]
+                    max-w-[580px]
 
                     text-[11.5px]
                     leading-[1.7]
 
-                    text-white/43
+                    text-white/40
 
                     sm:text-[13px]
                   "
                 >
-                  {modal ===
-                  "contact"
-                    ? "Tell me briefly what you want to build, improve or automate. I’ll get back to you personally."
-                    : "Choose a time that works for you. We’ll look at your current bottlenecks and where software, automation or AI can create the most impact."}
+                  {modal === "contact"
+                    ? "Tell me what you want to build, improve or automate. I’ll get back to you personally."
+                    : "Choose a time that works for you. We’ll look at your current setup, bottlenecks and where better systems could create the most leverage."}
                 </p>
               </div>
 
@@ -563,17 +420,13 @@ export function ComingSoonModals() {
                 type="button"
                 aria-label="Close"
                 onClick={() =>
-                  setModal(
-                    null,
-                  )
+                  setModal(null)
                 }
                 className="
                   flex
                   h-[36px]
                   w-[36px]
-
                   shrink-0
-
                   items-center
                   justify-center
 
@@ -582,38 +435,33 @@ export function ComingSoonModals() {
                   border
                   border-white/[0.09]
 
-                  bg-white/[0.035]
+                  bg-transparent
 
-                  text-white/50
+                  text-white/42
 
                   transition-all
                   duration-200
 
-                  hover:border-white/[0.16]
-                  hover:bg-white/[0.07]
+                  hover:border-white/[0.18]
+                  hover:bg-white/[0.03]
                   hover:text-white
                 "
               >
                 <X
-                  size={
-                    16
-                  }
-                  strokeWidth={
-                    1.7
-                  }
+                  size={16}
+                  strokeWidth={1.7}
                 />
               </button>
             </div>
 
-            {/* BODY */}
+            {/* =================================================
+                BODY
+            ================================================= */}
 
-            {modal ===
-            "contact" ? (
+            {modal === "contact" ? (
               <ContactForm
                 onClose={() =>
-                  setModal(
-                    null,
-                  )
+                  setModal(null)
                 }
               />
             ) : (
@@ -647,159 +495,119 @@ function ContactForm({
   const [
     errorMessage,
     setErrorMessage,
-  ] =
-    useState("");
+  ] = useState("");
 
-  const handleSubmit =
-    async (
-      event:
-        FormEvent<HTMLFormElement>,
-    ) => {
-      event.preventDefault();
+  const handleSubmit = async (
+    event: FormEvent<HTMLFormElement>,
+  ) => {
+    event.preventDefault();
 
-      if (
-        status ===
-        "loading"
-      ) {
-        return;
+    if (
+      status === "loading"
+    ) {
+      return;
+    }
+
+    setStatus("loading");
+    setErrorMessage("");
+
+    const form =
+      event.currentTarget;
+
+    const formData =
+      new FormData(form);
+
+    const payload = {
+      name:
+        formData
+          .get("name")
+          ?.toString() ?? "",
+
+      email:
+        formData
+          .get("email")
+          ?.toString() ?? "",
+
+      website:
+        formData
+          .get("website")
+          ?.toString() ?? "",
+
+      message:
+        formData
+          .get("message")
+          ?.toString() ?? "",
+
+      companyWebsite:
+        formData
+          .get(
+            "companyWebsite",
+          )
+          ?.toString() ?? "",
+
+      source:
+        typeof window !==
+        "undefined"
+          ? window.location.href
+          : "",
+    };
+
+    try {
+      const response =
+        await fetch(
+          "/api/contact",
+          {
+            method: "POST",
+
+            headers: {
+              "Content-Type":
+                "application/json",
+            },
+
+            body:
+              JSON.stringify(
+                payload,
+              ),
+          },
+        );
+
+      const result =
+        await response
+          .json()
+          .catch(() => null);
+
+      if (!response.ok) {
+        throw new Error(
+          result?.message ??
+            "Something went wrong.",
+        );
       }
 
-      setStatus(
-        "loading",
-      );
+      form.reset();
+      setStatus("success");
+    } catch (error) {
+      setStatus("error");
 
       setErrorMessage(
-        "",
+        error instanceof Error
+          ? error.message
+          : "Something went wrong.",
       );
-
-      const form =
-        event.currentTarget;
-
-      const formData =
-        new FormData(
-          form,
-        );
-
-      const payload = {
-        name:
-          formData
-            .get(
-              "name",
-            )
-            ?.toString() ??
-          "",
-
-        email:
-          formData
-            .get(
-              "email",
-            )
-            ?.toString() ??
-          "",
-
-        website:
-          formData
-            .get(
-              "website",
-            )
-            ?.toString() ??
-          "",
-
-        message:
-          formData
-            .get(
-              "message",
-            )
-            ?.toString() ??
-          "",
-
-        companyWebsite:
-          formData
-            .get(
-              "companyWebsite",
-            )
-            ?.toString() ??
-          "",
-
-        source:
-          typeof window !==
-          "undefined"
-            ? window
-                .location
-                .href
-            : "",
-      };
-
-      try {
-        const response =
-          await fetch(
-            "/api/contact",
-            {
-              method:
-                "POST",
-
-              headers: {
-                "Content-Type":
-                  "application/json",
-              },
-
-              body:
-                JSON.stringify(
-                  payload,
-                ),
-            },
-          );
-
-        const result =
-          await response
-            .json()
-            .catch(
-              () =>
-                null,
-            );
-
-        if (
-          !response.ok
-        ) {
-          throw new Error(
-            result
-              ?.message ??
-              "Something went wrong.",
-          );
-        }
-
-        form.reset();
-
-        setStatus(
-          "success",
-        );
-      } catch (error) {
-        setStatus(
-          "error",
-        );
-
-        setErrorMessage(
-          error instanceof
-            Error
-            ? error.message
-            : "Something went wrong.",
-        );
-      }
-    };
+    }
+  };
 
   /* =======================================================
      SUCCESS
   ======================================================= */
 
   if (
-    status ===
-    "success"
+    status === "success"
   ) {
     return (
       <div
         className="
           flex
-          min-h-[390px]
+          min-h-[380px]
 
           flex-col
           items-center
@@ -814,8 +622,8 @@ function ContactForm({
         <div
           className="
             flex
-            h-[52px]
-            w-[52px]
+            h-[48px]
+            w-[48px]
 
             items-center
             justify-center
@@ -823,23 +631,14 @@ function ContactForm({
             rounded-full
 
             border
-            border-[#FF5A1F]/20
+            border-white/[0.09]
 
-            bg-[#FF5A1F]/[0.08]
-
-            shadow-[0_0_35px_rgba(255,90,31,0.10)]
+            text-[#FF6A32]
           "
         >
           <Check
-            size={
-              21
-            }
-            strokeWidth={
-              1.8
-            }
-            className="
-              text-[#FF6A32]
-            "
+            size={20}
+            strokeWidth={1.8}
           />
         </div>
 
@@ -861,24 +660,22 @@ function ContactForm({
           className="
             mt-3
 
-            max-w-[380px]
+            max-w-[360px]
 
             text-[12.5px]
             leading-[1.7]
 
-            text-white/42
+            text-white/38
           "
         >
           Thanks for reaching out.
-          I&apos;ll review it and get
-          back to you directly.
+          I&apos;ll review your inquiry
+          and get back to you directly.
         </p>
 
         <button
           type="button"
-          onClick={
-            onClose
-          }
+          onClick={onClose}
           className="
             mt-7
 
@@ -891,19 +688,20 @@ function ContactForm({
             rounded-full
 
             border
-            border-white/[0.12]
+            border-white/[0.11]
 
             px-6
 
             text-[11px]
-            font-semibold
+            font-medium
 
-            text-white/80
+            text-white/70
 
             transition-all
+            duration-200
 
-            hover:border-white/[0.22]
-            hover:bg-white/[0.04]
+            hover:border-white/[0.2]
+            hover:bg-white/[0.025]
             hover:text-white
           "
         >
@@ -919,9 +717,7 @@ function ContactForm({
 
   return (
     <form
-      onSubmit={
-        handleSubmit
-      }
+      onSubmit={handleSubmit}
       className="
         px-5
         py-6
@@ -930,21 +726,17 @@ function ContactForm({
         sm:py-7
       "
     >
-      {/* HONEYPOT */}
+      {/* honeypot */}
 
       <div
         aria-hidden="true"
         className="
           pointer-events-none
-
           absolute
-
           left-[-9999px]
           top-[-9999px]
-
           h-0
           w-0
-
           overflow-hidden
         "
       >
@@ -954,17 +746,13 @@ function ContactForm({
           <input
             name="companyWebsite"
             type="text"
-
-            tabIndex={
-              -1
-            }
-
+            tabIndex={-1}
             autoComplete="off"
           />
         </label>
       </div>
 
-      {/* NAME + EMAIL */}
+      {/* name + email */}
 
       <div
         className="
@@ -982,11 +770,7 @@ function ContactForm({
             }
           >
             Name{" "}
-            <span
-              className="
-                text-[#FF5A1F]
-              "
-            >
+            <span className="text-[#FF5A1F]">
               *
             </span>
           </label>
@@ -994,19 +778,11 @@ function ContactForm({
           <input
             id="contact-name"
             name="name"
-
             type="text"
-
             required
-
-            maxLength={
-              100
-            }
-
+            maxLength={100}
             autoComplete="name"
-
             placeholder="Your name"
-
             className={
               fieldClassName
             }
@@ -1021,11 +797,7 @@ function ContactForm({
             }
           >
             Email{" "}
-            <span
-              className="
-                text-[#FF5A1F]
-              "
-            >
+            <span className="text-[#FF5A1F]">
               *
             </span>
           </label>
@@ -1033,19 +805,11 @@ function ContactForm({
           <input
             id="contact-email"
             name="email"
-
             type="email"
-
             required
-
-            maxLength={
-              160
-            }
-
+            maxLength={160}
             autoComplete="email"
-
             placeholder="you@company.com"
-
             className={
               fieldClassName
             }
@@ -1053,17 +817,12 @@ function ContactForm({
         </div>
       </div>
 
-      {/* WEBSITE */}
+      {/* website */}
 
-      <div
-        className="
-          mt-4
-        "
-      >
+      <div className="mt-4">
         <div
           className="
             mb-2
-
             flex
             items-center
             justify-between
@@ -1075,9 +834,8 @@ function ContactForm({
               text-[9px]
               font-semibold
               uppercase
-              tracking-[0.22em]
-
-              text-white/40
+              tracking-[0.2em]
+              text-white/36
             "
           >
             Website
@@ -1088,8 +846,7 @@ function ContactForm({
               text-[8px]
               uppercase
               tracking-[0.16em]
-
-              text-white/20
+              text-white/18
             "
           >
             Optional
@@ -1099,30 +856,19 @@ function ContactForm({
         <input
           id="contact-website"
           name="website"
-
           type="text"
-
-          maxLength={
-            200
-          }
-
+          maxLength={200}
           autoComplete="url"
-
           placeholder="company.com"
-
           className={
             fieldClassName
           }
         />
       </div>
 
-      {/* MESSAGE */}
+      {/* message */}
 
-      <div
-        className="
-          mt-4
-        "
-      >
+      <div className="mt-4">
         <label
           htmlFor="contact-message"
           className={
@@ -1130,11 +876,7 @@ function ContactForm({
           }
         >
           What can I help with?{" "}
-          <span
-            className="
-              text-[#FF5A1F]
-            "
-          >
+          <span className="text-[#FF5A1F]">
             *
           </span>
         </label>
@@ -1142,42 +884,29 @@ function ContactForm({
         <textarea
           id="contact-message"
           name="message"
-
           required
-
-          minLength={
-            10
-          }
-
-          maxLength={
-            2500
-          }
-
-          rows={
-            5
-          }
-
+          minLength={10}
+          maxLength={2500}
+          rows={5}
           placeholder="Tell me briefly what you want to improve, build or automate..."
-
           className="
             min-h-[135px]
             w-full
 
             resize-none
 
-            rounded-[12px]
+            rounded-[10px]
 
             border
-            border-white/[0.09]
+            border-white/[0.085]
 
-            bg-white/[0.035]
+            bg-white/[0.025]
 
             px-4
             py-3.5
 
             text-[13px]
             leading-[1.65]
-
             text-white
 
             outline-none
@@ -1185,38 +914,32 @@ function ContactForm({
             transition-all
             duration-200
 
-            placeholder:text-white/25
+            placeholder:text-white/22
 
             hover:border-white/[0.14]
 
-            focus:border-[#FF5A1F]/45
-            focus:bg-white/[0.05]
-            focus:shadow-[0_0_0_3px_rgba(255,90,31,0.06)]
+            focus:border-[#FF5A1F]/40
+            focus:bg-white/[0.035]
           "
         />
       </div>
 
-      {/* ERROR */}
+      {/* error */}
 
-      {status ===
-        "error" && (
+      {status === "error" && (
         <p
           className="
             mt-4
-
             text-[11px]
             leading-[1.5]
-
             text-red-300/80
           "
         >
-          {
-            errorMessage
-          }
+          {errorMessage}
         </p>
       )}
 
-      {/* ACTION */}
+      {/* footer */}
 
       <div
         className="
@@ -1224,7 +947,6 @@ function ContactForm({
 
           flex
           flex-col
-
           gap-4
 
           sm:flex-row
@@ -1235,26 +957,20 @@ function ContactForm({
         <p
           className="
             max-w-[290px]
-
             text-[9px]
             leading-[1.6]
-
-            text-white/27
+            text-white/24
           "
         >
-          Your details are used
-          only to respond to your
-          inquiry.
+          Your details are used only
+          to respond to your inquiry.
         </p>
 
         <button
           type="submit"
-
           disabled={
-            status ===
-            "loading"
+            status === "loading"
           }
-
           className="
             group
 
@@ -1274,17 +990,15 @@ function ContactForm({
 
             text-[11px]
             font-semibold
-
             text-white
 
-            shadow-[0_14px_38px_rgba(255,90,31,0.18)]
+            shadow-[0_12px_34px_rgba(255,90,31,0.16)]
 
             transition-all
             duration-300
 
             hover:-translate-y-[1px]
-            hover:bg-[#ff682e]
-            hover:shadow-[0_18px_46px_rgba(255,90,31,0.25)]
+            hover:bg-[#ff652b]
 
             disabled:pointer-events-none
             disabled:opacity-60
@@ -1292,21 +1006,14 @@ function ContactForm({
             sm:min-w-[172px]
           "
         >
-          {status ===
-          "loading" ? (
+          {status === "loading" ? (
             <>
               Sending
 
               <Loader2
-                size={
-                  14
-                }
-                strokeWidth={
-                  1.8
-                }
-                className="
-                  animate-spin
-                "
+                size={14}
+                strokeWidth={1.8}
+                className="animate-spin"
               />
             </>
           ) : (
@@ -1314,12 +1021,8 @@ function ContactForm({
               Send inquiry
 
               <ArrowRight
-                size={
-                  14
-                }
-                strokeWidth={
-                  1.8
-                }
+                size={14}
+                strokeWidth={1.8}
                 className="
                   transition-transform
                   duration-300
@@ -1336,11 +1039,9 @@ function ContactForm({
 }
 
 /* =========================================================
-   CUSTOM BOOKING
+   BOOKING
 ========================================================= */
 
 function BookingPanel() {
-  return (
-    <BookingWizard />
-  );
+  return <BookingWizard />;
 }

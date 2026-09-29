@@ -1,26 +1,22 @@
 "use client";
 
-import {
-  useEffect,
-  useRef,
-  useState,
-} from "react";
-
-import {
-  useInView,
-  useReducedMotion,
-} from "motion/react";
+import { useEffect, useRef, useState } from "react";
+import { useInView, useReducedMotion } from "motion/react";
 
 type AnimatedStatProps = {
   value: number;
+  prefix?: string;
   suffix?: string;
   decimals?: number;
+  duration?: number;
 };
 
 export function AnimatedStat({
   value,
+  prefix = "",
   suffix = "",
   decimals = 0,
+  duration = 1100,
 }: AnimatedStatProps) {
   const ref = useRef<HTMLSpanElement>(null);
 
@@ -43,17 +39,14 @@ export function AnimatedStat({
       return;
     }
 
-    const duration = 1100;
     const start = performance.now();
 
     let animationFrame = 0;
 
     const update = (now: number) => {
       const elapsed = now - start;
-
       const progress = Math.min(elapsed / duration, 1);
 
-      // Smooth deceleration.
       const eased = 1 - Math.pow(1 - progress, 3);
 
       setDisplayValue(value * eased);
@@ -68,13 +61,14 @@ export function AnimatedStat({
     return () => {
       cancelAnimationFrame(animationFrame);
     };
-  }, [isInView, reduceMotion, value]);
+  }, [duration, isInView, reduceMotion, value]);
 
   return (
     <span
       ref={ref}
-      aria-label={`${value}${suffix}`}
+      aria-label={`${prefix}${value}${suffix}`}
     >
+      {prefix}
       {displayValue.toFixed(decimals)}
       {suffix}
     </span>

@@ -1,11 +1,13 @@
 "use client";
 
 import Image from "next/image";
+
 import {
   motion,
   useScroll,
   useTransform,
 } from "motion/react";
+
 import { useRef } from "react";
 
 export function HeroBackground() {
@@ -16,20 +18,30 @@ export function HeroBackground() {
     offset: ["start start", "end start"],
   });
 
-  /*
-   * Zem je už na začiatku mierne vyššie.
-   * Pri scrollovaní sa približuje a pomaly klesá.
-   */
+  /* =========================================================
+     EARTH SCROLL MOTION
+
+     Initial state:
+     - slightly smaller
+     - noticeably lower
+     - headline gets more visual authority
+
+     Scroll:
+     - Earth slowly approaches
+     - moves downward
+     - subtle blur only near the end
+  ========================================================= */
+
   const scale = useTransform(
     scrollYProgress,
     [0, 0.55, 1],
-    [1.06, 1.15, 1.3],
+    [1, 1.08, 1.2],
   );
 
   const y = useTransform(
     scrollYProgress,
     [0, 0.55, 1],
-    [-72, -40, 30],
+    [-18, 8, 72],
   );
 
   const opacity = useTransform(
@@ -41,118 +53,193 @@ export function HeroBackground() {
   const blur = useTransform(
     scrollYProgress,
     [0, 0.72, 1],
-    ["blur(0px)", "blur(0px)", "blur(5px)"],
+    [
+      "blur(0px)",
+      "blur(0px)",
+      "blur(5px)",
+    ],
   );
 
   return (
     <div
       ref={backgroundRef}
       aria-hidden="true"
-      className="pointer-events-none absolute inset-0 overflow-hidden"
+      className="
+        pointer-events-none
+        absolute
+        inset-0
+        overflow-hidden
+        bg-black
+      "
     >
-      {/* EARTH */}
+      {/* =====================================================
+          EARTH
+      ===================================================== */}
       <motion.div
-        className="absolute inset-0"
+        className="
+          absolute
+          inset-0
+          will-change-transform
+        "
         style={{
           scale,
           y,
           opacity,
           filter: blur,
-          transformOrigin: "50% 60%",
+          transformOrigin: "50% 66%",
         }}
       >
+        {/* ===================================================
+            MOBILE
+        =================================================== */}
         <Image
-          src="/images/hero/hero2.webp"
+          src="/images/hero/pp.jpg"
           alt=""
           fill
           priority
           draggable={false}
           sizes="100vw"
-          className="select-none object-cover object-[center_42%]"
+          className="
+            select-none
+            object-contain
+            object-center
+            translate-y-[13vh]
+            scale-[1]
+            md:hidden
+          "
+        />
+
+        {/* ===================================================
+            DESKTOP
+        =================================================== */}
+        <Image
+          src="/images/hero/pp.jpg"
+          alt=""
+          fill
+          priority
+          draggable={false}
+          sizes="100vw"
+          className="
+            hidden
+            select-none
+            object-cover
+            object-[center_8%]
+            scale-[0.88]
+            md:block
+          "
         />
       </motion.div>
 
-      {/* TOP DARKENING */}
+      {/* =====================================================
+          TOP DARKENING
+      ===================================================== */}
       <div
-        className="absolute inset-x-0 top-0 h-[30%]"
+        className="
+          absolute
+          inset-x-0
+          top-0
+          h-[32%]
+        "
         style={{
           background: `
             linear-gradient(
               to bottom,
-              rgba(2, 5, 8, 0.48) 0%,
-              rgba(2, 5, 8, 0.18) 55%,
+              rgba(2, 5, 8, 0.62) 0%,
+              rgba(2, 5, 8, 0.26) 56%,
               transparent 100%
             )
           `,
         }}
       />
 
-      {/* DARK AURA BEHIND HERO TEXT */}
+      {/* =====================================================
+          DARK AURA BEHIND HERO COPY
+
+          This is intentionally invisible as an element.
+          It only lowers the contrast of Earth beneath text.
+      ===================================================== */}
       <div
         className="
           absolute
           left-1/2
-          top-[16%]
-          h-[390px]
-          w-[900px]
-          max-w-[95vw]
+          top-[15%]
+          h-[430px]
+          w-[980px]
+          max-w-[96vw]
           -translate-x-1/2
           rounded-full
-          blur-[35px]
+          blur-[32px]
         "
         style={{
           background: `
             radial-gradient(
               ellipse at center,
-              rgba(1, 5, 8, 0.72) 0%,
-              rgba(1, 5, 8, 0.48) 38%,
-              rgba(1, 5, 8, 0.16) 65%,
-              transparent 78%
+              rgba(1, 4, 7, 0.84) 0%,
+              rgba(1, 4, 7, 0.62) 34%,
+              rgba(1, 4, 7, 0.28) 58%,
+              rgba(1, 4, 7, 0.08) 72%,
+              transparent 82%
             )
           `,
         }}
       />
 
-      {/* SIDE VIGNETTE */}
+      {/* =====================================================
+          LIGHT CENTER VIGNETTE
+
+          Keeps the sides cinematic while preserving
+          detail around the planet.
+      ===================================================== */}
       <div
         className="absolute inset-0"
         style={{
           background: `
             radial-gradient(
               ellipse at center,
-              transparent 45%,
-              rgba(0,0,0,0.12) 72%,
-              rgba(0,0,0,0.34) 100%
+              transparent 42%,
+              rgba(0,0,0,0.10) 68%,
+              rgba(0,0,0,0.30) 100%
             )
           `,
         }}
       />
 
-      {/* ======================================================
-          CINEMATIC HERO → PROBLEM FADE
-
-          Koniec je presne rovnaký ako Problem background.
-      ====================================================== */}
+      {/* =====================================================
+          CINEMATIC HERO → NEXT SECTION FADE
+      ===================================================== */}
       <div
-        className="absolute inset-x-0 bottom-0 h-[38vh]"
+        className="
+          absolute
+          inset-x-0
+          bottom-0
+          h-[38vh]
+        "
         style={{
           background: `
             linear-gradient(
               to bottom,
               rgba(3,7,11,0) 0%,
-              rgba(3,7,11,0.04) 20%,
-              rgba(3,7,11,0.14) 38%,
-              rgba(3,7,11,0.38) 58%,
-              rgba(3,7,11,0.76) 80%,
+              rgba(3,7,11,0.03) 20%,
+              rgba(3,7,11,0.10) 38%,
+              rgba(3,7,11,0.32) 58%,
+              rgba(3,7,11,0.70) 80%,
               #03070b 100%
             )
           `,
         }}
       />
 
-      {/* VERY LIGHT BLUR ONLY AT THE VERY BOTTOM */}
+      {/* =====================================================
+          VERY SUBTLE BOTTOM BLUR
+      ===================================================== */}
       <div
-        className="absolute inset-x-0 bottom-0 h-[16vh] backdrop-blur-[2px]"
+        className="
+          absolute
+          inset-x-0
+          bottom-0
+          h-[14vh]
+          backdrop-blur-[2px]
+        "
         style={{
           WebkitMaskImage:
             "linear-gradient(to bottom, transparent, black)",
