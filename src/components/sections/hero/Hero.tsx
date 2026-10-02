@@ -58,11 +58,11 @@ export function Hero() {
             min-h-[100dvh]
             justify-center
             pb-[190px]
-            pt-[21vh]
+            pt-[28vh]
             sm:pb-[200px]
-            sm:pt-[20vh]
-            lg:pt-[18vh]
-            xl:pt-[17vh]
+            sm:pt-[26vh]
+            lg:pt-[23vh]
+            xl:pt-[22vh]
           "
         >
           <div className="mx-auto w-full max-w-[960px] text-center">

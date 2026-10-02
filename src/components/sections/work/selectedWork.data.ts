@@ -58,7 +58,7 @@ export const featuredCaseStudy: WorkCaseStudy = {
   description:
     "A custom platform bringing customers, operations, payments and day-to-day workflows into one structured system — designed around how the business actually runs.",
 
-  image: "/images/work/main.webp",
+  image: "/images/work/main.png",
 
   imageAlt:
     "Custom business platform dashboard showing operations, customers and business data",
@@ -96,12 +96,19 @@ export const secondaryCaseStudies: WorkCaseStudy[] = [
     description:
       "Automation and applied AI connect existing tools, process information and keep critical systems synchronized.",
 
-    image: "/images/work/ai-operations.png",
+    image: "/images/work/ai-operation.png",
 
     imageAlt:
       "Automation and applied AI workflow connecting business systems",
 
     href: "#ai-operations",
+
+    // TODO: Replace these presentation metrics with verified case-study results.
+    metrics: [
+      { value: "-50%", label: "manual work" },
+      { value: "2×", label: "process speed" },
+      { value: "+40%", label: "team capacity" },
+    ],
 
     bullets: [
       "Removes repetitive manual work",
@@ -121,11 +128,18 @@ export const secondaryCaseStudies: WorkCaseStudy[] = [
     description:
       "High-performance client-facing platforms with strong positioning, clean UX and a technical foundation designed to scale.",
 
-    image: "/images/work/client-platform.png",
+    image: "/images/work/web.png",
 
     imageAlt:
       "Modern client-facing website and digital platform",
 
     href: "#client-platform",
+
+    // TODO: Replace these presentation metrics with verified case-study results.
+    metrics: [
+      { value: "+68%", label: "conversion" },
+      { value: "-35%", label: "support load" },
+      { value: "10h", label: "saved / week" },
+    ],
   },
 ];
