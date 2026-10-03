@@ -1,6 +1,7 @@
 "use client";
 
 import { ArrowRight, BarChart3, Clock3, TrendingUp, Zap } from "lucide-react";
+import Link from "next/link";
 
 import { motion, useReducedMotion } from "motion/react";
 
@@ -10,19 +11,19 @@ import { Container } from "@/components/ui/Container";
 const benefits = [
   {
     icon: Clock3,
-    label: "Less friction",
-  },
-  {
-    icon: BarChart3,
-    label: "More clarity",
+    label: "Faster replies",
   },
   {
     icon: Zap,
-    label: "Faster decisions",
+    label: "Less manual work",
+  },
+  {
+    icon: BarChart3,
+    label: "Clearer decisions",
   },
   {
     icon: TrendingUp,
-    label: "More opportunity",
+    label: "Room to grow",
   },
 ];
 
@@ -166,14 +167,7 @@ export function System() {
           ================================================== */}
 
           <motion.div
-            initial={
-              reduceMotion
-                ? false
-                : {
-                    opacity: 0,
-                    y: 18,
-                  }
-            }
+            initial={false}
             whileInView={{
               opacity: 1,
               y: 0,
@@ -191,11 +185,11 @@ export function System() {
             {/* HEADLINE */}
             <h2
               className="
-                mt-10
-                text-[42px]
-                font-semibold
-                leading-[0.99]
-                tracking-[-0.06em]
+                text-[38px]
+                text-balance
+                font-normal
+                leading-[1.06]
+                tracking-[-0.04em]
 
                 sm:text-[50px]
                 md:text-[56px]
@@ -205,11 +199,9 @@ export function System() {
                 2xl:text-[62px]
               "
             >
-              Growth works
+              One connected system.
               <br />
-              better when
-              <br />
-              <span className="text-[#FF5A1F]">the system is connected.</span>
+              <span className="text-[#C2410C]">More room to grow.</span>
             </h2>
 
             {/* DESCRIPTION */}
@@ -219,13 +211,14 @@ export function System() {
                 max-w-[560px]
                 text-[16px]
                 leading-7
-                text-[#63717D]
+                text-[#52616D]
 
                 md:text-[17px]
               "
             >
-              Bring customer experience, operations and data into one
-              coordinated flow, so the business can move forward with clarity.
+              I connect your website, CRM and everyday tools so enquiries reach
+              the right person, routine tasks run automatically and you can see
+              what&apos;s working.
             </p>
 
             {/* ==================================================
@@ -233,7 +226,7 @@ export function System() {
             ================================================== */}
 
             <motion.div
-              initial="hidden"
+              initial={false}
               whileInView="visible"
               viewport={{
                 once: true,
@@ -251,8 +244,11 @@ export function System() {
                 mt-9
                 grid
                 grid-cols-2
+                gap-x-4
+                gap-y-2
 
                 sm:grid-cols-4
+                sm:gap-x-0
               "
             >
               {benefits.map((benefit, index) => {
@@ -286,12 +282,13 @@ export function System() {
                     ].join(" ")}
                   >
                     <Icon
+                      aria-hidden="true"
                       size={23}
                       strokeWidth={1.65}
                       className="text-[#071017]"
                     />
 
-                    <p className="mt-3 max-w-[90px] text-[13px] leading-[1.35] text-[#182630]">
+                    <p className="mt-3 max-w-[104px] text-[13px] leading-[1.45] text-[#182630]">
                       {benefit.label}
                     </p>
                   </motion.div>
@@ -304,8 +301,8 @@ export function System() {
             ================================================== */}
 
             <div className="mt-9 flex flex-col gap-5 sm:flex-row sm:items-center">
-              <a
-                href="#work"
+              <Link
+                href="/contact"
                 className="
     group
     inline-flex
@@ -320,42 +317,59 @@ export function System() {
     font-medium
     text-[#FFFFFF]
     shadow-[0_10px_30px_rgba(7,16,23,0.10)]
-    transition-all
+    transition-[transform,background-color,box-shadow]
     duration-200
-    hover:-translate-y-0.5
+    [@media(hover:hover)_and_(pointer:fine)]:hover:-translate-y-0.5
     hover:bg-[#111D25]
+    active:scale-[0.98]
+    motion-reduce:transform-none
+    focus-visible:outline-2
+    focus-visible:outline-offset-4
+    focus-visible:outline-[#C2410C]
   "
               >
-                <span className="text-[#FFFFFF]">See what&apos;s possible</span>
+                <span className="text-[#FFFFFF]">Book a strategy call</span>
 
                 <ArrowRight
                   size={17}
-                  className="text-[#FFFFFF] transition-transform duration-200 group-hover:translate-x-1"
+                  aria-hidden="true"
+                  className="text-[#FFFFFF] transition-transform duration-200 [@media(hover:hover)_and_(pointer:fine)]:group-hover:translate-x-1 motion-reduce:transform-none"
                 />
-              </a>
+              </Link>
 
               <a
-                href="#services"
+                href="#work"
                 className="
                   group
                   inline-flex
                   items-center
+                  min-h-11
+                  justify-center
+                  sm:justify-start
                   gap-3
                   text-[13px]
                   font-medium
                   text-[#17242E]
+                  rounded-sm
+                  focus-visible:outline-2
+                  focus-visible:outline-offset-4
+                  focus-visible:outline-[#C2410C]
                 "
               >
                 <span className="border-b border-[#17242E]/35 pb-[2px]">
-                  Explore solutions
+                  See it in action
                 </span>
 
                 <ArrowRight
                   size={16}
-                  className="transition-transform duration-200 group-hover:translate-x-1"
+                  aria-hidden="true"
+                  className="transition-transform duration-200 [@media(hover:hover)_and_(pointer:fine)]:group-hover:translate-x-1 motion-reduce:transform-none"
                 />
               </a>
             </div>
+            <p className="mt-4 max-w-[420px] text-[12px] leading-[1.6] text-[#52616D]">
+              We&apos;ll map the bottlenecks and the most useful next step for your business.
+            </p>
           </motion.div>
 
           {/* ==================================================

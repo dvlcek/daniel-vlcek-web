@@ -8,63 +8,68 @@ import { ProblemSignal } from "@/components/sections/problem/ProblemSignal";
 const problems = [
   {
     type: "experience" as const,
-    title: "Slow digital experience",
+    title: "Visitors leave",
     description:
-      "Slow, outdated experiences create friction before a customer ever reaches the decision point.",
+      "You pay to bring people to your website. Slow pages and a confusing next step lose them before they enquire.",
   },
   {
     type: "manual" as const,
-    title: "Manual workflows",
+    title: "Busywork takes over",
     description:
-      "Repetitive tasks, follow-ups and data entry consume time that should go into growth.",
+      "Your team copies data, sends reminders and repeats the same tasks. The work grows. Your capacity doesn't.",
   },
   {
     type: "systems" as const,
-    title: "Disconnected systems",
+    title: "Tools don't talk",
     description:
-      "Sales, operations and customer data live in separate tools instead of one connected flow.",
+      "Your website, inbox and CRM each hold part of the picture. Your team has to fill the gaps by hand.",
   },
   {
     type: "opportunities" as const,
-    title: "Lost opportunities",
+    title: "Leads go cold",
     description:
-      "Leads wait, follow-ups slip and important actions still depend on someone remembering.",
+      "An enquiry sits in an inbox. A follow-up gets forgotten. By the time you reply, the customer has moved on.",
   },
   {
     type: "visibility" as const,
-    title: "No real visibility",
+    title: "Decisions become guesses",
     description:
-      "Fragmented data makes it harder to see what is working, what is not and where money is leaking.",
+      "You piece together reports from different tools, yet still can't clearly see which efforts bring customers or where revenue slips away.",
   },
 ];
 
 const stats = [
   {
-    value: 8.4,
-    prefix: "+",
-    suffix: "%",
-    decimals: 1,
-    label: "retail conversion lift",
-    description: "observed with a 0.1s faster mobile experience",
-    source: "Deloitte / Google · Milliseconds Make Millions",
-  },
-  {
-    value: 4.9,
-    prefix: "",
-    suffix: "h",
-    decimals: 1,
-    label: "potentially saved / person / week",
-    description: "with improved work processes",
-    source: "Asana · Anatomy of Work 2023",
-  },
-  {
-    value: 85,
+    value: 53,
     prefix: "",
     suffix: "%",
     decimals: 0,
-    label: "expect consistent interactions",
-    description: "across different departments",
-    source: "Salesforce · State of the Connected Customer",
+    label: "of mobile visits abandoned",
+    description: "When a mobile site takes over 3 seconds to load.",
+    source: "Google · Mobile speed study, 2016",
+    sourceUrl:
+      "https://blog.google/products-and-platforms/products/ads/speed-scorecard-impact-calculator/",
+  },
+  {
+    value: 58,
+    prefix: "",
+    suffix: "%",
+    decimals: 0,
+    label: "of work time spent coordinating",
+    description: "Knowledge workers spend more time organising work than doing skilled work.",
+    source: "Asana · Anatomy of Work, 2023",
+    sourceUrl:
+      "https://asana.com/press/releases/pr/asana-anatomy-of-work-global-index-2023-smart-collaboration-and-clear-goals-integral-to-creating-positive-business-opportunities/5957f2bd-2a85-4ea1-93ed-6c507b478954",
+  },
+  {
+    value: 55,
+    prefix: "",
+    suffix: "%",
+    decimals: 0,
+    label: "of customers feel the disconnect",
+    description: "They say departments feel separate, rather than like one company.",
+    source: "Salesforce · Connected Customer, 2023",
+    sourceUrl: "https://www.salesforce.com/news/stories/foundations-announcement/",
   },
 ];
 
@@ -145,9 +150,10 @@ export function Problem() {
           <h2
             className="
               text-[38px]
-              font-medium
-              leading-[1.015]
-              tracking-[-0.052em]
+              text-balance
+              font-normal
+              leading-[1.08]
+              tracking-[-0.04em]
 
               sm:text-[46px]
 
@@ -156,15 +162,15 @@ export function Problem() {
               xl:text-[60px]
             "
           >
-            Most businesses don&apos;t lack potential.
+            Your business has moved forward.
 
             <br className="hidden md:block" />
 
             <span className="md:hidden"> </span>
 
-            They lack{" "}
+            Your systems{" "}
             <span className="text-[var(--accent)]">
-              connected systems.
+              haven&apos;t.
             </span>
           </h2>
 
@@ -175,15 +181,15 @@ export function Problem() {
               max-w-[720px]
               text-[14px]
               leading-[1.7]
-              text-white/42
+              text-white/64
 
               sm:text-[15px]
 
               xl:text-[16px]
             "
           >
-            Slow digital experiences, manual workflows and disconnected data
-            quietly cost companies time, visibility and revenue.
+            A slow website loses enquiries. Manual work eats into your day.
+            Disconnected tools make every next step harder than it needs to be.
           </p>
         </motion.div>
 
@@ -267,6 +273,7 @@ export function Problem() {
                 px-6
                 pb-7
                 pt-6
+                text-center
 
                 transition-[border-color,background-color]
                 duration-300
@@ -280,12 +287,17 @@ export function Problem() {
               <h3
                 className="
                   mt-4
+                  text-balance
                   text-[15px]
                   font-medium
                   leading-[1.25]
                   tracking-[-0.025em]
                   text-white/92
 
+                  xl:flex
+                  xl:min-h-[40px]
+                  xl:items-center
+                  xl:justify-center
                   xl:text-[16px]
                 "
               >
@@ -295,11 +307,10 @@ export function Problem() {
               <p
                 className="
                   mt-3
-                  text-[12px]
+                  text-pretty
+                  text-[14px]
                   leading-[1.72]
-                  text-white/40
-
-                  xl:text-[13px]
+                  text-white/64
                 "
               >
                 {problem.description}
@@ -467,26 +478,36 @@ export function Problem() {
                     mx-auto
                     mt-2
                     max-w-[270px]
-                    text-[11px]
+                    text-[13px]
                     leading-[1.55]
-                    text-white/36
-
-                    xl:text-[12px]
+                    text-white/60
                   "
                 >
                   {stat.description}
                 </p>
 
-                <p
+                <a
+                  href={stat.sourceUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="
                     mt-3
-                    text-[9px]
-                    leading-none
-                    text-white/22
+                    rounded-sm
+                    text-[11px]
+                    leading-[1.5]
+                    text-white/55
+                    underline
+                    decoration-white/20
+                    underline-offset-4
+                    transition-colors
+                    hover:text-white/80
+                    focus-visible:outline-2
+                    focus-visible:outline-offset-4
+                    focus-visible:outline-[var(--accent)]
                   "
                 >
                   {stat.source}
-                </p>
+                </a>
               </div>
             ))}
           </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { motion, useReducedMotion } from "motion/react";
 
 import { Container } from "@/components/ui/Container";
@@ -12,37 +13,37 @@ const services = [
     number: "01",
     image: "/images/services/custom-business-software.png",
     imageAlt: "Custom business software operations dashboard",
-    title: "Custom Business Software",
-    tagline: "Tools that fit your business, not the other way around.",
+    title: "Custom Software",
+    tagline: "Software that fits how you work.",
     description:
-      "I design and build internal platforms, operational tools and custom software that solve real business problems and adapt as you grow.",
-    examples:
-      "Internal platforms, CRMs, dashboards, booking systems, inventory and operations tools.",
-    href: "#software",
+      "When spreadsheets and off-the-shelf tools stop fitting, I build software around your workflow — so your team can manage customers, tasks and operations in one place.",
+    examples: ["CRMs and dashboards", "Booking and inventory systems", "Internal business platforms"],
+    href: "#business-platform",
+    cta: "See a software project",
   },
   {
     number: "02",
     image: "/images/services/automation-applied-ai.png",
     imageAlt: "Automation and applied AI workflow system",
-    title: "Automation & Applied AI",
-    tagline: "Less manual work. More progress.",
+    title: "Automation & AI",
+    tagline: "Let the repetitive work run itself.",
     description:
-      "I connect your systems, automate repetitive work and apply AI where it creates real value — so your team can focus on what matters.",
-    examples:
-      "Workflow automation, AI assistants, intelligent document processing and system integrations.",
-    href: "#automation",
+      "I connect your existing tools and automate data entry, follow-ups and document processing. AI handles the tasks it suits, with your team in control of the important decisions.",
+    examples: ["Connected tools and workflows", "AI assistants", "Document processing"],
+    href: "#ai-operations",
+    cta: "See an automation project",
   },
   {
     number: "03",
     image: "/images/services/web-client-platforms.png",
     imageAlt: "Modern web and client platform interface",
-    title: "Web & Client Platforms",
-    tagline: "Digital experiences that drive results.",
+    title: "Websites & Web Apps",
+    tagline: "Give visitors a reason to get in touch.",
     description:
-      "I build modern, performant websites and client-facing platforms that communicate your value, serve your customers and integrate with your broader systems.",
-    examples:
-      "Marketing websites, client portals, web applications, e-commerce and tailored platforms.",
-    href: "#web",
+      "I build fast, clear websites that make your offer easy to understand and act on — plus portals and web apps that let customers book, buy or manage their account.",
+    examples: ["Business websites", "Client portals and web apps", "E-commerce experiences"],
+    href: "#client-platform",
+    cta: "See a web project",
   },
 ];
 
@@ -63,14 +64,7 @@ export function WhatIBuild() {
             HEADER
         ==================================================== */}
         <motion.div
-          initial={
-            reduceMotion
-              ? false
-              : {
-                  opacity: 0,
-                  y: 18,
-                }
-          }
+          initial={false}
           whileInView={{
             opacity: 1,
             y: 0,
@@ -85,33 +79,23 @@ export function WhatIBuild() {
           }}
           className="mx-auto max-w-[950px] text-center"
         >
-          {/* EYELINER  */}
-          {/* <div className="flex items-center justify-center gap-4">
-            <span className="h-px w-8 bg-[#FF5A1F]" />
-
-            <span className="text-[9px] font-semibold uppercase tracking-[0.36em] text-[#64727E]">
-              What I Build
-            </span>
-          </div> */}
-
           <h2
             className="
-              mt-8
-              text-[40px]
-              font-semibold
-              leading-[0.98]
-              tracking-[-0.055em]
+              text-[38px]
+              text-balance
+              font-normal
+              leading-[1.06]
+              tracking-[-0.04em]
 
               sm:text-[48px]
               md:text-[56px]
               xl:text-[62px]
             "
           >
-            Systems built around how
-            <br className="hidden sm:block" />
-            {" "}your business{" "}
-            <span className="text-[#FF5A1F]">
-              actually works.
+            Turn visitors into customers.
+            <br />
+            <span className="text-[#C2410C]">
+              Give your team time back.
             </span>
           </h2>
 
@@ -119,17 +103,16 @@ export function WhatIBuild() {
             className="
               mx-auto
               mt-6
-              max-w-[800px]
+              max-w-[720px]
               text-[15px]
               leading-7
-              text-[#63717D]
+              text-[#52616D]
 
               md:text-[17px]
             "
           >
-            From internal platforms to automation and customer-facing
-            experiences, I build digital infrastructure that removes friction
-            and helps the business move forward.
+            Websites that bring enquiries. Software that fits your workflow.
+            Automation that takes the repetitive work off your team&apos;s plate.
           </p>
         </motion.div>
 
@@ -137,7 +120,7 @@ export function WhatIBuild() {
             SERVICES
         ==================================================== */}
         <motion.div
-          initial="hidden"
+          initial={false}
           whileInView="visible"
           viewport={{
             once: true,
@@ -185,7 +168,10 @@ export function WhatIBuild() {
                   relative
                   flex
                   flex-col
+                  min-w-0
                   py-9
+                  motion-reduce:!opacity-100
+                  motion-reduce:!transform-none
 
                   sm:px-5
 
@@ -224,17 +210,15 @@ export function WhatIBuild() {
                   src={service.image}
                   alt={service.imageAlt}
                   fill
-                  sizes="
-                    (max-width: 1024px) 100vw,
-                    33vw
-                  "
+                  sizes="(max-width: 639px) calc(100vw - 40px), (max-width: 1023px) calc(100vw - 104px), (max-width: 1279px) calc((100vw - 96px) / 3 - 56px), (max-width: 1479px) calc((100vw - 128px) / 3 - 72px), 378px"
                   className="
                     object-cover
                     transition-transform
-                    duration-700
+                    duration-300
                     ease-out
 
-                    group-hover:scale-[1.015]
+                    [@media(hover:hover)_and_(pointer:fine)]:group-hover:scale-[1.015]
+                    motion-reduce:transform-none
                   "
                 />
 
@@ -256,8 +240,8 @@ export function WhatIBuild() {
               {/* ==============================================
                   TEXT
               ============================================== */}
-              <div className="mt-7">
-                <p className="text-[9px] font-semibold tracking-[0.28em] text-[#89959E]">
+              <div className="mt-7 flex-1">
+                <p className="text-[11px] font-medium tracking-[0.18em] text-[#52616D]">
                   {service.number}
                 </p>
 
@@ -265,8 +249,9 @@ export function WhatIBuild() {
                   className="
                     mt-4
                     text-[23px]
-                    font-semibold
-                    leading-[1.08]
+                    text-balance
+                    font-medium
+                    leading-[1.2]
                     tracking-[-0.04em]
                     text-[#071017]
 
@@ -276,7 +261,7 @@ export function WhatIBuild() {
                   {service.title}
                 </h3>
 
-                <p className="mt-3 text-[14px] leading-6 text-[#53636F]">
+                <p className="mt-3 text-[15px] font-medium leading-6 text-[#263640] lg:min-h-12 xl:min-h-6">
                   {service.tagline}
                 </p>
 
@@ -286,7 +271,7 @@ export function WhatIBuild() {
                     max-w-[390px]
                     text-[14px]
                     leading-[1.7]
-                    text-[#63717D]
+                    text-[#52616D]
                   "
                 >
                   {service.description}
@@ -297,13 +282,18 @@ export function WhatIBuild() {
                   EXAMPLES
               ============================================== */}
               <div className="mt-7 border-t border-[#071017]/10 pt-5">
-                <p className="text-[9px] font-semibold uppercase tracking-[0.28em] text-[#89959E]">
-                  Examples
+                <p className="text-[11px] font-medium uppercase tracking-[0.16em] text-[#52616D]">
+                  What I build
                 </p>
 
-                <p className="mt-3 max-w-[390px] text-[13px] leading-[1.6] text-[#63717D]">
-                  {service.examples}
-                </p>
+                <ul className="mt-3 space-y-2 text-[13px] leading-[1.6] text-[#52616D]">
+                  {service.examples.map((example) => (
+                    <li key={example} className="flex items-start gap-2.5">
+                      <span aria-hidden="true" className="mt-[8px] h-1 w-1 shrink-0 rounded-full bg-[#C2410C]" />
+                      <span>{example}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
 
               {/* ==============================================
@@ -314,11 +304,16 @@ export function WhatIBuild() {
                   href={service.href}
                   className="
                     inline-flex
+                    min-h-11
                     items-center
+                    rounded-sm
                     gap-4
                     text-[14px]
                     font-medium
                     text-[#071017]
+                    focus-visible:outline-2
+                    focus-visible:outline-offset-4
+                    focus-visible:outline-[#C2410C]
                   "
                 >
                   <span
@@ -332,7 +327,7 @@ export function WhatIBuild() {
                       group-hover:border-[#FF5A1F]
                     "
                   >
-                    Explore
+                    {service.cta}
                   </span>
 
                   <span
@@ -343,7 +338,8 @@ export function WhatIBuild() {
                       transition-transform
                       duration-200
 
-                      group-hover:translate-x-1
+                      [@media(hover:hover)_and_(pointer:fine)]:group-hover:translate-x-1
+                      motion-reduce:transform-none
                     "
                   >
                     →
@@ -372,25 +368,31 @@ export function WhatIBuild() {
           "
         >
           <p className="max-w-[800px] text-[14px] leading-6 text-[#263640]">
-            You don&apos;t need to choose a technology first. We start with
-            what is slowing the business down.
+            Start with what your business needs most. Build one focused solution,
+            or connect the whole workflow.
           </p>
 
-          <a
-            href="#process"
+          <Link
+            href="/contact"
             className="
               group
               inline-flex
+              min-h-11
+              self-start
+              rounded-sm
               shrink-0
               items-center
               gap-4
               text-[14px]
               font-medium
               text-[#071017]
+              focus-visible:outline-2
+              focus-visible:outline-offset-4
+              focus-visible:outline-[#C2410C]
             "
           >
             <span className="border-b border-[#071017]/35 pb-[2px]">
-              Explore my approach
+              Talk about your project
             </span>
 
             <span
@@ -399,12 +401,13 @@ export function WhatIBuild() {
                 text-[18px]
                 transition-transform
                 duration-200
-                group-hover:translate-x-1
+                [@media(hover:hover)_and_(pointer:fine)]:group-hover:translate-x-1
+                motion-reduce:transform-none
               "
             >
               →
             </span>
-          </a>
+          </Link>
         </div>
       </Container>
     </section>
