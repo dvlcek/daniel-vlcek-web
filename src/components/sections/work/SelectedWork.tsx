@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import Image, { type ImageProps } from "next/image";
 import { ArrowRight } from "lucide-react";
 import { motion, useInView, useReducedMotion } from "motion/react";
+import styles from "./SelectedWork.module.css";
 
 import {
   featuredCaseStudy,
@@ -22,8 +23,8 @@ export function SelectedWork() {
     <section id="work" className="relative isolate overflow-hidden bg-[#03070b] text-white">
       <SelectedWorkBackground />
 
-      <div className="relative z-10 mx-auto w-full max-w-[1528px] px-5 pb-[132px] pt-20 sm:px-8 sm:pb-[144px] sm:pt-24 lg:pt-28 min-[1280px]:px-8 min-[1280px]:pb-[152px] min-[1280px]:pt-[108px] min-[1520px]:px-0">
-        <div className="grid gap-16 min-[1280px]:grid-cols-[320px_minmax(0,1fr)] min-[1280px]:items-start min-[1280px]:gap-8 min-[1440px]:grid-cols-[340px_minmax(0,1fr)] min-[1440px]:gap-9">
+      <div className="relative z-10 mx-auto w-full max-w-[1640px] px-5 py-20 sm:px-8 sm:py-24 lg:px-12 xl:py-28">
+        <div className="grid gap-12 min-[1280px]:grid-cols-[300px_minmax(0,1fr)] min-[1280px]:items-start min-[1280px]:gap-10 min-[1440px]:grid-cols-[340px_minmax(0,1fr)] min-[1600px]:gap-12">
           <SelectedWorkIntro reduceMotion={reduceMotion} />
 
           <motion.div
@@ -35,10 +36,10 @@ export function SelectedWork() {
               hidden: {},
               visible: { transition: { staggerChildren: reduceMotion ? 0 : 0.1 } },
             }}
-            className="grid min-w-0 gap-4"
+            className="grid min-w-0 scroll-mt-24 gap-5"
           >
             <FeaturedCaseStudy />
-            <div className="grid gap-4 min-[1440px]:grid-cols-2">
+            <div className="grid items-stretch gap-5 min-[1280px]:grid-cols-2">
               {secondaryCaseStudies.slice(0, 2).map((project, index) => (
                 <SecondaryCaseStudy
                   key={project.title}
@@ -63,7 +64,7 @@ function SelectedWorkIntro({ reduceMotion }: { reduceMotion: boolean | null }) {
       transition={{ duration: 0.68, ease }}
       className="min-w-0 min-[1280px]:sticky min-[1280px]:top-28"
     >
-      {/* <div className="flex items-center gap-4">
+      <div className="flex items-center gap-4">
         <motion.span
           initial={reduceMotion ? false : { scaleX: 0 }}
           whileInView={{ scaleX: 1 }}
@@ -72,21 +73,19 @@ function SelectedWorkIntro({ reduceMotion }: { reduceMotion: boolean | null }) {
           style={{ transformOrigin: "left" }}
           className="h-px w-10 shrink-0 bg-[var(--accent)]"
         />
-        <span className="text-[10px] font-medium uppercase tracking-[0.28em] text-white/50">
+        <span className="text-[11px] font-medium uppercase tracking-[0.24em] text-white/65">
           Selected Work
         </span>
-      </div> */}
+      </div>
 
-      <h2 className="mt-10 max-w-[350px] text-[42px] font-medium leading-[0.97] tracking-[-0.052em] min-[430px]:text-[44px] sm:max-w-[520px] sm:text-[52px] min-[1280px]:max-w-[320px] min-[1280px]:text-[52px] min-[1600px]:max-w-[350px] min-[1600px]:text-[60px]">
-        <span className="block">Systems that</span>
-        <span className="block">make the</span>
-        <span className="block">business</span>
-        <span className="block text-[var(--accent)]">move faster.</span>
+      <h2 className="mt-7 max-w-[580px] text-[44px] font-medium leading-[1.04] tracking-[-0.045em] sm:text-[60px] min-[1280px]:max-w-[340px] min-[1280px]:text-[52px] min-[1440px]:text-[58px]">
+        <span className="block">Less busywork.</span>
+        <span className="block text-[var(--accent)]">More business.</span>
       </h2>
 
-      <p className="mt-7 max-w-[320px] text-[14px] leading-[1.72] text-white/55 sm:max-w-[420px] min-[1280px]:max-w-[310px] min-[1600px]:text-[15px]">
-        A selection of digital systems built to reduce manual work, connect
-        operations and create measurable business outcomes.
+      <p className="mt-6 max-w-[460px] text-[16px] leading-[1.75] text-white/70 min-[1280px]:max-w-[340px]">
+        See how custom platforms, automation and better digital experiences
+        turn everyday bottlenecks into room to grow.
       </p>
 
       <motion.div
@@ -97,7 +96,7 @@ function SelectedWorkIntro({ reduceMotion }: { reduceMotion: boolean | null }) {
           hidden: {},
           visible: { transition: { staggerChildren: reduceMotion ? 0 : 0.07 } },
         }}
-        className="mt-12 grid max-w-[390px] grid-cols-3 sm:max-w-[440px] min-[1280px]:max-w-none"
+        className="mt-10 grid max-w-[440px] grid-cols-3 min-[1280px]:max-w-none"
       >
         {selectedWorkIntroStats.map((metric, index) => (
           <motion.div
@@ -108,10 +107,10 @@ function SelectedWorkIntro({ reduceMotion }: { reduceMotion: boolean | null }) {
             }}
             className={index > 0 ? "min-w-0 border-l border-white/[0.08] px-4" : "min-w-0 pr-4"}
           >
-            <div className="text-[25px] font-medium leading-none tracking-[-0.05em] text-white min-[1600px]:text-[27px]">
+            <div className="text-[32px] font-medium leading-none tracking-[-0.04em] text-white tabular-nums sm:text-[36px]">
               <AnimatedNumber metric={metric} />
             </div>
-            <p className="mt-2.5 max-w-[92px] text-[10px] leading-[1.4] text-white/52 min-[1600px]:text-[11px]">
+            <p className="mt-3 max-w-[110px] break-words text-[12px] leading-[1.5] text-white/65">
               {metric.label}
             </p>
           </motion.div>
@@ -124,12 +123,10 @@ function SelectedWorkIntro({ reduceMotion }: { reduceMotion: boolean | null }) {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.48, delay: 0.27, ease }}
-        className="group mt-11 inline-flex h-[50px] items-center rounded-full border border-white/[0.14] pr-6 text-[12px] font-medium text-white/88 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]/70 focus-visible:ring-offset-4 focus-visible:ring-offset-[#03070b]"
+        className="group mt-10 inline-flex min-h-[52px] items-center justify-center gap-5 rounded-full bg-[var(--accent)] px-7 text-sm font-medium text-white shadow-[0_8px_30px_rgba(255,90,31,0.14)] transition-[background-color,box-shadow] duration-200 hover:bg-[var(--accent-hover)] hover:shadow-[0_12px_35px_rgba(255,90,31,0.20)] motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--accent)]"
       >
-        <span className="-ml-px flex h-[50px] w-[50px] shrink-0 items-center justify-center rounded-full bg-[var(--accent)] text-white">
-          <ArrowRight size={16} strokeWidth={1.7} className="transition-transform duration-300 group-hover:translate-x-0.5" />
-        </span>
-        <span className="ml-5">Explore selected work</span>
+        <span>Explore selected work</span>
+        <ArrowRight size={17} aria-hidden="true" strokeWidth={1.7} className="transition-transform duration-200 [@media(hover:hover)_and_(pointer:fine)]:group-hover:translate-x-1 motion-reduce:transform-none" />
       </motion.a>
     </motion.div>
   );
@@ -142,14 +139,12 @@ function FeaturedCaseStudy() {
     <motion.article
       id="business-platform"
       variants={{
-        hidden: reduceMotion ? {} : { opacity: 0, y: 22 },
-        visible: { opacity: 1, y: 0, transition: { duration: 0.68, ease } },
+        hidden: reduceMotion ? {} : { opacity: 0 },
+        visible: { opacity: 1, transition: { duration: reduceMotion ? 0 : 0.55, ease } },
       }}
-      whileHover={reduceMotion ? undefined : { y: -2 }}
-      transition={{ duration: 0.24, ease }}
-      className="group relative min-w-0 overflow-hidden rounded-[20px] border border-white/[0.09] bg-white/[0.015] transition-colors duration-300 hover:border-white/[0.14]"
+      className={`${styles.card} group relative min-w-0 overflow-hidden rounded-[20px]`}
     >
-      <div className="relative min-h-[430px] min-[1280px]:h-[430px] min-[1440px]:h-[440px]">
+      <div className="relative min-h-[460px]">
         <ProjectVisual
           src={featuredCaseStudy.image}
           alt={featuredCaseStudy.imageAlt}
@@ -158,18 +153,18 @@ function FeaturedCaseStudy() {
           objectPosition="left center"
         />
 
-        <div className="relative z-10 flex min-h-[430px] min-w-0 max-w-[88%] flex-col p-6 [text-shadow:0_2px_16px_rgba(0,0,0,0.72)] md:max-w-[44%] md:p-7 min-[1280px]:min-h-0 min-[1440px]:p-8">
+        <div className="relative z-10 flex min-h-[460px] min-w-0 max-w-full flex-col p-6 [text-shadow:0_2px_16px_rgba(0,0,0,0.72)] sm:max-w-[65%] sm:p-8 md:max-w-[60%] min-[1600px]:max-w-[54%] min-[1600px]:p-10">
           <ProjectTag>{featuredCaseStudy.eyebrow}</ProjectTag>
-          <h3 className="mt-6 max-w-[340px] text-[28px] font-medium leading-[1.04] tracking-[-0.04em] text-white min-[1440px]:text-[30px]">
+          <h3 className="mt-6 max-w-[400px] text-[30px] font-medium leading-[1.12] tracking-[-0.035em] text-white sm:text-[34px]">
             {featuredCaseStudy.title}
           </h3>
-          <p className="mt-4 max-w-[330px] text-[13px] leading-[1.65] text-white/56 min-[1440px]:text-[14px]">
+          <p className="mt-4 max-w-[400px] text-[15px] leading-[1.7] text-white/75">
             {featuredCaseStudy.subtitle}
           </p>
           {featuredCaseStudy.metrics?.length ? (
             <MetricsRow metrics={featuredCaseStudy.metrics} className="mt-7" />
           ) : null}
-          <p className="mt-5 max-w-[305px] text-[11px] leading-[1.55] text-white/50">
+          <p className="mt-6 max-w-[380px] text-[13px] leading-[1.65] text-white/65">
             One connected system for customers, operations and visibility —
             without the usual manual handoffs.
           </p>
@@ -190,14 +185,12 @@ function SecondaryCaseStudy({ project, id }: { project: WorkCaseStudy; id: strin
     <motion.article
       id={id}
       variants={{
-        hidden: reduceMotion ? {} : { opacity: 0, y: 20 },
-        visible: { opacity: 1, y: 0, transition: { duration: 0.64, ease } },
+        hidden: reduceMotion ? {} : { opacity: 0 },
+        visible: { opacity: 1, transition: { duration: reduceMotion ? 0 : 0.55, ease } },
       }}
-      whileHover={reduceMotion ? undefined : { y: -2 }}
-      transition={{ duration: 0.24, ease }}
-      className="group relative min-w-0 overflow-hidden rounded-[18px] border border-white/[0.09] bg-white/[0.015] transition-colors duration-300 hover:border-white/[0.14]"
+      className={`${styles.card} group relative min-w-0 overflow-hidden rounded-[20px]`}
     >
-      <div className="relative min-h-[350px] min-[1280px]:h-[360px] min-[1440px]:h-[372px]">
+      <div className="relative h-full min-h-[380px]">
         <ProjectVisual
           src={project.image}
           alt={project.imageAlt}
@@ -207,18 +200,18 @@ function SecondaryCaseStudy({ project, id }: { project: WorkCaseStudy; id: strin
           objectPosition={id === "ai-operations" ? "53% center" : "70% center"}
         />
 
-        <div className="relative z-10 flex min-h-[350px] min-w-0 max-w-[88%] flex-col p-6 [text-shadow:0_2px_14px_rgba(0,0,0,0.72)] md:max-w-[55%] min-[1280px]:min-h-0 min-[1440px]:max-w-[52%] min-[1440px]:p-7">
+        <div className="relative z-10 flex h-full min-h-[380px] min-w-0 max-w-full flex-col p-6 [text-shadow:0_2px_14px_rgba(0,0,0,0.72)] sm:max-w-[65%] sm:p-7 min-[1280px]:max-w-[90%] min-[1440px]:max-w-[84%] min-[1600px]:max-w-[78%] min-[1600px]:p-8">
           <ProjectTag compact>{project.eyebrow}</ProjectTag>
-          <h3 className="mt-5 max-w-[280px] text-[23px] font-medium leading-[1.05] tracking-[-0.04em] text-white min-[1600px]:text-[25px]">
+          <h3 className="mt-6 max-w-[320px] text-[26px] font-medium leading-[1.12] tracking-[-0.035em] text-white min-[1600px]:text-[28px]">
             {project.title}
           </h3>
-          <p className="mt-3.5 max-w-[300px] text-[12px] leading-[1.65] text-white/55 min-[1600px]:text-[13px]">
+          <p className="mt-4 max-w-[340px] text-[14px] leading-[1.7] text-white/75">
             {project.subtitle}
           </p>
           {project.metrics?.length ? (
             <MetricsRow metrics={project.metrics} compact className="mt-6" />
           ) : null}
-          <div className="mt-auto pt-4">
+          <div className="mt-auto pt-6">
             <CaseStudyLink href={project.href} title={project.title} compact />
           </div>
         </div>
@@ -230,7 +223,7 @@ function SecondaryCaseStudy({ project, id }: { project: WorkCaseStudy; id: strin
 
 function ProjectTag({ children, compact = false }: { children: React.ReactNode; compact?: boolean }) {
   return (
-    <span className={`inline-flex h-[30px] w-fit max-w-full items-center rounded-full border border-white/[0.14] font-medium uppercase text-white/68 ${compact ? "px-3 text-[9px] tracking-[0.16em]" : "px-3.5 text-[9px] tracking-[0.18em]"}`}>
+    <span className={`inline-flex min-h-8 w-fit max-w-full items-center rounded-full border border-white/[0.12] bg-[#03070b]/35 px-3.5 py-1.5 text-[10px] font-medium uppercase leading-[1.5] text-white/75 ${compact ? "tracking-[0.12em]" : "tracking-[0.16em]"}`}>
       {children}
     </span>
   );
@@ -262,9 +255,9 @@ function ProjectVisual({
         alt={alt}
         fill
         priority={priority}
-        sizes={featured ? "(max-width: 1279px) 100vw, 1144px" : "(max-width: 1439px) 100vw, 564px"}
+        sizes={featured ? "(max-width: 1279px) 100vw, 1156px" : "(max-width: 1279px) 100vw, 568px"}
         style={{ objectPosition: featured ? "right center" : objectPosition }}
-        className={`${featured ? "origin-right scale-[1.5] object-cover md:object-contain md:object-right" : "object-cover"} transition-transform duration-[900ms] ease-out ${featured ? "" : "group-hover:scale-[1.012]"} motion-reduce:transition-none`}
+        className={`${featured ? "origin-right scale-[1.5] object-cover md:object-contain md:object-right [@media(hover:hover)_and_(pointer:fine)]:group-hover:scale-[1.515] motion-reduce:group-hover:scale-[1.5]" : "object-cover [@media(hover:hover)_and_(pointer:fine)]:group-hover:scale-[1.015] motion-reduce:group-hover:scale-100"} transition-transform duration-500 ease-out motion-reduce:transition-none`}
       />
       <div
         aria-hidden="true"
@@ -281,6 +274,11 @@ function ProjectVisual({
               : "linear-gradient(90deg, #03070b 0%, rgba(3,7,11,0.78) 15%, rgba(3,7,11,0.18) 46%, rgba(3,7,11,0) 72%)",
         }}
       />
+      <div
+        aria-hidden="true"
+        className="absolute inset-0"
+        style={{ background: "linear-gradient(0deg, rgba(3,7,11,0.72) 0%, rgba(3,7,11,0.42) 58%, rgba(3,7,11,0.08) 100%)" }}
+      />
     </div>
   );
 }
@@ -295,7 +293,7 @@ function MetricsRow({
   className?: string;
 }) {
   return (
-    <div className={`grid grid-cols-3 ${className}`}>
+    <div className={`${compact ? "grid grid-cols-3" : "flex flex-wrap gap-y-4"} ${className}`}>
       {metrics.slice(0, 3).map((metric, index) => (
         <MetricItem key={metric.label} value={metric.value} label={metric.label} separated={index > 0} compact={compact} />
       ))}
@@ -315,12 +313,30 @@ function MetricItem({
   compact?: boolean;
 }) {
   return (
-    <div className={separated ? "min-w-0 border-l border-white/[0.08] px-3" : "min-w-0 pr-3"}>
-      <div className={`font-medium leading-none tracking-[-0.04em] text-white ${compact ? "text-[16px] min-[1600px]:text-[18px]" : "text-[18px] min-[1600px]:text-[20px]"}`}>
-        {value}
+    <div className={separated ? "min-w-0 border-l border-white/[0.1] px-2 sm:px-3" : "min-w-0 pr-2 sm:pr-3"}>
+      <div className={`font-medium leading-[1.15] tracking-[-0.035em] text-white tabular-nums ${compact ? "text-[22px] sm:text-[24px] min-[1600px]:text-[28px]" : "text-[20px]"}`}>
+        <AnimatedMetricValue value={value} label={label} />
       </div>
-      <p className="mt-2 break-words text-[9px] leading-[1.35] text-white/52 min-[1600px]:text-[10px]">{label}</p>
+      <p className="mt-2 max-w-[108px] break-words text-[12px] leading-[1.5] text-white/70">{label}</p>
     </div>
+  );
+}
+
+function AnimatedMetricValue({ value, label }: { value: string; label: string }) {
+  const numericValue = value.match(/^([+-]?)(\d+(?:\.\d+)?)(.*)$/);
+  if (!numericValue) return value;
+
+  return (
+    <AnimatedNumber
+      metric={{
+        value: Number(numericValue[2]),
+        prefix: numericValue[1],
+        suffix: numericValue[3],
+        decimals: numericValue[2].split(".")[1]?.length ?? 0,
+        direction: "up",
+        label,
+      }}
+    />
   );
 }
 
@@ -329,10 +345,10 @@ function CaseStudyLink({ href, title, compact = false }: { href: string; title: 
     <a
       href={href}
       aria-label={`View case study: ${title}`}
-      className={`group/link inline-flex min-h-11 items-center justify-center rounded-full border border-white/[0.14] font-medium text-white/86 transition-colors duration-300 hover:border-white/[0.24] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]/70 focus-visible:ring-offset-4 focus-visible:ring-offset-[#03070b] ${compact ? "min-w-[168px] gap-7 px-5 text-[11px]" : "min-w-[184px] gap-8 px-6 text-[12px]"}`}
+      className={`group/link inline-flex min-h-12 w-fit max-w-full items-center justify-center rounded-full border border-white/[0.16] bg-[#03070b]/40 text-sm font-medium text-white/90 backdrop-blur-sm transition-colors duration-200 hover:border-white/25 hover:bg-white/[0.06] hover:text-white motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--accent)] ${compact ? "gap-4 px-5" : "gap-5 px-7"}`}
     >
       <span>View case study</span>
-      <ArrowRight size={compact ? 12 : 13} strokeWidth={1.7} className="transition-transform duration-300 group-hover/link:translate-x-0.5" />
+      <ArrowRight size={compact ? 14 : 16} aria-hidden="true" strokeWidth={1.7} className="transition-transform duration-200 [@media(hover:hover)_and_(pointer:fine)]:group-hover/link:translate-x-1 motion-reduce:transform-none" />
     </a>
   );
 }
@@ -350,11 +366,11 @@ function AnimatedNumber({ metric }: { metric: AnimatedMetricType }) {
   useEffect(() => {
     if (!inView) return;
     if (reduceMotion) {
-       const reducedMotionFrame = requestAnimationFrame(() => {
+      const reducedMotionFrame = requestAnimationFrame(() => {
         setValue(metric.value);
       });
       return () => cancelAnimationFrame(reducedMotionFrame);
-   }
+    }
 
     const startValue = metric.direction === "down"
       ? metric.from ?? Math.max(metric.value + 5, metric.value * 1.5)
@@ -376,7 +392,8 @@ function AnimatedNumber({ metric }: { metric: AnimatedMetricType }) {
 
   return (
     <span ref={ref}>
-      {metric.prefix ?? ""}{value.toFixed(metric.decimals ?? 0)}{metric.suffix ?? ""}
+      <span className="sr-only">{metric.prefix ?? ""}{metric.value.toFixed(metric.decimals ?? 0)}{metric.suffix ?? ""}</span>
+      <span aria-hidden="true">{metric.prefix ?? ""}{(reduceMotion ? metric.value : value).toFixed(metric.decimals ?? 0)}{metric.suffix ?? ""}</span>
     </span>
   );
 }
