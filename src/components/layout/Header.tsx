@@ -2,40 +2,47 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 import { Container } from "@/components/ui/Container";
 
 const navigation = [
-  { label: "Work", href: "/work", id: "work" },
-  { label: "Services", href: "/services", id: "services" },
-  { label: "About", href: "/about", id: "about" },
-  { label: "Process", href: "/process", id: "process" },
-  { label: "Insights", href: "/insights", id: "insights" },
+  { label: "Work", href: "/#work", id: "work" },
+  { label: "Services", href: "/#services", id: "services" },
+  { label: "About", href: "/#about", id: "about" },
+  { label: "Process", href: "/#process", id: "process" },
 ];
 
 export function Header() {
+  const pathname = usePathname();
   const [activeSection, setActiveSection] = useState<string | null>(null);
 
   useEffect(() => {
+    if (pathname !== "/") return;
+
     const sections = navigation
       .map((item) => document.getElementById(item.id))
       .filter((section): section is HTMLElement => section !== null);
 
     if (!sections.length) return;
 
+    const intersectingSections = new Set<HTMLElement>();
     const observer = new IntersectionObserver(
       (entries) => {
-        const visibleEntries = entries
-          .filter((entry) => entry.isIntersecting)
+        entries.forEach((entry) => {
+          const section = entry.target as HTMLElement;
+          if (entry.isIntersecting) intersectingSections.add(section);
+          else intersectingSections.delete(section);
+        });
+
+        const visibleSections = [...intersectingSections]
           .sort(
             (a, b) =>
-              Math.abs(a.boundingClientRect.top) -
-              Math.abs(b.boundingClientRect.top),
+              Math.abs(a.getBoundingClientRect().top) -
+              Math.abs(b.getBoundingClientRect().top),
           );
 
-        if (visibleEntries.length > 0) {
-          setActiveSection(visibleEntries[0].target.id);
-        }
+        setActiveSection(visibleSections[0]?.id ?? null);
       },
       {
         rootMargin: "-30% 0px -60% 0px",
@@ -48,11 +55,7 @@ export function Header() {
     return () => {
       observer.disconnect();
     };
-  }, []);
-
-  const handleNavigation = (id: string) => {
-    setActiveSection(id);
-  };
+  }, [pathname]);
 
   return (
     <header className="absolute inset-x-0 top-0 z-50">
@@ -81,13 +84,13 @@ export function Header() {
             className="hidden items-center gap-9 lg:flex"
           >
             {navigation.map((item) => {
-              const isActive = activeSection === item.id;
+              const isActive = pathname === "/" && activeSection === item.id;
 
               return (
                 <Link
                   key={item.label}
                   href={item.href}
-                  onClick={() => handleNavigation(item.id)}
+                  aria-current={isActive ? "location" : undefined}
                   className={`
                     group
                     relative

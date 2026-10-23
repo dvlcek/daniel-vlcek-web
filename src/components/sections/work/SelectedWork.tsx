@@ -1,15 +1,12 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
 import Image, { type ImageProps } from "next/image";
 import { ArrowRight } from "lucide-react";
-import { motion, useInView, useReducedMotion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import styles from "./SelectedWork.module.css";
 
 import {
   featuredCaseStudy,
   secondaryCaseStudies,
-  selectedWorkIntroStats,
-  type AnimatedMetric as AnimatedMetricType,
   type WorkCaseStudy,
   type WorkMetric,
 } from "./selectedWork.data";
@@ -88,35 +85,6 @@ function SelectedWorkIntro({ reduceMotion }: { reduceMotion: boolean | null }) {
         turn everyday bottlenecks into room to grow.
       </p>
 
-      <motion.div
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.6 }}
-        variants={{
-          hidden: {},
-          visible: { transition: { staggerChildren: reduceMotion ? 0 : 0.07 } },
-        }}
-        className="mt-10 grid max-w-[440px] grid-cols-3 min-[1280px]:max-w-none"
-      >
-        {selectedWorkIntroStats.map((metric, index) => (
-          <motion.div
-            key={metric.label}
-            variants={{
-              hidden: reduceMotion ? {} : { opacity: 0, y: 8 },
-              visible: { opacity: 1, y: 0, transition: { duration: 0.44, ease } },
-            }}
-            className={index > 0 ? "min-w-0 border-l border-white/[0.08] px-4" : "min-w-0 pr-4"}
-          >
-            <div className="text-[32px] font-medium leading-none tracking-[-0.04em] text-white tabular-nums sm:text-[36px]">
-              <AnimatedNumber metric={metric} />
-            </div>
-            <p className="mt-3 max-w-[110px] break-words text-[12px] leading-[1.5] text-white/65">
-              {metric.label}
-            </p>
-          </motion.div>
-        ))}
-      </motion.div>
-
       <motion.a
         href="#case-studies"
         initial={reduceMotion ? false : { opacity: 0, y: 8 }}
@@ -168,9 +136,6 @@ function FeaturedCaseStudy() {
             One connected system for customers, operations and visibility —
             without the usual manual handoffs.
           </p>
-          <div className="mt-auto pt-6">
-            <CaseStudyLink href={featuredCaseStudy.href} title={featuredCaseStudy.title} />
-          </div>
         </div>
 
       </div>
@@ -208,12 +173,6 @@ function SecondaryCaseStudy({ project, id }: { project: WorkCaseStudy; id: strin
           <p className="mt-4 max-w-[340px] text-[14px] leading-[1.7] text-white/75">
             {project.subtitle}
           </p>
-          {project.metrics?.length ? (
-            <MetricsRow metrics={project.metrics} compact className="mt-6" />
-          ) : null}
-          <div className="mt-auto pt-6">
-            <CaseStudyLink href={project.href} title={project.title} compact />
-          </div>
         </div>
 
       </div>
@@ -315,86 +274,10 @@ function MetricItem({
   return (
     <div className={separated ? "min-w-0 border-l border-white/[0.1] px-2 sm:px-3" : "min-w-0 pr-2 sm:pr-3"}>
       <div className={`font-medium leading-[1.15] tracking-[-0.035em] text-white tabular-nums ${compact ? "text-[22px] sm:text-[24px] min-[1600px]:text-[28px]" : "text-[20px]"}`}>
-        <AnimatedMetricValue value={value} label={label} />
+        {value}
       </div>
       <p className="mt-2 max-w-[108px] break-words text-[12px] leading-[1.5] text-white/70">{label}</p>
     </div>
-  );
-}
-
-function AnimatedMetricValue({ value, label }: { value: string; label: string }) {
-  const numericValue = value.match(/^([+-]?)(\d+(?:\.\d+)?)(.*)$/);
-  if (!numericValue) return value;
-
-  return (
-    <AnimatedNumber
-      metric={{
-        value: Number(numericValue[2]),
-        prefix: numericValue[1],
-        suffix: numericValue[3],
-        decimals: numericValue[2].split(".")[1]?.length ?? 0,
-        direction: "up",
-        label,
-      }}
-    />
-  );
-}
-
-function CaseStudyLink({ href, title, compact = false }: { href: string; title: string; compact?: boolean }) {
-  return (
-    <a
-      href={href}
-      aria-label={`View case study: ${title}`}
-      className={`group/link inline-flex min-h-12 w-fit max-w-full items-center justify-center rounded-full border border-white/[0.16] bg-[#03070b]/40 text-sm font-medium text-white/90 backdrop-blur-sm transition-colors duration-200 hover:border-white/25 hover:bg-white/[0.06] hover:text-white motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--accent)] ${compact ? "gap-4 px-5" : "gap-5 px-7"}`}
-    >
-      <span>View case study</span>
-      <ArrowRight size={compact ? 14 : 16} aria-hidden="true" strokeWidth={1.7} className="transition-transform duration-200 [@media(hover:hover)_and_(pointer:fine)]:group-hover/link:translate-x-1 motion-reduce:transform-none" />
-    </a>
-  );
-}
-
-function AnimatedNumber({ metric }: { metric: AnimatedMetricType }) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, amount: 0.8 });
-  const reduceMotion = useReducedMotion();
-  const [value, setValue] = useState(() => {
-    if (reduceMotion) return metric.value;
-    if (metric.direction === "down") return metric.from ?? Math.max(metric.value + 5, metric.value * 1.5);
-    return metric.from ?? 0;
-  });
-
-  useEffect(() => {
-    if (!inView) return;
-    if (reduceMotion) {
-      const reducedMotionFrame = requestAnimationFrame(() => {
-        setValue(metric.value);
-      });
-      return () => cancelAnimationFrame(reducedMotionFrame);
-    }
-
-    const startValue = metric.direction === "down"
-      ? metric.from ?? Math.max(metric.value + 5, metric.value * 1.5)
-      : metric.from ?? 0;
-    const duration = metric.direction === "down" ? 900 : 1050;
-    const startTime = performance.now();
-    let frame = 0;
-
-    const update = (now: number) => {
-      const progress = Math.min((now - startTime) / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      setValue(startValue + (metric.value - startValue) * eased);
-      if (progress < 1) frame = requestAnimationFrame(update);
-    };
-
-    frame = requestAnimationFrame(update);
-    return () => cancelAnimationFrame(frame);
-  }, [inView, metric.direction, metric.from, metric.value, reduceMotion]);
-
-  return (
-    <span ref={ref}>
-      <span className="sr-only">{metric.prefix ?? ""}{metric.value.toFixed(metric.decimals ?? 0)}{metric.suffix ?? ""}</span>
-      <span aria-hidden="true">{metric.prefix ?? ""}{(reduceMotion ? metric.value : value).toFixed(metric.decimals ?? 0)}{metric.suffix ?? ""}</span>
-    </span>
   );
 }
 

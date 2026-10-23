@@ -54,7 +54,9 @@ export const ModelName = {
   Lead: 'Lead',
   Booking: 'Booking',
   AvailabilityRule: 'AvailabilityRule',
-  AvailabilityOverride: 'AvailabilityOverride'
+  AvailabilityOverride: 'AvailabilityOverride',
+  BookingAttempt: 'BookingAttempt',
+  SecurityRateLimit: 'SecurityRateLimit'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -138,6 +140,28 @@ export const AvailabilityOverrideScalarFieldEnum = {
 } as const
 
 export type AvailabilityOverrideScalarFieldEnum = (typeof AvailabilityOverrideScalarFieldEnum)[keyof typeof AvailabilityOverrideScalarFieldEnum]
+
+
+export const BookingAttemptScalarFieldEnum = {
+  id: 'id',
+  tokenHash: 'tokenHash',
+  leadId: 'leadId',
+  bookingId: 'bookingId',
+  confirmationEmailSent: 'confirmationEmailSent',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt'
+} as const
+
+export type BookingAttemptScalarFieldEnum = (typeof BookingAttemptScalarFieldEnum)[keyof typeof BookingAttemptScalarFieldEnum]
+
+
+export const SecurityRateLimitScalarFieldEnum = {
+  key: 'key',
+  hits: 'hits',
+  expiresAt: 'expiresAt'
+} as const
+
+export type SecurityRateLimitScalarFieldEnum = (typeof SecurityRateLimitScalarFieldEnum)[keyof typeof SecurityRateLimitScalarFieldEnum]
 
 
 export const SortOrder = {

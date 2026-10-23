@@ -1,15 +1,3 @@
-export type MetricDirection = "up" | "down";
-
-export type AnimatedMetric = {
-  value: number;
-  from?: number;
-  decimals?: number;
-  prefix?: string;
-  suffix?: string;
-  label: string;
-  direction: MetricDirection;
-};
-
 export type WorkMetric = {
   value: string;
   label: string;
@@ -23,32 +11,12 @@ export type WorkCaseStudy = {
   description: string;
   image: string;
   imageAlt: string;
-  href: string;
   metrics?: WorkMetric[];
   bullets?: string[];
 };
 
-export const selectedWorkIntroStats: AnimatedMetric[] = [
-  {
-    value: 3,
-    label: "core disciplines",
-    direction: "up",
-  },
-  {
-    value: 1,
-    label: "connected delivery",
-    direction: "up",
-  },
-  {
-    value: 0,
-    from: 6,
-    label: "template-first builds",
-    direction: "down",
-  },
-];
-
 export const featuredCaseStudy: WorkCaseStudy = {
-  eyebrow: "Featured Case Study",
+  eyebrow: "Featured Project",
 
   title: "Business Platform",
 
@@ -62,8 +30,6 @@ export const featuredCaseStudy: WorkCaseStudy = {
 
   imageAlt:
     "Custom business platform dashboard showing operations, customers and business data",
-
-  href: "#business-platform",
 
   metrics: [
     {
@@ -101,15 +67,6 @@ export const secondaryCaseStudies: WorkCaseStudy[] = [
     imageAlt:
       "Automation and applied AI workflow connecting business systems",
 
-    href: "#ai-operations",
-
-    // TODO: Replace these presentation metrics with verified case-study results.
-    metrics: [
-      { value: "-50%", label: "manual work" },
-      { value: "2×", label: "process speed" },
-      { value: "+40%", label: "team capacity" },
-    ],
-
     bullets: [
       "Removes repetitive manual work",
       "Extracts and structures information",
@@ -132,14 +89,5 @@ export const secondaryCaseStudies: WorkCaseStudy[] = [
 
     imageAlt:
       "Modern client-facing website and digital platform",
-
-    href: "#client-platform",
-
-    // TODO: Replace these presentation metrics with verified case-study results.
-    metrics: [
-      { value: "+68%", label: "conversion" },
-      { value: "-35%", label: "support load" },
-      { value: "10h", label: "saved / week" },
-    ],
   },
 ];

@@ -17,6 +17,7 @@ export const BOOKING_INTAKE_MAX_BODY_BYTES =
 
 const bookingIntakeSchema = z
   .object({
+    attemptId: z.string().uuid(),
     name: z
       .string()
       .trim()

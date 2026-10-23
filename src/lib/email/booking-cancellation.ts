@@ -2,9 +2,7 @@ import {
   DateTime,
 } from "luxon";
 
-import {
-  Resend,
-} from "resend";
+import { BoundedResend as Resend } from "@/lib/email/client";
 
 import {
   createBookingIcs,

@@ -1,3 +1,7 @@
+import { logSecurityFailure } from "@/lib/security/log";
+import { DateTime } from "luxon";
+import { SecurityError, securityResponse } from "@/lib/security/http";
+import { limitRequest } from "@/lib/security/rate-limit";
 import {
   NextRequest,
   NextResponse,
@@ -54,6 +58,7 @@ export async function GET(
   request: NextRequest,
 ) {
   try {
+    await limitRequest(request, "availability");
     const params =
       request.nextUrl.searchParams;
 
@@ -75,7 +80,7 @@ export async function GET(
         !Number.isFinite(
           parsed,
         ) ||
-        parsed < 1
+        parsed < 1 || !Number.isInteger(parsed) || parsed > 31
       ) {
         return noStoreJson(
           {
@@ -93,7 +98,7 @@ export async function GET(
 
     if (
       from &&
-      !isDateKey(from)
+      (!isDateKey(from) || !DateTime.fromISO(from).isValid)
     ) {
       return noStoreJson(
         {
@@ -118,10 +123,8 @@ export async function GET(
       ...availability,
     });
   } catch (error) {
-    console.error(
-      "Booking availability API error:",
-      error,
-    );
+    if (error instanceof SecurityError) return securityResponse(error, "booking_availability");
+    logSecurityFailure("Booking availability API error:", error);
 
     return noStoreJson(
       {

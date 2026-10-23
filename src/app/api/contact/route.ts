@@ -1,20 +1,14 @@
+import { logSecurityFailure } from "@/lib/security/log";
+import { SecurityError, readJson, requireSameOrigin, securityResponse } from "@/lib/security/http";
+import { limitIdentity, limitRequest } from "@/lib/security/rate-limit";
 import {
   NextRequest,
   NextResponse,
 } from "next/server";
 
-import { Resend } from "resend";
+import { BoundedResend as Resend } from "@/lib/email/client";
 
 export const runtime = "nodejs";
-
-type ContactPayload = {
-  name?: unknown;
-  email?: unknown;
-  website?: unknown;
-  message?: unknown;
-  companyWebsite?: unknown;
-  source?: unknown;
-};
 
 function stringValue(
   value: unknown,
@@ -74,6 +68,9 @@ export async function POST(
   request: NextRequest,
 ) {
   try {
+    requireSameOrigin(request);
+    await limitRequest(request, "contact");
+    const body = await readJson(request);
     /* ========================================================
        ENVIRONMENT
     ======================================================== */
@@ -95,9 +92,7 @@ export async function POST(
       !contactToEmail ||
       !contactFromEmail
     ) {
-      console.error(
-        "Contact API: missing email environment variables.",
-      );
+      logSecurityFailure("Contact API: missing email environment variables.");
 
       return NextResponse.json(
         {
@@ -114,24 +109,6 @@ export async function POST(
     /* ========================================================
        REQUEST BODY
     ======================================================== */
-
-    let body: ContactPayload;
-
-    try {
-      body =
-        (await request.json()) as ContactPayload;
-    } catch {
-      return NextResponse.json(
-        {
-          ok: false,
-          message:
-            "Invalid request.",
-        },
-        {
-          status: 400,
-        },
-      );
-    }
 
     const name =
       stringValue(body.name);
@@ -258,6 +235,8 @@ export async function POST(
       );
     }
 
+    if (source.length > 200 || honeypot.length > 500) throw new SecurityError(400, "Invalid request.");
+    await limitIdentity("contact", email);
     /* ========================================================
        NORMALIZATION
     ======================================================== */
@@ -578,7 +557,6 @@ danielvlko.com
     `.trim();
 
     const {
-      data: internalData,
       error: internalError,
     } = await resend.emails.send({
       from: contactFromEmail,
@@ -616,10 +594,7 @@ danielvlko.com
     ======================================================== */
 
     if (internalError) {
-      console.error(
-        "Resend internal email error:",
-        internalError,
-      );
+      logSecurityFailure("Resend internal email error:", internalError);
 
       return NextResponse.json(
         {
@@ -1014,7 +989,6 @@ danielvlko.com
     `.trim();
 
     const {
-      data: confirmationData,
       error: confirmationError,
     } = await resend.emails.send({
       from: contactFromEmail,
@@ -1053,32 +1027,12 @@ danielvlko.com
     ======================================================== */
 
     if (confirmationError) {
-      console.error(
-        "Resend confirmation email error:",
-        confirmationError,
-      );
+      logSecurityFailure("Resend confirmation email error:", confirmationError);
     }
 
     /* ========================================================
        SUCCESS
     ======================================================== */
-
-    console.log(
-      "Contact inquiry processed:",
-      {
-        internalEmailId:
-          internalData?.id,
-
-        confirmationEmailId:
-          confirmationData?.id,
-
-        confirmationSent:
-          !confirmationError,
-
-        name,
-        email,
-      },
-    );
 
     return NextResponse.json({
       ok: true,
@@ -1086,10 +1040,8 @@ danielvlko.com
         "Message sent successfully.",
     });
   } catch (error) {
-    console.error(
-      "Contact API error:",
-      error,
-    );
+    if (error instanceof SecurityError) return securityResponse(error, "contact");
+    logSecurityFailure("Contact API error:", error);
 
     return NextResponse.json(
       {

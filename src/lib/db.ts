@@ -34,6 +34,10 @@ function createPrismaClient(): PrismaClient {
   const adapter =
     new PrismaPg({
       connectionString,
+      connectionTimeoutMillis: 5000,
+      statement_timeout: 10_000,
+      max: 5,
+      idleTimeoutMillis: 30_000,
     });
 
   return new PrismaClient({
@@ -66,13 +70,9 @@ export function getDb(): PrismaClient {
   const client =
     createPrismaClient();
 
-  if (
-    process.env.NODE_ENV !==
-    "production"
-  ) {
-    globalForPrisma.__danielVlkoPrisma =
-      client;
-  }
+  // Rate guards and handlers must share one bounded pool in each runtime,
+  // including production. Durable limiter state still lives in PostgreSQL.
+  globalForPrisma.__danielVlkoPrisma = client;
 
   return client;
 }

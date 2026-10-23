@@ -271,6 +271,7 @@ export type BookingWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Booking"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Booking"> | Date | string
   lead?: Prisma.XOR<Prisma.LeadScalarRelationFilter, Prisma.LeadWhereInput>
+  attempts?: Prisma.BookingAttemptListRelationFilter
 }
 
 export type BookingOrderByWithRelationInput = {
@@ -291,6 +292,7 @@ export type BookingOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   lead?: Prisma.LeadOrderByWithRelationInput
+  attempts?: Prisma.BookingAttemptOrderByRelationAggregateInput
 }
 
 export type BookingWhereUniqueInput = Prisma.AtLeast<{
@@ -314,6 +316,7 @@ export type BookingWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Booking"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Booking"> | Date | string
   lead?: Prisma.XOR<Prisma.LeadScalarRelationFilter, Prisma.LeadWhereInput>
+  attempts?: Prisma.BookingAttemptListRelationFilter
 }, "id" | "activeSlotKey" | "cancelTokenHash">
 
 export type BookingOrderByWithAggregationInput = {
@@ -377,6 +380,7 @@ export type BookingCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   lead: Prisma.LeadCreateNestedOneWithoutBookingsInput
+  attempts?: Prisma.BookingAttemptCreateNestedManyWithoutBookingInput
 }
 
 export type BookingUncheckedCreateInput = {
@@ -396,6 +400,7 @@ export type BookingUncheckedCreateInput = {
   scheduleChangedAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  attempts?: Prisma.BookingAttemptUncheckedCreateNestedManyWithoutBookingInput
 }
 
 export type BookingUpdateInput = {
@@ -415,6 +420,7 @@ export type BookingUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lead?: Prisma.LeadUpdateOneRequiredWithoutBookingsNestedInput
+  attempts?: Prisma.BookingAttemptUpdateManyWithoutBookingNestedInput
 }
 
 export type BookingUncheckedUpdateInput = {
@@ -434,6 +440,7 @@ export type BookingUncheckedUpdateInput = {
   scheduleChangedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  attempts?: Prisma.BookingAttemptUncheckedUpdateManyWithoutBookingNestedInput
 }
 
 export type BookingCreateManyInput = {
@@ -559,6 +566,11 @@ export type BookingMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
 }
 
+export type BookingNullableScalarRelationFilter = {
+  is?: Prisma.BookingWhereInput | null
+  isNot?: Prisma.BookingWhereInput | null
+}
+
 export type BookingCreateNestedManyWithoutLeadInput = {
   create?: Prisma.XOR<Prisma.BookingCreateWithoutLeadInput, Prisma.BookingUncheckedCreateWithoutLeadInput> | Prisma.BookingCreateWithoutLeadInput[] | Prisma.BookingUncheckedCreateWithoutLeadInput[]
   connectOrCreate?: Prisma.BookingCreateOrConnectWithoutLeadInput | Prisma.BookingCreateOrConnectWithoutLeadInput[]
@@ -605,6 +617,22 @@ export type EnumBookingStatusFieldUpdateOperationsInput = {
   set?: $Enums.BookingStatus
 }
 
+export type BookingCreateNestedOneWithoutAttemptsInput = {
+  create?: Prisma.XOR<Prisma.BookingCreateWithoutAttemptsInput, Prisma.BookingUncheckedCreateWithoutAttemptsInput>
+  connectOrCreate?: Prisma.BookingCreateOrConnectWithoutAttemptsInput
+  connect?: Prisma.BookingWhereUniqueInput
+}
+
+export type BookingUpdateOneWithoutAttemptsNestedInput = {
+  create?: Prisma.XOR<Prisma.BookingCreateWithoutAttemptsInput, Prisma.BookingUncheckedCreateWithoutAttemptsInput>
+  connectOrCreate?: Prisma.BookingCreateOrConnectWithoutAttemptsInput
+  upsert?: Prisma.BookingUpsertWithoutAttemptsInput
+  disconnect?: Prisma.BookingWhereInput | boolean
+  delete?: Prisma.BookingWhereInput | boolean
+  connect?: Prisma.BookingWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BookingUpdateToOneWithWhereWithoutAttemptsInput, Prisma.BookingUpdateWithoutAttemptsInput>, Prisma.BookingUncheckedUpdateWithoutAttemptsInput>
+}
+
 export type BookingCreateWithoutLeadInput = {
   id?: string
   startsAt: Date | string
@@ -621,6 +649,7 @@ export type BookingCreateWithoutLeadInput = {
   scheduleChangedAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  attempts?: Prisma.BookingAttemptCreateNestedManyWithoutBookingInput
 }
 
 export type BookingUncheckedCreateWithoutLeadInput = {
@@ -639,6 +668,7 @@ export type BookingUncheckedCreateWithoutLeadInput = {
   scheduleChangedAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  attempts?: Prisma.BookingAttemptUncheckedCreateNestedManyWithoutBookingInput
 }
 
 export type BookingCreateOrConnectWithoutLeadInput = {
@@ -689,6 +719,98 @@ export type BookingScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Booking"> | Date | string
 }
 
+export type BookingCreateWithoutAttemptsInput = {
+  id?: string
+  startsAt: Date | string
+  endsAt: Date | string
+  timezone: string
+  status?: $Enums.BookingStatus
+  activeSlotKey?: string | null
+  externalCalendarEventId?: string | null
+  externalCalendarUrl?: string | null
+  meetingUrl?: string | null
+  cancelTokenHash?: string | null
+  reminder24hEmailId?: string | null
+  reminder30mEmailId?: string | null
+  scheduleChangedAt?: Date | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  lead: Prisma.LeadCreateNestedOneWithoutBookingsInput
+}
+
+export type BookingUncheckedCreateWithoutAttemptsInput = {
+  id?: string
+  leadId: string
+  startsAt: Date | string
+  endsAt: Date | string
+  timezone: string
+  status?: $Enums.BookingStatus
+  activeSlotKey?: string | null
+  externalCalendarEventId?: string | null
+  externalCalendarUrl?: string | null
+  meetingUrl?: string | null
+  cancelTokenHash?: string | null
+  reminder24hEmailId?: string | null
+  reminder30mEmailId?: string | null
+  scheduleChangedAt?: Date | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type BookingCreateOrConnectWithoutAttemptsInput = {
+  where: Prisma.BookingWhereUniqueInput
+  create: Prisma.XOR<Prisma.BookingCreateWithoutAttemptsInput, Prisma.BookingUncheckedCreateWithoutAttemptsInput>
+}
+
+export type BookingUpsertWithoutAttemptsInput = {
+  update: Prisma.XOR<Prisma.BookingUpdateWithoutAttemptsInput, Prisma.BookingUncheckedUpdateWithoutAttemptsInput>
+  create: Prisma.XOR<Prisma.BookingCreateWithoutAttemptsInput, Prisma.BookingUncheckedCreateWithoutAttemptsInput>
+  where?: Prisma.BookingWhereInput
+}
+
+export type BookingUpdateToOneWithWhereWithoutAttemptsInput = {
+  where?: Prisma.BookingWhereInput
+  data: Prisma.XOR<Prisma.BookingUpdateWithoutAttemptsInput, Prisma.BookingUncheckedUpdateWithoutAttemptsInput>
+}
+
+export type BookingUpdateWithoutAttemptsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
+  activeSlotKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  externalCalendarEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  externalCalendarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetingUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cancelTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reminder24hEmailId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reminder30mEmailId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scheduleChangedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lead?: Prisma.LeadUpdateOneRequiredWithoutBookingsNestedInput
+}
+
+export type BookingUncheckedUpdateWithoutAttemptsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  leadId?: Prisma.StringFieldUpdateOperationsInput | string
+  startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
+  activeSlotKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  externalCalendarEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  externalCalendarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetingUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cancelTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reminder24hEmailId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reminder30mEmailId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scheduleChangedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
 export type BookingCreateManyLeadInput = {
   id?: string
   startsAt: Date | string
@@ -723,6 +845,7 @@ export type BookingUpdateWithoutLeadInput = {
   scheduleChangedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  attempts?: Prisma.BookingAttemptUpdateManyWithoutBookingNestedInput
 }
 
 export type BookingUncheckedUpdateWithoutLeadInput = {
@@ -741,6 +864,7 @@ export type BookingUncheckedUpdateWithoutLeadInput = {
   scheduleChangedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  attempts?: Prisma.BookingAttemptUncheckedUpdateManyWithoutBookingNestedInput
 }
 
 export type BookingUncheckedUpdateManyWithoutLeadInput = {
@@ -762,6 +886,35 @@ export type BookingUncheckedUpdateManyWithoutLeadInput = {
 }
 
 
+/**
+ * Count Type BookingCountOutputType
+ */
+
+export type BookingCountOutputType = {
+  attempts: number
+}
+
+export type BookingCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  attempts?: boolean | BookingCountOutputTypeCountAttemptsArgs
+}
+
+/**
+ * BookingCountOutputType without action
+ */
+export type BookingCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BookingCountOutputType
+   */
+  select?: Prisma.BookingCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * BookingCountOutputType without action
+ */
+export type BookingCountOutputTypeCountAttemptsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BookingAttemptWhereInput
+}
+
 
 export type BookingSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -781,6 +934,8 @@ export type BookingSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   createdAt?: boolean
   updatedAt?: boolean
   lead?: boolean | Prisma.LeadDefaultArgs<ExtArgs>
+  attempts?: boolean | Prisma.Booking$attemptsArgs<ExtArgs>
+  _count?: boolean | Prisma.BookingCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["booking"]>
 
 export type BookingSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -845,6 +1000,8 @@ export type BookingSelectScalar = {
 export type BookingOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "leadId" | "startsAt" | "endsAt" | "timezone" | "status" | "activeSlotKey" | "externalCalendarEventId" | "externalCalendarUrl" | "meetingUrl" | "cancelTokenHash" | "reminder24hEmailId" | "reminder30mEmailId" | "scheduleChangedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["booking"]>
 export type BookingInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   lead?: boolean | Prisma.LeadDefaultArgs<ExtArgs>
+  attempts?: boolean | Prisma.Booking$attemptsArgs<ExtArgs>
+  _count?: boolean | Prisma.BookingCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type BookingIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   lead?: boolean | Prisma.LeadDefaultArgs<ExtArgs>
@@ -857,6 +1014,7 @@ export type $BookingPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   name: "Booking"
   objects: {
     lead: Prisma.$LeadPayload<ExtArgs>
+    attempts: Prisma.$BookingAttemptPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1276,6 +1434,7 @@ readonly fields: BookingFieldRefs;
 export interface Prisma__BookingClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   lead<T extends Prisma.LeadDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LeadDefaultArgs<ExtArgs>>): Prisma.Prisma__LeadClient<runtime.Types.Result.GetResult<Prisma.$LeadPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  attempts<T extends Prisma.Booking$attemptsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Booking$attemptsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BookingAttemptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1719,6 +1878,30 @@ export type BookingDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Limit how many Bookings to delete.
    */
   limit?: number
+}
+
+/**
+ * Booking.attempts
+ */
+export type Booking$attemptsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BookingAttempt
+   */
+  select?: Prisma.BookingAttemptSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the BookingAttempt
+   */
+  omit?: Prisma.BookingAttemptOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BookingAttemptInclude<ExtArgs> | null
+  where?: Prisma.BookingAttemptWhereInput
+  orderBy?: Prisma.BookingAttemptOrderByWithRelationInput | Prisma.BookingAttemptOrderByWithRelationInput[]
+  cursor?: Prisma.BookingAttemptWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BookingAttemptScalarFieldEnum | Prisma.BookingAttemptScalarFieldEnum[]
 }
 
 /**

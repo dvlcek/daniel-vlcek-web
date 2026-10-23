@@ -400,7 +400,9 @@ export const ModelName = {
   Lead: 'Lead',
   Booking: 'Booking',
   AvailabilityRule: 'AvailabilityRule',
-  AvailabilityOverride: 'AvailabilityOverride'
+  AvailabilityOverride: 'AvailabilityOverride',
+  BookingAttempt: 'BookingAttempt',
+  SecurityRateLimit: 'SecurityRateLimit'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -416,7 +418,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "lead" | "booking" | "availabilityRule" | "availabilityOverride"
+    modelProps: "lead" | "booking" | "availabilityRule" | "availabilityOverride" | "bookingAttempt" | "securityRateLimit"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -716,6 +718,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    BookingAttempt: {
+      payload: Prisma.$BookingAttemptPayload<ExtArgs>
+      fields: Prisma.BookingAttemptFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.BookingAttemptFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookingAttemptPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.BookingAttemptFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookingAttemptPayload>
+        }
+        findFirst: {
+          args: Prisma.BookingAttemptFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookingAttemptPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.BookingAttemptFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookingAttemptPayload>
+        }
+        findMany: {
+          args: Prisma.BookingAttemptFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookingAttemptPayload>[]
+        }
+        create: {
+          args: Prisma.BookingAttemptCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookingAttemptPayload>
+        }
+        createMany: {
+          args: Prisma.BookingAttemptCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.BookingAttemptCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookingAttemptPayload>[]
+        }
+        delete: {
+          args: Prisma.BookingAttemptDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookingAttemptPayload>
+        }
+        update: {
+          args: Prisma.BookingAttemptUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookingAttemptPayload>
+        }
+        deleteMany: {
+          args: Prisma.BookingAttemptDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.BookingAttemptUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.BookingAttemptUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookingAttemptPayload>[]
+        }
+        upsert: {
+          args: Prisma.BookingAttemptUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookingAttemptPayload>
+        }
+        aggregate: {
+          args: Prisma.BookingAttemptAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBookingAttempt>
+        }
+        groupBy: {
+          args: Prisma.BookingAttemptGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BookingAttemptGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.BookingAttemptCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BookingAttemptCountAggregateOutputType> | number
+        }
+      }
+    }
+    SecurityRateLimit: {
+      payload: Prisma.$SecurityRateLimitPayload<ExtArgs>
+      fields: Prisma.SecurityRateLimitFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.SecurityRateLimitFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SecurityRateLimitPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.SecurityRateLimitFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SecurityRateLimitPayload>
+        }
+        findFirst: {
+          args: Prisma.SecurityRateLimitFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SecurityRateLimitPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.SecurityRateLimitFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SecurityRateLimitPayload>
+        }
+        findMany: {
+          args: Prisma.SecurityRateLimitFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SecurityRateLimitPayload>[]
+        }
+        create: {
+          args: Prisma.SecurityRateLimitCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SecurityRateLimitPayload>
+        }
+        createMany: {
+          args: Prisma.SecurityRateLimitCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.SecurityRateLimitCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SecurityRateLimitPayload>[]
+        }
+        delete: {
+          args: Prisma.SecurityRateLimitDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SecurityRateLimitPayload>
+        }
+        update: {
+          args: Prisma.SecurityRateLimitUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SecurityRateLimitPayload>
+        }
+        deleteMany: {
+          args: Prisma.SecurityRateLimitDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.SecurityRateLimitUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.SecurityRateLimitUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SecurityRateLimitPayload>[]
+        }
+        upsert: {
+          args: Prisma.SecurityRateLimitUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SecurityRateLimitPayload>
+        }
+        aggregate: {
+          args: Prisma.SecurityRateLimitAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSecurityRateLimit>
+        }
+        groupBy: {
+          args: Prisma.SecurityRateLimitGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SecurityRateLimitGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.SecurityRateLimitCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SecurityRateLimitCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -820,6 +970,28 @@ export const AvailabilityOverrideScalarFieldEnum = {
 } as const
 
 export type AvailabilityOverrideScalarFieldEnum = (typeof AvailabilityOverrideScalarFieldEnum)[keyof typeof AvailabilityOverrideScalarFieldEnum]
+
+
+export const BookingAttemptScalarFieldEnum = {
+  id: 'id',
+  tokenHash: 'tokenHash',
+  leadId: 'leadId',
+  bookingId: 'bookingId',
+  confirmationEmailSent: 'confirmationEmailSent',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt'
+} as const
+
+export type BookingAttemptScalarFieldEnum = (typeof BookingAttemptScalarFieldEnum)[keyof typeof BookingAttemptScalarFieldEnum]
+
+
+export const SecurityRateLimitScalarFieldEnum = {
+  key: 'key',
+  hits: 'hits',
+  expiresAt: 'expiresAt'
+} as const
+
+export type SecurityRateLimitScalarFieldEnum = (typeof SecurityRateLimitScalarFieldEnum)[keyof typeof SecurityRateLimitScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1125,6 +1297,8 @@ export type GlobalOmitConfig = {
   booking?: Prisma.BookingOmit
   availabilityRule?: Prisma.AvailabilityRuleOmit
   availabilityOverride?: Prisma.AvailabilityOverrideOmit
+  bookingAttempt?: Prisma.BookingAttemptOmit
+  securityRateLimit?: Prisma.SecurityRateLimitOmit
 }
 
 /* Types for Logging */

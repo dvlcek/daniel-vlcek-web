@@ -1,3 +1,6 @@
+import { logSecurityFailure } from "@/lib/security/log";
+import { SecurityError, readJson, requireSameOrigin, securityResponse } from "@/lib/security/http";
+import { limitRequest } from "@/lib/security/rate-limit";
 import {
   NextRequest,
   NextResponse,
@@ -36,13 +39,15 @@ const manageBookingSchema =
         z
           .string()
           .trim()
-          .min(1),
+          .min(1)
+          .max(256),
 
       token:
         z
           .string()
           .trim()
-          .min(1),
+          .min(1)
+          .max(256),
     })
     .strict();
 
@@ -77,16 +82,17 @@ function noStoreJson(
 export async function POST(
   request: NextRequest,
 ) {
-  const db =
-    getDb();
-
   try {
+    requireSameOrigin(request);
+    await limitRequest(request, "manage");
+    const db = getDb();
     let body: unknown;
 
     try {
       body =
-        await request.json();
-    } catch {
+        await readJson(request);
+    } catch (error) {
+      if (error instanceof SecurityError) return securityResponse(error, "booking_request");
       return noStoreJson(
         {
           ok: false,
@@ -154,7 +160,7 @@ export async function POST(
           message:
             "This booking link is invalid or no longer available.",
         },
-        404,
+        403,
       );
     }
 
@@ -202,10 +208,8 @@ export async function POST(
       },
     });
   } catch (error) {
-    console.error(
-      "Booking manage API error:",
-      error,
-    );
+    if (error instanceof SecurityError) return securityResponse(error, "booking_request");
+    logSecurityFailure("Booking manage API error:", error);
 
     return noStoreJson(
       {

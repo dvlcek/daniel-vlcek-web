@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test:security": "tsx --test tests/security.test.ts",
+    "test:security:postgres": "node scripts/test-security-postgres.mjs"
   },
   "dependencies": {
     "@calcom/embed-react": "^1.5.3",

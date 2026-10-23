@@ -65,6 +65,7 @@ model Lead {
   status LeadStatus @default(NEW)
 
   bookings Booking[]
+  bookingAttempt BookingAttempt?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -86,6 +87,7 @@ model Booking {
 
   leadId String
   lead   Lead   @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  attempts BookingAttempt[]
 
   startsAt DateTime @db.Timestamptz(3)
   endsAt   DateTime @db.Timestamptz(3)
@@ -193,4 +195,25 @@ model AvailabilityOverride {
 
   @@index([dateKey])
   @@index([dateKey, type])
+}
+
+// Ownership of one pending booking attempt; only a capability hash is persisted.
+model BookingAttempt {
+  id String @id @db.Uuid
+  tokenHash String @unique
+  leadId String @unique
+  lead Lead @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  bookingId String?
+  booking Booking? @relation(fields: [bookingId], references: [id], onDelete: SetNull)
+  confirmationEmailSent Boolean @default(false)
+  expiresAt DateTime @db.Timestamptz(3)
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  @@index([expiresAt])
+}
+
+model SecurityRateLimit {
+  key String @id
+  hits Int
+  expiresAt DateTime @db.Timestamptz(3)
+  @@index([expiresAt])
 }

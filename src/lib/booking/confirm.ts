@@ -9,6 +9,7 @@ import { bookingConfig } from "@/lib/booking/config";
 
 const bookingConfirmSchema = z
   .object({
+    attemptId: z.string().uuid(),
     leadId: z
       .string()
       .trim()
@@ -27,6 +28,7 @@ const bookingConfirmSchema = z
 ========================================================= */
 
 export type BookingConfirmInput = {
+  attemptId: string;
   leadId: string;
   startsAt: string;
 };
@@ -133,6 +135,7 @@ export function parseBookingConfirmation(
     success: true,
 
     data: {
+      attemptId: parsed.data.attemptId,
       leadId:
         parsed.data.leadId,
 

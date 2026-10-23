@@ -1,3 +1,6 @@
+import { logSecurityFailure } from "@/lib/security/log";
+import { SecurityError, readJson, requireSameOrigin, securityResponse } from "@/lib/security/http";
+import { limitRequest } from "@/lib/security/rate-limit";
 import {
   NextRequest,
   NextResponse,
@@ -49,13 +52,15 @@ const cancelBookingSchema =
         z
           .string()
           .trim()
-          .min(1),
+          .min(1)
+          .max(256),
 
       token:
         z
           .string()
           .trim()
-          .min(1),
+          .min(1)
+          .max(256),
     })
     .strict();
 
@@ -118,10 +123,10 @@ function getLeadStatusAfterCancellation(
 export async function POST(
   request: NextRequest,
 ) {
-  const db =
-    getDb();
-
   try {
+    requireSameOrigin(request);
+    await limitRequest(request, "cancel");
+    const db = getDb();
     /* =====================================================
        PARSE REQUEST
     ===================================================== */
@@ -131,8 +136,9 @@ export async function POST(
 
     try {
       body =
-        await request.json();
-    } catch {
+        await readJson(request);
+    } catch (error) {
+      if (error instanceof SecurityError) return securityResponse(error, "booking_request");
       return noStoreJson(
         {
           ok:
@@ -213,7 +219,7 @@ export async function POST(
           message:
             "This booking link is invalid or no longer available.",
         },
-        404,
+        403,
       );
     }
 
@@ -320,16 +326,7 @@ export async function POST(
       if (
         !calendarProvider
       ) {
-        console.error(
-          "Cannot cancel Google Calendar event because calendar provider is unavailable.",
-          {
-            bookingId:
-              booking.id,
-
-            externalCalendarEventId:
-              booking.externalCalendarEventId,
-          },
-        );
+        logSecurityFailure("Cannot cancel Google Calendar event because calendar provider is unavailable.");
 
         return noStoreJson(
           {
@@ -348,18 +345,7 @@ export async function POST(
           booking.externalCalendarEventId,
         );
       } catch (error) {
-        console.error(
-          "Google Calendar cancellation failed:",
-          {
-            bookingId:
-              booking.id,
-
-            externalCalendarEventId:
-              booking.externalCalendarEventId,
-
-            error,
-          },
-        );
+        logSecurityFailure("Google Calendar cancellation failed:", error);
 
         return noStoreJson(
           {
@@ -477,16 +463,7 @@ export async function POST(
       } catch (
         emailError
       ) {
-        console.error(
-          "Booking cancellation email failed:",
-          {
-            bookingId:
-              booking.id,
-
-            error:
-              emailError,
-          },
-        );
+        logSecurityFailure("Booking cancellation email failed:", emailError);
       }
     }
 
@@ -512,10 +489,8 @@ export async function POST(
       },
     });
   } catch (error) {
-    console.error(
-      "Booking cancellation API error:",
-      error,
-    );
+    if (error instanceof SecurityError) return securityResponse(error, "booking_request");
+    logSecurityFailure("Booking cancellation API error:", error);
 
     return noStoreJson(
       {

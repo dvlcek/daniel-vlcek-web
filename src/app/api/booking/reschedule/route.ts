@@ -1,3 +1,6 @@
+import { logSecurityFailure } from "@/lib/security/log";
+import { SecurityError, readJson, requireSameOrigin, securityResponse } from "@/lib/security/http";
+import { limitRequest } from "@/lib/security/rate-limit";
 import {
   NextRequest,
   NextResponse,
@@ -64,19 +67,22 @@ const rescheduleSchema =
         z
           .string()
           .trim()
-          .min(1),
+          .min(1)
+          .max(256),
 
       token:
         z
           .string()
           .trim()
-          .min(1),
+          .min(1)
+          .max(256),
 
       startsAt:
         z
           .string()
           .trim()
-          .min(1),
+          .min(1)
+          .max(256),
     })
     .strict();
 
@@ -191,17 +197,18 @@ function buildCalendarDescription(
 export async function POST(
   request: NextRequest,
 ) {
-  const db =
-    getDb();
-
   try {
+    requireSameOrigin(request);
+    await limitRequest(request, "reschedule");
+    const db = getDb();
     let body:
       unknown;
 
     try {
       body =
-        await request.json();
-    } catch {
+        await readJson(request);
+    } catch (error) {
+      if (error instanceof SecurityError) return securityResponse(error, "booking_request");
       return noStoreJson(
         {
           ok:
@@ -289,7 +296,7 @@ export async function POST(
           message:
             "This booking link is invalid or no longer available.",
         },
-        404,
+        403,
       );
     }
 
@@ -346,13 +353,7 @@ export async function POST(
     if (
       !booking.externalCalendarEventId
     ) {
-      console.error(
-        "Confirmed booking is missing calendar event ID.",
-        {
-          bookingId:
-            booking.id,
-        },
-      );
+      logSecurityFailure("Confirmed booking is missing calendar event ID.");
 
       return noStoreJson(
         {
@@ -785,16 +786,10 @@ export async function POST(
       } catch (
         rollbackError
       ) {
-        console.error(
-          "CRITICAL: Could not restore booking after Google Calendar update failure:",
-          rollbackError,
-        );
+        logSecurityFailure("CRITICAL: Could not restore booking after Google Calendar update failure:", rollbackError);
       }
 
-      console.error(
-        "Google Calendar reschedule failed:",
-        error,
-      );
+      logSecurityFailure("Google Calendar reschedule failed:", error);
 
       return noStoreJson(
         {
@@ -932,10 +927,7 @@ export async function POST(
         } catch (
           calendarRollbackError
         ) {
-          console.error(
-            "CRITICAL: Could not restore original Google Calendar event:",
-            calendarRollbackError,
-          );
+          logSecurityFailure("CRITICAL: Could not restore original Google Calendar event:", calendarRollbackError);
         }
       }
 
@@ -976,10 +968,7 @@ export async function POST(
       } catch (
         dbRollbackError
       ) {
-        console.error(
-          "CRITICAL: Could not restore original booking:",
-          dbRollbackError,
-        );
+        logSecurityFailure("CRITICAL: Could not restore original booking:", dbRollbackError);
       }
 
       throw error;
@@ -1034,10 +1023,7 @@ export async function POST(
     } catch (
       emailError
     ) {
-      console.error(
-        "Reschedule confirmation email failed:",
-        emailError,
-      );
+      logSecurityFailure("Reschedule confirmation email failed:", emailError);
     }
 
     /* =====================================================
@@ -1068,10 +1054,8 @@ export async function POST(
       confirmationEmailSent,
     });
   } catch (error) {
-    console.error(
-      "Booking reschedule API error:",
-      error,
-    );
+    if (error instanceof SecurityError) return securityResponse(error, "booking_request");
+    logSecurityFailure("Booking reschedule API error:", error);
 
     return noStoreJson(
       {

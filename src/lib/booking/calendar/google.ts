@@ -182,6 +182,8 @@ export class GoogleCalendarProvider
 
     this.calendar =
       google.calendar({
+        timeout: 10_000,
+        retry: false,
         version:
           "v3",
 

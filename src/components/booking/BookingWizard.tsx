@@ -2606,6 +2606,7 @@ function AvailabilityPicker({
 ========================================================= */
 
 export function BookingWizard() {
+  const bookingAttemptRef = useRef<string | null>(null);
   const reduceMotion =
     useReducedMotion();
 
@@ -2865,6 +2866,17 @@ export function BookingWizard() {
         );
 
       try {
+        const storageKey = "dv-booking-attempt";
+        let attemptId: string;
+        try {
+          const stored = JSON.parse(sessionStorage.getItem(storageKey) ?? "null") as { id?: string; createdAt?: number } | null;
+          attemptId = stored?.id && stored.createdAt && Date.now() - stored.createdAt < 3_600_000
+            ? stored.id : crypto.randomUUID();
+          sessionStorage.setItem(storageKey, JSON.stringify({ id: attemptId, createdAt: stored?.id === attemptId ? stored.createdAt : Date.now() }));
+        } catch {
+          attemptId = bookingAttemptRef.current ?? crypto.randomUUID();
+        }
+        bookingAttemptRef.current = attemptId;
         /* ===============================================
            LEAD
         =============================================== */
@@ -2883,6 +2895,7 @@ export function BookingWizard() {
 
               body:
                 JSON.stringify({
+                  attemptId,
                   name:
                     details.name,
 
@@ -2926,6 +2939,10 @@ export function BookingWizard() {
           !intakeResult.ok ||
           !intakeResult.leadId
         ) {
+          if (intakeResponse.status === 403) {
+            bookingAttemptRef.current = null;
+            try { sessionStorage.removeItem(storageKey); } catch { /* Storage may be unavailable. */ }
+          }
           throw new Error(
             intakeResult.message ??
               "Could not start booking.",
@@ -2950,6 +2967,7 @@ export function BookingWizard() {
 
               body:
                 JSON.stringify({
+                  attemptId,
                   leadId:
                     intakeResult.leadId,
 

@@ -168,7 +168,7 @@ export function Hero() {
               </Link>
 
               <Link
-                href="/work"
+                href="/#work"
                 className="
                   inline-flex
                   h-12

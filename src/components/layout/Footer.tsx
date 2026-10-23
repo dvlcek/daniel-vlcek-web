@@ -4,7 +4,6 @@ import type { ReactNode } from "react";
 
 import {
   ArrowRight,
-  Code2,
   Mail,
 } from "lucide-react";
 
@@ -344,39 +343,6 @@ export function Footer() {
             {/* SOCIALS */}
 
             <div className="flex items-center gap-1">
-              {/* LINKEDIN */}
-
-              <SocialLink
-                href="#"
-                label="LinkedIn"
-              >
-                <span
-                  className="
-                    relative
-                    top-[-1px]
-
-                    text-[15px]
-                    font-bold
-                    leading-none
-                    tracking-[-0.07em]
-                  "
-                >
-                  in
-                </span>
-              </SocialLink>
-
-              {/* GITHUB */}
-
-              <SocialLink
-                href="#"
-                label="GitHub"
-              >
-                <Code2
-                  size={17}
-                  strokeWidth={1.65}
-                />
-              </SocialLink>
-
               {/* EMAIL */}
 
               <SocialLink

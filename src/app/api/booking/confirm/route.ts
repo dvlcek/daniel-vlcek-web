@@ -1,3 +1,7 @@
+import { logSecurityFailure } from "@/lib/security/log";
+import { ownedAttempt, readAttemptToken } from "@/lib/booking/session";
+import { SecurityError, readJson, requireSameOrigin, securityResponse } from "@/lib/security/http";
+import { limitIdentity, limitRequest } from "@/lib/security/rate-limit";
 import {
   NextRequest,
   NextResponse,
@@ -153,8 +157,7 @@ function buildCalendarDescription(
 export async function POST(
   request: NextRequest,
 ) {
-  const db =
-    getDb();
+  let db: ReturnType<typeof getDb> | undefined;
 
   let reservedBookingId:
     | string
@@ -165,6 +168,9 @@ export async function POST(
     | null = null;
 
   try {
+    requireSameOrigin(request);
+    await limitRequest(request, "confirm");
+    db = getDb();
     /* =====================================================
        REQUEST
     ===================================================== */
@@ -173,8 +179,9 @@ export async function POST(
 
     try {
       body =
-        await request.json();
-    } catch {
+        await readJson(request);
+    } catch (error) {
+      if (error instanceof SecurityError) return securityResponse(error, "booking_confirm");
       return noStoreJson(
         {
           ok: false,
@@ -206,7 +213,21 @@ export async function POST(
     const {
       leadId,
       startsAt,
+      attemptId,
     } = parsed.data;
+    const capability = readAttemptToken(request, attemptId);
+    const attempt = await db.$transaction(tx => ownedAttempt(tx, attemptId, capability, leadId));
+    await limitIdentity("confirm", attempt.id);
+    const previous = attempt.bookingId ? await db.booking.findUnique({ where: { id: attempt.bookingId } }) : null;
+    if (previous && previous.status !== BookingStatus.CANCELLED) {
+      if (previous.status === BookingStatus.CONFIRMED && previous.startsAt.getTime() === new Date(startsAt).getTime()) {
+        return noStoreJson({ ok: true, booking: {
+          id: previous.id, startsAt: previous.startsAt.toISOString(), endsAt: previous.endsAt.toISOString(),
+          timezone: previous.timezone, status: previous.status,
+        }, confirmationEmailSent: attempt.confirmationEmailSent, reused: true });
+      }
+      throw new SecurityError(409, "This booking is already completed or processing. Please try again shortly.");
+    }
 
     /* =====================================================
        CANDIDATE TIME
@@ -432,6 +453,13 @@ export async function POST(
       const reservation =
         await db.$transaction(
           async (tx) => {
+            const currentAttempt = await ownedAttempt(tx, attemptId, capability, leadId);
+            if (currentAttempt.bookingId) {
+              const currentBooking = await tx.booking.findUnique({ where: { id: currentAttempt.bookingId } });
+              if (currentBooking && currentBooking.status !== BookingStatus.CANCELLED) {
+                throw new SecurityError(409, "This booking is already completed or processing. Please try again shortly.");
+              }
+            }
             const conflict =
               await tx.booking.findFirst({
                 where: {
@@ -494,6 +522,7 @@ export async function POST(
                 },
               });
 
+            await tx.bookingAttempt.update({ where: { id: attemptId }, data: { bookingId: booking.id, confirmationEmailSent: false } });
             return {
               conflict:
                 false as const,
@@ -656,16 +685,10 @@ export async function POST(
       } catch (
         cleanupError
       ) {
-        console.error(
-          "CRITICAL: Google failure reservation cleanup failed:",
-          cleanupError,
-        );
+        logSecurityFailure("CRITICAL: Google failure reservation cleanup failed:", cleanupError);
       }
 
-      console.error(
-        "Google Calendar event creation failed:",
-        error,
-      );
+      logSecurityFailure("Google Calendar event creation failed:", error);
 
       return noStoreJson(
         {
@@ -771,16 +794,7 @@ export async function POST(
       if (
         !finalized.meetingUrl
       ) {
-        console.error(
-          "Booking confirmed but Google Calendar did not return a Meet URL.",
-          {
-            bookingId:
-              finalized.id,
-
-            externalCalendarEventId:
-              finalized.externalCalendarEventId,
-          },
-        );
+        logSecurityFailure("Booking confirmed but Google Calendar did not return a Meet URL.");
       }
 
       /* ===================================================
@@ -839,13 +853,11 @@ export async function POST(
 
         confirmationEmailSent =
           true;
+        await db.bookingAttempt.update({ where: { id: attemptId }, data: { confirmationEmailSent: true } });
       } catch (
         emailError
       ) {
-        console.error(
-          "Booking confirmation email failed:",
-          emailError,
-        );
+        logSecurityFailure("Booking confirmation email failed:", emailError);
       }
 
       /* ===================================================
@@ -912,10 +924,7 @@ export async function POST(
       } catch (
         calendarCleanupError
       ) {
-        console.error(
-          "CRITICAL: Could not remove orphaned Google Calendar event:",
-          calendarCleanupError,
-        );
+        logSecurityFailure("CRITICAL: Could not remove orphaned Google Calendar event:", calendarCleanupError);
       }
 
       try {
@@ -960,19 +969,14 @@ export async function POST(
       } catch (
         cleanupError
       ) {
-        console.error(
-          "CRITICAL: Could not release failed booking reservation:",
-          cleanupError,
-        );
+        logSecurityFailure("CRITICAL: Could not release failed booking reservation:", cleanupError);
       }
 
       throw error;
     }
   } catch (error) {
-    console.error(
-      "Booking confirmation API error:",
-      error,
-    );
+    if (error instanceof SecurityError) return securityResponse(error, "booking_confirm");
+    logSecurityFailure("Booking confirmation API error:", error);
 
     /* =====================================================
        FINAL SAFETY CLEANUP
@@ -986,7 +990,7 @@ export async function POST(
     ===================================================== */
 
     if (
-      reservedBookingId
+      reservedBookingId && db
     ) {
       try {
         await db.booking.updateMany({
@@ -1009,10 +1013,7 @@ export async function POST(
       } catch (
         cleanupError
       ) {
-        console.error(
-          "Booking reservation cleanup failed:",
-          cleanupError,
-        );
+        logSecurityFailure("Booking reservation cleanup failed:", cleanupError);
       }
     }
 
