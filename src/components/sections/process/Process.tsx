@@ -100,7 +100,7 @@ export function Process() {
             Understand first.
             <br />
             Build what{" "}
-            <span className="text-[#FF5A1F]">
+            <span className="text-[#C2410C]">
               matters.
             </span>
           </motion.h2>
@@ -279,7 +279,7 @@ function ProcessStep({ step, reduceMotion }: ProcessStepProps) {
     >
       <div className="flex items-center gap-6" aria-hidden="true">
         <span
-          className={`${styles.number} shrink-0 text-[52px] font-medium leading-none tracking-[-0.06em] text-[#CDD1D4] tabular-nums md:text-[58px] xl:text-[60px] 2xl:text-[66px]`}
+          className={`${styles.number} shrink-0 text-[52px] font-medium leading-none tracking-[-0.06em] text-[#7A8790] tabular-nums md:text-[58px] xl:text-[60px] 2xl:text-[66px]`}
         >
           {step.number}
         </span>
@@ -303,7 +303,7 @@ function ProcessStep({ step, reduceMotion }: ProcessStepProps) {
       <h3 className="card-title mt-6 text-[#071017]">
         {step.title}
       </h3>
-      <p className="small-copy mt-3 font-medium text-[#65727C]">
+      <p className="small-copy mt-3 font-medium text-[#5F6C76]">
         {step.kicker}
       </p>
       <p className="body-copy mt-4 max-w-[310px] text-[#5F6C76]">

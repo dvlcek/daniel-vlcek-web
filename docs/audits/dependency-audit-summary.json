@@ -1,0 +1,153 @@
+{
+  "date": "2026-10-23",
+  "command": "npm audit --omit=dev --json",
+  "counts": {
+    "info": 0,
+    "low": 0,
+    "moderate": 1,
+    "high": 6,
+    "critical": 1,
+    "total": 8
+  },
+  "scope": "Existing production dependency tree; no audit fix or unrelated upgrades performed.",
+  "packages": [
+    {
+      "name": "@prisma/config",
+      "severity": "high",
+      "direct": false,
+      "range": "6.13.0-dev.1 - 7.10.0 || 8.1.0-dev.1 - 8.1.0-dev.4",
+      "fixAvailable": true,
+      "advisories": []
+    },
+    {
+      "name": "deepmerge-ts",
+      "severity": "high",
+      "direct": false,
+      "range": "<8.0.0",
+      "fixAvailable": true,
+      "advisories": [
+        {
+          "title": "DeepmergeTS has stack exhaustion when merging recursive object graphs",
+          "url": "https://github.com/advisories/GHSA-ggr8-5vv4-36mx"
+        }
+      ]
+    },
+    {
+      "name": "fast-uri",
+      "severity": "moderate",
+      "direct": false,
+      "range": "3.0.0 - 3.1.7",
+      "fixAvailable": true,
+      "advisories": [
+        {
+          "title": "fast-uri vulnerable to inconsistent host case normalization via percent-encoded octets",
+          "url": "https://github.com/advisories/GHSA-hrr3-gc8f-f4qj"
+        }
+      ]
+    },
+    {
+      "name": "mysql2",
+      "severity": "high",
+      "direct": false,
+      "range": "<=3.23.0",
+      "fixAvailable": true,
+      "advisories": [
+        {
+          "title": "MySQL2: Auth Plugin Downgrade to mysql_clear_password Leaks Plaintext Credentials",
+          "url": "https://github.com/advisories/GHSA-3f6p-5ww8-9rcr"
+        },
+        {
+          "title": "MySQL2: Unbounded zlib inflate in compressed MySQL protocol handler allows decompression-bomb DoS",
+          "url": "https://github.com/advisories/GHSA-rgwj-5xj2-c3m3"
+        }
+      ]
+    },
+    {
+      "name": "next",
+      "severity": "critical",
+      "direct": true,
+      "range": "16.0.0 - 16.4.0",
+      "fixAvailable": true,
+      "advisories": [
+        {
+          "title": "Next.js: Remote Code Execution in next/og ImageResponse",
+          "url": "https://github.com/advisories/GHSA-vcvr-r3jv-pc5j"
+        },
+        {
+          "title": "Next.js: Pending `use cache` fill can leak Draft Mode content into regular responses and persisted pages",
+          "url": "https://github.com/advisories/GHSA-3w37-wq28-93x7"
+        },
+        {
+          "title": "Next.js has cache poisoning of SSG and ISR pages in self-hosted applications",
+          "url": "https://github.com/advisories/GHSA-4jqv-mc3x-m676"
+        },
+        {
+          "title": "Next.js has information disclosure in development server's Model Context Protocol endpoint",
+          "url": "https://github.com/advisories/GHSA-39w2-rjm5-chcv"
+        },
+        {
+          "title": "Next.js has information disclosure in App Router metadata image routes via dynamicParams bypass",
+          "url": "https://github.com/advisories/GHSA-f87g-xv8r-7p7x"
+        },
+        {
+          "title": "Next.js has cache poisoning in SSG/ISR rendering that leads to cross-user content substitution and persistent denial of service",
+          "url": "https://github.com/advisories/GHSA-mcj8-r9mp-w47p"
+        },
+        {
+          "title": "Next.js has Server-Side Request Forgery in Image Optimization",
+          "url": "https://github.com/advisories/GHSA-cjq9-62q9-8jv4"
+        },
+        {
+          "title": "Next.js: Unauthenticated Remote Code Execution in Image Optimization API when SVG files are used",
+          "url": "https://github.com/advisories/GHSA-2464-fhr4-w9xw"
+        },
+        {
+          "title": "Next.js: Denial of Service in App Router using Server Actions",
+          "url": "https://github.com/advisories/GHSA-p3m5-59mp-jv5r"
+        },
+        {
+          "title": "next.js cache leak across root param values in nested 'use cache' functions",
+          "url": "https://github.com/advisories/GHSA-h694-7cp9-m8p3"
+        },
+        {
+          "title": "Next.js: Unauthenticated Remote Code Execution in `use cache` functions returning typed arrays",
+          "url": "https://github.com/advisories/GHSA-673q-mjm6-r5xr"
+        }
+      ]
+    },
+    {
+      "name": "prisma",
+      "severity": "high",
+      "direct": true,
+      "range": "6.13.0-dev.1 - 7.10.0 || 8.0.0-rc.3 - 8.1.0-dev.6",
+      "fixAvailable": true,
+      "advisories": []
+    },
+    {
+      "name": "sharp",
+      "severity": "high",
+      "direct": false,
+      "range": "<0.35.5",
+      "fixAvailable": true,
+      "advisories": [
+        {
+          "title": "sharp : Vulnerability in librsvg dependency CVE-2026-96889",
+          "url": "https://github.com/advisories/GHSA-wq5f-xc86-pv6w"
+        }
+      ]
+    },
+    {
+      "name": "source-map-js",
+      "severity": "high",
+      "direct": false,
+      "range": "1.0.0 - 1.2.1",
+      "fixAvailable": true,
+      "advisories": [
+        {
+          "title": "source-map-js allows event-loop denial of service through indexed source-map section offsets",
+          "url": "https://github.com/advisories/GHSA-68fv-2mgg-jv7q"
+        }
+      ]
+    }
+  ]
+}

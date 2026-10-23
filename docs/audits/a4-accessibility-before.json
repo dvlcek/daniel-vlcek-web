@@ -1,0 +1,430 @@
+{
+  "date": "2026-10-23T08:35:02.956Z",
+  "baseline": true,
+  "results": [
+    {
+      "width": 320,
+      "path": "/",
+      "violations": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.14/color-contrast?application=playwright",
+          "nodes": [
+            {
+              "target": [
+                "a[data-contact-source=\"hero\"] > span:nth-child(1)"
+              ],
+              "html": "<span>Book a strategy call</span>",
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.11 (foreground color: #ffffff, background color: #ff5a1f, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "target": [
+                ".PhXd_W_step:nth-child(1) > .gap-6.items-center.flex > .PhXd_W_number.text-\\[52px\\].text-\\[\\#CDD1D4\\]"
+              ],
+              "html": "<span class=\"PhXd_W_number shrink-0 text-[52px] font-medium leading-none tracking-[-0.06em] text-[#CDD1D4] tabular-nums md:text-[58px] xl:text-[60px] 2xl:text-[66px]\">01</span>",
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 1.38 (foreground color: #cdd1d4, background color: #f6f3ee, font size: 39.0pt (52px), font weight: normal). Expected contrast ratio of 3:1"
+            },
+            {
+              "target": [
+                ".PhXd_W_step:nth-child(1) > .text-\\[\\#65727C\\].small-copy.font-medium"
+              ],
+              "html": "<p class=\"small-copy mt-3 font-medium text-[#65727C]\">Find the real constraint.</p>",
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 4.46 (foreground color: #65727c, background color: #f6f3ee, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "target": [
+                ".PhXd_W_step:nth-child(2) > .gap-6.items-center.flex > .PhXd_W_number.text-\\[52px\\].text-\\[\\#CDD1D4\\]"
+              ],
+              "html": "<span class=\"PhXd_W_number shrink-0 text-[52px] font-medium leading-none tracking-[-0.06em] text-[#CDD1D4] tabular-nums md:text-[58px] xl:text-[60px] 2xl:text-[66px]\">02</span>",
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 1.38 (foreground color: #cdd1d4, background color: #f6f3ee, font size: 39.0pt (52px), font weight: normal). Expected contrast ratio of 3:1"
+            },
+            {
+              "target": [
+                ".PhXd_W_step:nth-child(2) > .text-\\[\\#65727C\\].small-copy.font-medium"
+              ],
+              "html": "<p class=\"small-copy mt-3 font-medium text-[#65727C]\">Design the right system.</p>",
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 4.46 (foreground color: #65727c, background color: #f6f3ee, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "target": [
+                ".PhXd_W_step:nth-child(3) > .gap-6.items-center.flex > .PhXd_W_number.text-\\[52px\\].text-\\[\\#CDD1D4\\]"
+              ],
+              "html": "<span class=\"PhXd_W_number shrink-0 text-[52px] font-medium leading-none tracking-[-0.06em] text-[#CDD1D4] tabular-nums md:text-[58px] xl:text-[60px] 2xl:text-[66px]\">03</span>",
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 1.38 (foreground color: #cdd1d4, background color: #f6f3ee, font size: 39.0pt (52px), font weight: normal). Expected contrast ratio of 3:1"
+            },
+            {
+              "target": [
+                ".PhXd_W_step:nth-child(3) > .text-\\[\\#65727C\\].small-copy.font-medium"
+              ],
+              "html": "<p class=\"small-copy mt-3 font-medium text-[#65727C]\">Turn the plan into reality.</p>",
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 4.46 (foreground color: #65727c, background color: #f6f3ee, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "target": [
+                ".PhXd_W_step:nth-child(4) > .gap-6.items-center.flex > .PhXd_W_number.text-\\[52px\\].text-\\[\\#CDD1D4\\]"
+              ],
+              "html": "<span class=\"PhXd_W_number shrink-0 text-[52px] font-medium leading-none tracking-[-0.06em] text-[#CDD1D4] tabular-nums md:text-[58px] xl:text-[60px] 2xl:text-[66px]\">04</span>",
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 1.38 (foreground color: #cdd1d4, background color: #f6f3ee, font size: 39.0pt (52px), font weight: normal). Expected contrast ratio of 3:1"
+            },
+            {
+              "target": [
+                ".PhXd_W_step:nth-child(4) > .text-\\[\\#65727C\\].small-copy.font-medium"
+              ],
+              "html": "<p class=\"small-copy mt-3 font-medium text-[#65727C]\">Make it better as you grow.</p>",
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 4.46 (foreground color: #65727c, background color: #f6f3ee, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "target": [
+                ".text-\\[\\#697781\\]"
+              ],
+              "html": "<span class=\"eyebrow text-[#697781]\">About Daniel</span>",
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 4.16 (foreground color: #697781, background color: #f6f3ee, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "target": [
+                "#about-heading > .text-\\[\\#FF5A1F\\]"
+              ],
+              "html": "<span class=\"text-[#FF5A1F]\">Technical execution.</span>",
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 2.81 (foreground color: #ff5a1f, background color: #f6f3ee, font size: 28.5pt (38px), font weight: normal). Expected contrast ratio of 3:1"
+            }
+          ]
+        }
+      ],
+      "incomplete": [
+        {
+          "id": "aria-prohibited-attr",
+          "nodes": 3
+        },
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": 1
+        },
+        {
+          "id": "color-contrast",
+          "nodes": 42
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "path": "/contact",
+      "violations": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.14/color-contrast?application=playwright",
+          "nodes": [
+            {
+              "target": [
+                ".tracking-\\[0\\.21em\\].text-white\\/22.text-\\[8px\\]"
+              ],
+              "html": "<span class=\"\n            text-[8px]\n            font-semibold\n            uppercase\n            tracking-[0.21em]\n\n            text-white/22\n          \">Details</span>",
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 1.89 (foreground color: #3c4043, background color: #050a0e, font size: 6.0pt (8px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "target": [
+                ".bg-white\\/\\[0\\.015\\]"
+              ],
+              "html": "<div class=\"\n            flex\n  ...\">",
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 1.94 (foreground color: #3f4346, background color: #090e12, font size: 6.0pt (8px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "target": [
+                ".leading-\\[1\\.7\\]"
+              ],
+              "html": "<p class=\"\n\n                mt-2\n\n\n\n                text-[11px]\n\n                leading-[1.7]\n\n\n\n                text-white/34\n\n              \">Pick an available 30-minute discovery call.</p>",
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3 (foreground color: #5a5d60, background color: #050a0e, font size: 8.3pt (11px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "target": [
+                ".mt-7 > div > .tracking-\\[0\\.2em\\].text-white\\/23"
+              ],
+              "html": "<p class=\"\r\n\n              text-[8px]\r\n\n              font-semibold\r\n\n              uppercase\r\n\n              tracking-[0.2em]\r\n\n\r\n\n              text-white/23\r\n\n            \">Available dates</p>",
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 1.95 (foreground color: #3e4245, background color: #050a0e, font size: 6.0pt (8px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "target": [
+                ".text-white\\/19"
+              ],
+              "html": "<p class=\"\r\n\n              mt-1\r\n\n\r\n\n              text-[9px]\r\n\n\r\n\n              text-white/19\r\n\n            \">Closest available times</p>",
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 1.7 (foreground color: #34393c, background color: #050a0e, font size: 6.8pt (9px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "target": [
+                ".h-\\[36px\\]"
+              ],
+              "html": "<button type=\"button\" class=\"\r\n\n            group...\">",
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 4.24 (foreground color: #747779, background color: #0b1014, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "target": [
+                ".border-white\\/\\[0\\.065\\].hover\\:border-white\\/\\[0\\.12\\].hover\\:bg-white\\/\\[0\\.035\\]:nth-child(2) > .tracking-\\[0\\.17em\\].text-white\\/25.text-\\[8px\\]"
+              ],
+              "html": "<span class=\"\n                            block\n\n                            text-[8px]\n                            font-semibold\n                            uppercase\n                            tracking-[0.17em]\n\n                            text-white/25\n                          \">Saturday</span>",
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 2.18 (foreground color: #474b4e, background color: #0a0f13, font size: 6.0pt (8px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "target": [
+                ".rounded-\\[16px\\] > .justify-between.gap-4.flex > div:nth-child(1) > .tracking-\\[0\\.2em\\].text-white\\/23.text-\\[8px\\]"
+              ],
+              "html": "<span class=\"\r\n\n                  text-[8px]\r\n\n                  font-semibold\r\n\n                  uppercase\r\n\n                  tracking-[0.2em]\r\n\n\r\n\n                  text-white/23\r\n\n                \">Available times</span>",
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 1.96 (foreground color: #3e4244, background color: #04090c, font size: 6.0pt (8px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "target": [
+                ".tracking-\\[0\\.14em\\]"
+              ],
+              "html": "<div class=\"\r\n\n                  flex\r\n\n                  items-center\r\n\n                  gap-2\r\n\n\r\n\n                  text-[8px]\r\n\n                  uppercase\r\n\n                  tracking-[0.14em]\r\n\n\r\n\n                  text-white/20\r\n\n                \">",
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 1.74 (foreground color: #363a3d, background color: #04090c, font size: 6.0pt (8px), font weight: normal). Expected contrast ratio of 4.5:1"
+            }
+          ]
+        }
+      ],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": 2
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "path": "/",
+      "violations": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.14/color-contrast?application=playwright",
+          "nodes": [
+            {
+              "target": [
+                "a[data-contact-source=\"hero\"] > span:nth-child(1)"
+              ],
+              "html": "<span>Book a strategy call</span>",
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.11 (foreground color: #ffffff, background color: #ff5a1f, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "target": [
+                "._09F5kq_introAction > span"
+              ],
+              "html": "<span>Explore selected work</span>",
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.11 (foreground color: #ffffff, background color: #ff5a1f, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "target": [
+                ".section-intro > h2 > .text-\\[\\#FF5A1F\\]"
+              ],
+              "html": "<span class=\"text-[#FF5A1F]\">matters.</span>",
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 2.81 (foreground color: #ff5a1f, background color: #f6f3ee, font size: 45.0pt (60px), font weight: normal). Expected contrast ratio of 3:1"
+            },
+            {
+              "target": [
+                ".PhXd_W_step:nth-child(1) > .gap-6.items-center.flex > .PhXd_W_number.text-\\[52px\\].text-\\[\\#CDD1D4\\]"
+              ],
+              "html": "<span class=\"PhXd_W_number shrink-0 text-[52px] font-medium leading-none tracking-[-0.06em] text-[#CDD1D4] tabular-nums md:text-[58px] xl:text-[60px] 2xl:text-[66px]\">01</span>",
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 1.38 (foreground color: #cdd1d4, background color: #f6f3ee, font size: 45.0pt (60px), font weight: normal). Expected contrast ratio of 3:1"
+            },
+            {
+              "target": [
+                ".PhXd_W_step:nth-child(1) > .text-\\[\\#65727C\\].small-copy.font-medium"
+              ],
+              "html": "<p class=\"small-copy mt-3 font-medium text-[#65727C]\">Find the real constraint.</p>",
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 4.46 (foreground color: #65727c, background color: #f6f3ee, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "target": [
+                ".PhXd_W_step:nth-child(2) > .gap-6.items-center.flex > .PhXd_W_number.text-\\[52px\\].text-\\[\\#CDD1D4\\]"
+              ],
+              "html": "<span class=\"PhXd_W_number shrink-0 text-[52px] font-medium leading-none tracking-[-0.06em] text-[#CDD1D4] tabular-nums md:text-[58px] xl:text-[60px] 2xl:text-[66px]\">02</span>",
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 1.38 (foreground color: #cdd1d4, background color: #f6f3ee, font size: 45.0pt (60px), font weight: normal). Expected contrast ratio of 3:1"
+            },
+            {
+              "target": [
+                ".PhXd_W_step:nth-child(2) > .text-\\[\\#65727C\\].small-copy.font-medium"
+              ],
+              "html": "<p class=\"small-copy mt-3 font-medium text-[#65727C]\">Design the right system.</p>",
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 4.46 (foreground color: #65727c, background color: #f6f3ee, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "target": [
+                ".PhXd_W_step:nth-child(3) > .gap-6.items-center.flex > .PhXd_W_number.text-\\[52px\\].text-\\[\\#CDD1D4\\]"
+              ],
+              "html": "<span class=\"PhXd_W_number shrink-0 text-[52px] font-medium leading-none tracking-[-0.06em] text-[#CDD1D4] tabular-nums md:text-[58px] xl:text-[60px] 2xl:text-[66px]\">03</span>",
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 1.38 (foreground color: #cdd1d4, background color: #f6f3ee, font size: 45.0pt (60px), font weight: normal). Expected contrast ratio of 3:1"
+            },
+            {
+              "target": [
+                ".PhXd_W_step:nth-child(3) > .text-\\[\\#65727C\\].small-copy.font-medium"
+              ],
+              "html": "<p class=\"small-copy mt-3 font-medium text-[#65727C]\">Turn the plan into reality.</p>",
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 4.46 (foreground color: #65727c, background color: #f6f3ee, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "target": [
+                ".PhXd_W_step:nth-child(4) > .gap-6.items-center.flex > .PhXd_W_number.text-\\[52px\\].text-\\[\\#CDD1D4\\]"
+              ],
+              "html": "<span class=\"PhXd_W_number shrink-0 text-[52px] font-medium leading-none tracking-[-0.06em] text-[#CDD1D4] tabular-nums md:text-[58px] xl:text-[60px] 2xl:text-[66px]\">04</span>",
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 1.38 (foreground color: #cdd1d4, background color: #f6f3ee, font size: 45.0pt (60px), font weight: normal). Expected contrast ratio of 3:1"
+            },
+            {
+              "target": [
+                ".PhXd_W_step:nth-child(4) > .text-\\[\\#65727C\\].small-copy.font-medium"
+              ],
+              "html": "<p class=\"small-copy mt-3 font-medium text-[#65727C]\">Make it better as you grow.</p>",
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 4.46 (foreground color: #65727c, background color: #f6f3ee, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "target": [
+                ".text-\\[\\#697781\\]"
+              ],
+              "html": "<span class=\"eyebrow text-[#697781]\">About Daniel</span>",
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 4.16 (foreground color: #697781, background color: #f6f3ee, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "target": [
+                "#about-heading > .text-\\[\\#FF5A1F\\]"
+              ],
+              "html": "<span class=\"text-[#FF5A1F]\">Technical execution.</span>",
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 2.81 (foreground color: #ff5a1f, background color: #f6f3ee, font size: 45.0pt (60px), font weight: normal). Expected contrast ratio of 3:1"
+            }
+          ]
+        }
+      ],
+      "incomplete": [
+        {
+          "id": "aria-prohibited-attr",
+          "nodes": 3
+        },
+        {
+          "id": "color-contrast",
+          "nodes": 61
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "path": "/contact",
+      "violations": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.14/color-contrast?application=playwright",
+          "nodes": [
+            {
+              "target": [
+                ".tracking-\\[0\\.21em\\].text-white\\/22.text-\\[8px\\]"
+              ],
+              "html": "<span class=\"\n            text-[8px]\n            font-semibold\n            uppercase\n            tracking-[0.21em]\n\n            text-white/22\n          \">Details</span>",
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 1.89 (foreground color: #3c4043, background color: #050a0e, font size: 6.0pt (8px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "target": [
+                ".bg-white\\/\\[0\\.015\\]"
+              ],
+              "html": "<div class=\"\n            flex\n  ...\">",
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 1.94 (foreground color: #3f4346, background color: #090e12, font size: 6.0pt (8px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "target": [
+                ".leading-\\[1\\.7\\]"
+              ],
+              "html": "<p class=\"\n\n                mt-2\n\n\n\n                text-[11px]\n\n                leading-[1.7]\n\n\n\n                text-white/34\n\n              \">Pick an available 30-minute discovery call.</p>",
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3 (foreground color: #5a5d60, background color: #050a0e, font size: 8.3pt (11px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "target": [
+                ".mt-7 > div > .tracking-\\[0\\.2em\\].text-white\\/23"
+              ],
+              "html": "<p class=\"\r\n\n              text-[8px]\r\n\n              font-semibold\r\n\n              uppercase\r\n\n              tracking-[0.2em]\r\n\n\r\n\n              text-white/23\r\n\n            \">Available dates</p>",
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 1.95 (foreground color: #3e4245, background color: #050a0e, font size: 6.0pt (8px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "target": [
+                ".text-white\\/19"
+              ],
+              "html": "<p class=\"\r\n\n              mt-1\r\n\n\r\n\n              text-[9px]\r\n\n\r\n\n              text-white/19\r\n\n            \">Closest available times</p>",
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 1.7 (foreground color: #34393c, background color: #050a0e, font size: 6.8pt (9px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "target": [
+                ".h-\\[36px\\]"
+              ],
+              "html": "<button type=\"button\" class=\"\r\n\n            group...\">",
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 4.24 (foreground color: #747779, background color: #0b1014, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "target": [
+                ".border-white\\/\\[0\\.065\\].hover\\:border-white\\/\\[0\\.12\\].hover\\:bg-white\\/\\[0\\.035\\]:nth-child(2) > .tracking-\\[0\\.17em\\].text-white\\/25.text-\\[8px\\]"
+              ],
+              "html": "<span class=\"\n                            block\n\n                            text-[8px]\n                            font-semibold\n                            uppercase\n                            tracking-[0.17em]\n\n                            text-white/25\n                          \">Saturday</span>",
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 2.18 (foreground color: #474b4e, background color: #0a0f13, font size: 6.0pt (8px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "target": [
+                ".border-white\\/\\[0\\.065\\].hover\\:border-white\\/\\[0\\.12\\].hover\\:bg-white\\/\\[0\\.035\\]:nth-child(3) > .tracking-\\[0\\.17em\\].text-white\\/25.text-\\[8px\\]"
+              ],
+              "html": "<span class=\"\n                            block\n\n                            text-[8px]\n                            font-semibold\n                            uppercase\n                            tracking-[0.17em]\n\n                            text-white/25\n                          \">Sunday</span>",
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 2.18 (foreground color: #474b4e, background color: #0a0f13, font size: 6.0pt (8px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "target": [
+                ".border-white\\/\\[0\\.065\\].hover\\:border-white\\/\\[0\\.12\\].hover\\:bg-white\\/\\[0\\.035\\]:nth-child(4) > .tracking-\\[0\\.17em\\].text-white\\/25.text-\\[8px\\]"
+              ],
+              "html": "<span class=\"\n                            block\n\n                            text-[8px]\n                            font-semibold\n                            uppercase\n                            tracking-[0.17em]\n\n                            text-white/25\n                          \">Monday</span>",
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 2.18 (foreground color: #474b4e, background color: #0a0f13, font size: 6.0pt (8px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "target": [
+                ".border-white\\/\\[0\\.065\\].hover\\:border-white\\/\\[0\\.12\\].hover\\:bg-white\\/\\[0\\.035\\]:nth-child(5) > .tracking-\\[0\\.17em\\].text-white\\/25.text-\\[8px\\]"
+              ],
+              "html": "<span class=\"\n                            block\n\n                            text-[8px]\n                            font-semibold\n                            uppercase\n                            tracking-[0.17em]\n\n                            text-white/25\n                          \">Tuesday</span>",
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 2.18 (foreground color: #474b4e, background color: #0a0f13, font size: 6.0pt (8px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "target": [
+                ".rounded-\\[16px\\] > .justify-between.gap-4.flex > div:nth-child(1) > .tracking-\\[0\\.2em\\].text-white\\/23.text-\\[8px\\]"
+              ],
+              "html": "<span class=\"\r\n\n                  text-[8px]\r\n\n                  font-semibold\r\n\n                  uppercase\r\n\n                  tracking-[0.2em]\r\n\n\r\n\n                  text-white/23\r\n\n                \">Available times</span>",
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 1.96 (foreground color: #3e4244, background color: #04090c, font size: 6.0pt (8px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "target": [
+                ".tracking-\\[0\\.14em\\]"
+              ],
+              "html": "<div class=\"\r\n\n                  flex\r\n\n                  items-center\r\n\n                  gap-2\r\n\n\r\n\n                  text-[8px]\r\n\n                  uppercase\r\n\n                  tracking-[0.14em]\r\n\n\r\n\n                  text-white/20\r\n\n                \">",
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 1.74 (foreground color: #363a3d, background color: #04090c, font size: 6.0pt (8px), font weight: normal). Expected contrast ratio of 4.5:1"
+            }
+          ]
+        }
+      ],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": 1
+        }
+      ]
+    }
+  ],
+  "geometry": [
+    {
+      "width": 320,
+      "height": 568,
+      "ctaBottom": 694.15625,
+      "logosTop": 680.15625,
+      "clearance": -14
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "ctaBottom": 607.03125,
+      "logosTop": 796,
+      "clearance": 188.96875
+    }
+  ],
+  "scope": "Automated Chromium WCAG-tagged rules; manual screen-reader/assistive-device acceptance not established."
+}

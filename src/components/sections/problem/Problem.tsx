@@ -144,7 +144,7 @@ export function Problem() {
           </h2>
 
           <p
-            className="section-copy intro-gap mx-auto text-white/64"
+            className="section-copy intro-gap mx-auto text-white/65"
           >
             A slow website loses enquiries. Manual work eats into your day.
             Disconnected tools make every next step harder than it needs to be.
@@ -246,7 +246,7 @@ export function Problem() {
               </h3>
 
               <p
-                className="small-copy mt-3 text-white/64"
+                className="small-copy mt-3 text-white/65"
               >
                 {problem.description}
               </p>
@@ -398,7 +398,7 @@ export function Problem() {
                 </p>
 
                 <p
-                  className="small-copy mx-auto mt-2 max-w-[270px] text-white/60"
+                  className="small-copy mx-auto mt-2 max-w-[270px] text-white/65"
                 >
                   {stat.description}
                 </p>
@@ -411,7 +411,7 @@ export function Problem() {
                     mt-3
                     rounded-sm
                     caption
-                    text-white/55
+                    text-white/65
                     underline
                     decoration-white/20
                     underline-offset-4

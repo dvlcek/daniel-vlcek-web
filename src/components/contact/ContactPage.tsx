@@ -9,8 +9,8 @@ const focusClass = "rounded-sm focus-visible:outline-2 focus-visible:outline-off
 
 export function ContactPage() {
   return (
-    <main className="bg-[#020609] text-white">
-      <header className="border-b border-white/[0.08]">
+    <>
+      <header className="border-b border-white/[0.08] bg-[#020609] text-white">
         <Container>
           <div className="flex min-h-[76px] items-center justify-between gap-4">
             <Link href="/" className={`${focusClass} inline-flex min-h-11 items-center text-[12px] font-semibold uppercase tracking-[0.24em] transition-opacity duration-150 hover:opacity-75 motion-reduce:transition-none`}>
@@ -23,7 +23,7 @@ export function ContactPage() {
           </div>
         </Container>
       </header>
-
+      <main id="main-content" tabIndex={-1} className="bg-[#020609] text-white">
       <Container className="py-10 sm:py-14 lg:py-20">
         <div className="mx-auto grid max-w-[1160px] items-start gap-9 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.35fr)] lg:gap-14 xl:gap-20">
           <section aria-labelledby="contact-heading" className="min-w-0 lg:pt-6">
@@ -67,5 +67,6 @@ export function ContactPage() {
         </div>
       </Container>
     </main>
+    </>
   );
 }

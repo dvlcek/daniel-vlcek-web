@@ -4,6 +4,7 @@ import { createContext, useContext, useEffect, useRef, useState, type ReactNode 
 import { Analytics, type BeforeSendEvent } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { usePathname } from "next/navigation";
+import { MotionConfig } from "motion/react";
 import { trackContactEvent } from "@/lib/contact-analytics";
 import {
   PRIVACY_CHOICE_KEY, isPublicTelemetryPath, readPrivacyChoice, savePrivacyChoice,
@@ -73,6 +74,7 @@ export function PrivacyProvider({ children }: { children: ReactNode }) {
   };
 
   return (
+    <MotionConfig reducedMotion="user">
     <PrivacyContext.Provider value={openSettings}>
       {children}
       {choice?.analytics && isPublicTelemetryPath(pathname) && (
@@ -86,6 +88,12 @@ export function PrivacyProvider({ children }: { children: ReactNode }) {
           ref={panelRef}
           tabIndex={-1}
           aria-labelledby="privacy-choice-heading"
+          onKeyDown={event => {
+            if (event.key === "Escape" && settingsOpen) {
+              setSettingsOpen(false);
+              returnFocusRef.current?.focus();
+            }
+          }}
           className="fixed inset-x-4 bottom-4 z-[100] mx-auto max-w-[920px] rounded-2xl border border-white/15 bg-[#071017] p-5 text-white shadow-[0_16px_60px_rgba(0,0,0,0.35)] outline-none sm:p-6"
         >
           <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
@@ -105,6 +113,7 @@ export function PrivacyProvider({ children }: { children: ReactNode }) {
         </section>
       )}
     </PrivacyContext.Provider>
+    </MotionConfig>
   );
 }
 

@@ -120,7 +120,7 @@ export function ComingSoon() {
     !!shouldReduceMotion;
 
   return (
-    <main
+    <main id="main-content" tabIndex={-1}
       className="
         relative
         min-h-[100dvh]

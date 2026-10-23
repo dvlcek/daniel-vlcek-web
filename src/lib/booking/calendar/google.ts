@@ -224,6 +224,12 @@ export class GoogleCalendarProvider
         this.calendarId
       ];
 
+    // Google can return HTTP 200 with a per-calendar error. Missing/error
+    // results must never be interpreted as an empty (fully available) diary.
+    if (!calendarData || calendarData.errors?.length || !Array.isArray(calendarData.busy)) {
+      throw new Error("Calendar availability could not be verified.");
+    }
+
     const busy =
       calendarData?.busy ??
       [];
@@ -236,7 +242,7 @@ export class GoogleCalendarProvider
           !period.start ||
           !period.end
         ) {
-          return [];
+          throw new Error("Calendar returned an invalid busy period.");
         }
 
         const startsAt =
@@ -259,7 +265,7 @@ export class GoogleCalendarProvider
           endsAt <=
             startsAt
         ) {
-          return [];
+          throw new Error("Calendar returned an invalid busy period.");
         }
 
         return [
@@ -321,6 +327,11 @@ export class GoogleCalendarProvider
     const calendarTimezone =
       response.data.timeZone ??
       "UTC";
+
+    // Never approve a reschedule from an incomplete page of busy events.
+    if (response.data.nextPageToken) {
+      throw new Error("Calendar event list is incomplete; availability could not be verified.");
+    }
 
     const events =
       response.data.items ??

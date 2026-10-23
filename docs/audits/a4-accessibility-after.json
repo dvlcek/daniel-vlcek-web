@@ -1,0 +1,818 @@
+{
+  "date": "2026-10-23T09:01:19.620Z",
+  "baseline": false,
+  "results": [
+    {
+      "width": 320,
+      "path": "/",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                ".text-xs"
+              ],
+              "html": "<button type=\"button\" aria-expanded=\"false\" aria-controls=\"mobile-navigation\" aria-haspopup=\"dialog\" class=\"min-h-11 px-2 text-xs text-white lg:hidden focus-visible:outline-2 focus-visible:outline-[var(--accent)]\">Menu</button>",
+              "summary": "Fix all of the following:\n  Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"mobile-navigation\""
+            }
+          ]
+        },
+        {
+          "id": "color-contrast",
+          "nodes": [
+            {
+              "target": [
+                ".tracking-\\[0\\.28em\\].transition-opacity.hover\\:opacity-75"
+              ],
+              "html": "<a class=\"\n\n              text-[13px]\n\n              font-semibold\n\n              uppercase\n\n              tracking-[0.28em]\n\n              text-white\n\n              transition-opacity\n\n              duration-200\n\n              hover:opacity-75\n\n            \" href=\"/\">Daniel VLKO</a>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".text-xs"
+              ],
+              "html": "<button type=\"button\" aria-expanded=\"false\" aria-controls=\"mobile-navigation\" aria-haspopup=\"dialog\" class=\"min-h-11 px-2 text-xs text-white lg:hidden focus-visible:outline-2 focus-visible:outline-[var(--accent)]\">Menu</button>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".sm\\:gap-4 > span:nth-child(1)"
+              ],
+              "html": "<span>Let's Talk</span>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".mb-6"
+              ],
+              "html": "<p class=\"eyebrow mb-6 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-white/75\">Web Development<span class=\"mx-3 text-white/65\">·</span>Automation Systems</p>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".mx-3"
+              ],
+              "html": "<span class=\"mx-3 text-white/65\">·</span>",
+              "summary": "Fix any of the following:\n  Element content is too short to determine if it is actual text content"
+            },
+            {
+              "target": [
+                "h1"
+              ],
+              "html": "<h1 class=\"display-heading\" style=\"text-shadow:0 4px 20px rgba(0,0,0,0.72), 0 16px 56px rgba(0,0,0,0.52)\">Build the next version<br>of<!-- --> <span class=\"text-[var(--accent)]\">your business.</span></h1>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements"
+            },
+            {
+              "target": [
+                "h1 > .text-\\[var\\(--accent\\)\\]"
+              ],
+              "html": "<span class=\"text-[var(--accent)]\">your business.</span>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".max-w-\\[600px\\]"
+              ],
+              "html": "<p class=\"section-copy intro-gap mx-auto max-w-[600px] text-white/65\" style=\"text-shadow:0 3px 16px rgba(0,0,0,0.82)\">High-converting websites, custom software and automation for companies that want to grow, operate faster and stop being held back by outdated systems.</p>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "a[data-contact-source=\"hero\"] > .button-arrow[aria-hidden=\"true\"]"
+              ],
+              "html": "<span aria-hidden=\"true\" class=\"button-arrow\">→</span>",
+              "summary": "Fix any of the following:\n  Element content contains only non-text characters"
+            },
+            {
+              "target": [
+                ".border-white\\/\\[0\\.16\\]"
+              ],
+              "html": "<a class=\"button-secondary\n\n  ...\" href=\"/#work\">",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".mb-5 > .eyebrow.text-white\\/65"
+              ],
+              "html": "<p class=\"eyebrow text-white/65\">Platforms I build with</p>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".section-heading--column"
+              ],
+              "html": "<h2 class=\"section-heading section-heading--column\">One connected system.<br><span class=\"text-[#C2410C]\">More room to grow.</span></h2>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".section-heading--column > .text-\\[\\#C2410C\\]"
+              ],
+              "html": "<span class=\"text-[#C2410C]\">More room to grow.</span>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".max-w-\\[620px\\] > .section-copy.intro-gap.text-\\[\\#52616D\\]"
+              ],
+              "html": "<p class=\"section-copy intro-gap text-[#52616D]\">I connect your website, CRM and everyday tools so enquiries reach the right person, routine tasks run automatically and you can see what's working.</p>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".py-3:nth-child(1) > .max-w-\\[104px\\].leading-\\[1\\.45\\].text-\\[\\#182630\\]"
+              ],
+              "html": "<p class=\"mt-3 max-w-[104px] text-[13px] leading-[1.45] text-[#182630]\">Faster replies</p>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".sm\\:border-l.sm\\:border-\\[\\#101D26\\]\\/10.sm\\:pl-6:nth-child(2) > .max-w-\\[104px\\].leading-\\[1\\.45\\].text-\\[\\#182630\\]"
+              ],
+              "html": "<p class=\"mt-3 max-w-[104px] text-[13px] leading-[1.45] text-[#182630]\">Less manual work</p>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".sm\\:border-l.sm\\:border-\\[\\#101D26\\]\\/10.sm\\:pl-6:nth-child(3) > .max-w-\\[104px\\].leading-\\[1\\.45\\].text-\\[\\#182630\\]"
+              ],
+              "html": "<p class=\"mt-3 max-w-[104px] text-[13px] leading-[1.45] text-[#182630]\">Clearer decisions</p>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".sm\\:border-l.sm\\:border-\\[\\#101D26\\]\\/10.sm\\:pl-6:nth-child(4) > .max-w-\\[104px\\].leading-\\[1\\.45\\].text-\\[\\#182630\\]"
+              ],
+              "html": "<p class=\"mt-3 max-w-[104px] text-[13px] leading-[1.45] text-[#182630]\">Room to grow</p>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".border-\\[\\#17242E\\]\\/35"
+              ],
+              "html": "<span class=\"border-b border-[#17242E]/35 pb-[2px]\">See it in action</span>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".max-w-\\[420px\\]"
+              ],
+              "html": "<p class=\"mt-4 max-w-[420px] caption text-[#52616D]\">We'll map the bottlenecks and the most useful next step for your business.</p>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "#system-diagram-caption"
+              ],
+              "html": "<figcaption id=\"system-diagram-caption\" class=\"KYTxOq_caption\"><span aria-hidden=\"true\" class=\"KYTxOq_statusDot\"></span>One enquiry. Every next step connected.</figcaption>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "a[href$=\"#business-platform\"] > .text-\\[18px\\].leading-none.button-arrow"
+              ],
+              "html": "<span aria-hidden=\"true\" class=\"button-arrow text-[18px] leading-none\">→</span>",
+              "summary": "Fix any of the following:\n  Element content contains only non-text characters"
+            },
+            {
+              "target": [
+                "a[href$=\"#ai-operations\"] > .text-\\[18px\\].leading-none.button-arrow"
+              ],
+              "html": "<span aria-hidden=\"true\" class=\"button-arrow text-[18px] leading-none\">→</span>",
+              "summary": "Fix any of the following:\n  Element content contains only non-text characters"
+            },
+            {
+              "target": [
+                "a[href$=\"#client-platform\"] > .text-\\[18px\\].leading-none.button-arrow"
+              ],
+              "html": "<span aria-hidden=\"true\" class=\"button-arrow text-[18px] leading-none\">→</span>",
+              "summary": "Fix any of the following:\n  Element content contains only non-text characters"
+            },
+            {
+              "target": [
+                ".self-start > .text-\\[18px\\].button-arrow[aria-hidden=\"true\"]"
+              ],
+              "html": "<span aria-hidden=\"true\" class=\"button-arrow text-[18px]\">→</span>",
+              "summary": "Fix any of the following:\n  Element content contains only non-text characters"
+            },
+            {
+              "target": [
+                ".\\[text-shadow\\:0_2px_16px_rgba\\(0\\,0\\,0\\,0\\.72\\)\\] > .min-h-8.border-white\\/\\[0\\.12\\].bg-\\[\\#03070b\\]\\/35"
+              ],
+              "html": "<span class=\"inline-flex min-h-8 w-fit max-w-full items-center rounded-full border border-white/[0.12] bg-[#03070b]/35 px-3.5 py-1.5 eyebrow text-white/75\">Featured Project</span>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".card-title--featured"
+              ],
+              "html": "<h3 class=\"card-title card-title--featured mt-6 max-w-[400px] text-white\">Business Platform</h3>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".max-w-\\[400px\\].text-white\\/75.body-copy"
+              ],
+              "html": "<p class=\"mt-4 max-w-[400px] body-copy text-white/75\">One operating system instead of fragmented tools, manual handoffs and disconnected information.</p>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".pr-2 > .leading-\\[1\\.15\\].tracking-\\[-0\\.035em\\].text-\\[20px\\]"
+              ],
+              "html": "<div class=\"font-medium leading-[1.15] tracking-[-0.035em] text-white tabular-nums text-[20px]\">Unified</div>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".pr-2 > .max-w-\\[108px\\].break-words.text-\\[12px\\]"
+              ],
+              "html": "<p class=\"mt-2 max-w-[108px] break-words text-[12px] leading-[1.5] text-white/70\">business operations</p>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements"
+            },
+            {
+              "target": [
+                ".border-l.border-white\\/\\[0\\.1\\].sm\\:px-3:nth-child(2) > .leading-\\[1\\.15\\].tracking-\\[-0\\.035em\\].text-\\[20px\\]"
+              ],
+              "html": "<div class=\"font-medium leading-[1.15] tracking-[-0.035em] text-white tabular-nums text-[20px]\">Automated</div>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".border-l.border-white\\/\\[0\\.1\\].sm\\:px-3:nth-child(2) > .max-w-\\[108px\\].break-words.text-\\[12px\\]"
+              ],
+              "html": "<p class=\"mt-2 max-w-[108px] break-words text-[12px] leading-[1.5] text-white/70\">repetitive workflows</p>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".border-l.border-white\\/\\[0\\.1\\].sm\\:px-3:nth-child(3) > .leading-\\[1\\.15\\].tracking-\\[-0\\.035em\\].text-\\[20px\\]"
+              ],
+              "html": "<div class=\"font-medium leading-[1.15] tracking-[-0.035em] text-white tabular-nums text-[20px]\">Scalable</div>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".border-l.border-white\\/\\[0\\.1\\].sm\\:px-3:nth-child(3) > .max-w-\\[108px\\].break-words.text-\\[12px\\]"
+              ],
+              "html": "<p class=\"mt-2 max-w-[108px] break-words text-[12px] leading-[1.5] text-white/70\">technical foundation</p>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".max-w-\\[380px\\]"
+              ],
+              "html": "<p class=\"mt-6 max-w-[380px] small-copy text-white/65\">One connected system for customers, operations and visibility — without the usual manual handoffs.</p>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "#ai-operations > .h-full.min-h-\\[380px\\].relative > .\\[text-shadow\\:0_2px_14px_rgba\\(0\\,0\\,0\\,0\\.72\\)\\].min-\\[1280px\\]\\:max-w-\\[70\\%\\].sm\\:max-w-\\[65\\%\\] > .min-h-8.border-white\\/\\[0\\.12\\].bg-\\[\\#03070b\\]\\/35"
+              ],
+              "html": "<span class=\"inline-flex min-h-8 w-fit max-w-full items-center rounded-full border border-white/[0.12] bg-[#03070b]/35 px-3.5 py-1.5 eyebrow text-white/75\">Automation &amp; Applied AI</span>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "#ai-operations > .h-full.min-h-\\[380px\\].relative > .\\[text-shadow\\:0_2px_14px_rgba\\(0\\,0\\,0\\,0\\.72\\)\\].min-\\[1280px\\]\\:max-w-\\[70\\%\\].sm\\:max-w-\\[65\\%\\] > .max-w-\\[320px\\].mt-6.card-title"
+              ],
+              "html": "<h3 class=\"card-title mt-6 max-w-[320px] text-white\">AI Operations System</h3>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "#ai-operations > .h-full.min-h-\\[380px\\].relative > .\\[text-shadow\\:0_2px_14px_rgba\\(0\\,0\\,0\\,0\\.72\\)\\].min-\\[1280px\\]\\:max-w-\\[70\\%\\].sm\\:max-w-\\[65\\%\\] > .max-w-\\[340px\\].text-white\\/75.body-copy"
+              ],
+              "html": "<p class=\"mt-4 max-w-[340px] body-copy text-white/75\">Turn repetitive processes and scattered information into workflows that move on their own.</p>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "#client-platform > .h-full.min-h-\\[380px\\].relative > .\\[text-shadow\\:0_2px_14px_rgba\\(0\\,0\\,0\\,0\\.72\\)\\].min-\\[1280px\\]\\:max-w-\\[70\\%\\].sm\\:max-w-\\[65\\%\\] > .min-h-8.border-white\\/\\[0\\.12\\].bg-\\[\\#03070b\\]\\/35"
+              ],
+              "html": "<span class=\"inline-flex min-h-8 w-fit max-w-full items-center rounded-full border border-white/[0.12] bg-[#03070b]/35 px-3.5 py-1.5 eyebrow text-white/75\">Web &amp; Client Platform</span>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "#client-platform > .h-full.min-h-\\[380px\\].relative > .\\[text-shadow\\:0_2px_14px_rgba\\(0\\,0\\,0\\,0\\.72\\)\\].min-\\[1280px\\]\\:max-w-\\[70\\%\\].sm\\:max-w-\\[65\\%\\] > .max-w-\\[320px\\].mt-6.card-title"
+              ],
+              "html": "<h3 class=\"card-title mt-6 max-w-[320px] text-white\">Client Platform</h3>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "#client-platform > .h-full.min-h-\\[380px\\].relative > .\\[text-shadow\\:0_2px_14px_rgba\\(0\\,0\\,0\\,0\\.72\\)\\].min-\\[1280px\\]\\:max-w-\\[70\\%\\].sm\\:max-w-\\[65\\%\\] > .max-w-\\[340px\\].text-white\\/75.body-copy"
+              ],
+              "html": "<p class=\"mt-4 max-w-[340px] body-copy text-white/75\">A digital experience that earns trust, communicates value and moves the customer forward.</p>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "path": "/contact",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": [
+            {
+              "target": [
+                ".border-white\\/\\[0\\.065\\].hover\\:border-white\\/\\[0\\.12\\].hover\\:bg-white\\/\\[0\\.035\\]:nth-child(3) > .tracking-\\[0\\.17em\\].text-\\[8px\\].uppercase"
+              ],
+              "html": "<span class=\"\n                            block\n\n                            text-[8px]\n                            font-semibold\n                            uppercase\n                            tracking-[0.17em]\n\n                            text-white/65\n                          \">Sunday</span>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined because it's partially obscured by another element"
+            },
+            {
+              "target": [
+                ".border-white\\/\\[0\\.065\\].hover\\:border-white\\/\\[0\\.12\\].hover\\:bg-white\\/\\[0\\.035\\]:nth-child(3) > .mt-1\\.5.text-white\\/80.font-medium"
+              ],
+              "html": "<span class=\"\r\n\n                            mt-1.5\r\n\n                            block\r\n\n\r\n\n                            text-[13px]\r\n\n                            font-medium\r\n\n\r\n\n                            text-white/80\r\n\n                          \">25 Oct</span>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined because it's partially obscured by another element"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "path": "/",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": [
+            {
+              "target": [
+                ".tracking-\\[0\\.28em\\].transition-opacity.hover\\:opacity-75"
+              ],
+              "html": "<a class=\"\n\n              text-[13px]\n\n              font-semibold\n\n              uppercase\n\n              tracking-[0.28em]\n\n              text-white\n\n              transition-opacity\n\n              duration-200\n\n              hover:opacity-75\n\n            \" href=\"/\">Daniel VLKO</a>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".py-2.hover\\:text-white[href$=\"/#work\"]"
+              ],
+              "html": "<a class=\"\n                    group\n                    relative\n                    py-2\n                    nav-text\n                    transition-colors\n                    duration-200\n                    text-white/65 hover:text-white\n                  \" href=\"/#work\">",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".py-2.hover\\:text-white[href$=\"/#services\"]"
+              ],
+              "html": "<a class=\"\n                    group\n                    relative\n                    py-2\n                    nav-text\n                    transition-colors\n                    duration-200\n                    text-white/65 hover:text-white\n                  \" href=\"/#services\">",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".py-2.hover\\:text-white[href$=\"/#about\"]"
+              ],
+              "html": "<a class=\"\n                    group\n                    relative\n                    py-2\n                    nav-text\n                    transition-colors\n                    duration-200\n                    text-white/65 hover:text-white\n                  \" href=\"/#about\">",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".py-2.hover\\:text-white[href$=\"/#process\"]"
+              ],
+              "html": "<a class=\"\n                    group\n                    relative\n                    py-2\n                    nav-text\n                    transition-colors\n                    duration-200\n                    text-white/65 hover:text-white\n                  \" href=\"/#process\">",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".sm\\:gap-4 > span:nth-child(1)"
+              ],
+              "html": "<span>Let's Talk</span>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".sm\\:inline"
+              ],
+              "html": "<span aria-hidden=\"true\" class=\"button-arrow hidden sm:inline text-[var(--accent)]\">→</span>",
+              "summary": "Fix any of the following:\n  Element content contains only non-text characters"
+            },
+            {
+              "target": [
+                ".mb-6"
+              ],
+              "html": "<p class=\"eyebrow mb-6 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-white/75\">Web Development<span class=\"mx-3 text-white/65\">·</span>Automation Systems</p>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".mx-3"
+              ],
+              "html": "<span class=\"mx-3 text-white/65\">·</span>",
+              "summary": "Fix any of the following:\n  Element content is too short to determine if it is actual text content"
+            },
+            {
+              "target": [
+                "h1"
+              ],
+              "html": "<h1 class=\"display-heading\" style=\"text-shadow:0 4px 20px rgba(0,0,0,0.72), 0 16px 56px rgba(0,0,0,0.52)\">Build the next version<br>of<!-- --> <span class=\"text-[var(--accent)]\">your business.</span></h1>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements"
+            },
+            {
+              "target": [
+                "h1 > .text-\\[var\\(--accent\\)\\]"
+              ],
+              "html": "<span class=\"text-[var(--accent)]\">your business.</span>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".max-w-\\[600px\\]"
+              ],
+              "html": "<p class=\"section-copy intro-gap mx-auto max-w-[600px] text-white/65\" style=\"text-shadow:0 3px 16px rgba(0,0,0,0.82)\">High-converting websites, custom software and automation for companies that want to grow, operate faster and stop being held back by outdated systems.</p>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "a[data-contact-source=\"hero\"] > .button-arrow[aria-hidden=\"true\"]"
+              ],
+              "html": "<span aria-hidden=\"true\" class=\"button-arrow\">→</span>",
+              "summary": "Fix any of the following:\n  Element content contains only non-text characters"
+            },
+            {
+              "target": [
+                ".border-white\\/\\[0\\.16\\]"
+              ],
+              "html": "<a class=\"button-secondary\n\n  ...\" href=\"/#work\">",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".mb-5 > .eyebrow.text-white\\/65"
+              ],
+              "html": "<p class=\"eyebrow text-white/65\">Platforms I build with</p>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".section-space.z-10.page-container > .section-intro.text-center.mx-auto > .section-heading--center"
+              ],
+              "html": "<h2 class=\"section-heading section-heading--center\">Your business has moved forward.<br class=\"hidden md:block\"><span class=\"md:hidden\"> </span>Your systems<!-- --> <span class=\"text-[var(--accent)]\">haven't.</span></h2>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".section-heading--center > .text-\\[var\\(--accent\\)\\]"
+              ],
+              "html": "<span class=\"text-[var(--accent)]\">haven't.</span>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".section-space.z-10.page-container > .section-intro.text-center.mx-auto > .section-copy.intro-gap.mx-auto"
+              ],
+              "html": "<p class=\"section-copy intro-gap mx-auto text-white/65\">A slow website loses enquiries. Manual work eats into your day. Disconnected tools make every next step harder than it needs to be.</p>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".min-h-\\[178px\\].px-6.text-center:nth-child(1) > .max-w-\\[270px\\].mt-2.mx-auto"
+              ],
+              "html": "<p class=\"small-copy mx-auto mt-2 max-w-[270px] text-white/65\">When a mobile site takes over 3 seconds to load.</p>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements"
+            },
+            {
+              "target": [
+                ".min-h-\\[178px\\].px-6.text-center:nth-child(2) > .max-w-\\[270px\\].mt-2.mx-auto"
+              ],
+              "html": "<p class=\"small-copy mx-auto mt-2 max-w-[270px] text-white/65\">Knowledge workers spend more time organising work than doing skilled work.</p>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements"
+            },
+            {
+              "target": [
+                ".min-h-\\[178px\\].px-6.text-center:nth-child(3) > .max-w-\\[270px\\].mt-2.mx-auto"
+              ],
+              "html": "<p class=\"small-copy mx-auto mt-2 max-w-[270px] text-white/65\">They say departments feel separate, rather than like one company.</p>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements"
+            },
+            {
+              "target": [
+                ".section-heading--column"
+              ],
+              "html": "<h2 class=\"section-heading section-heading--column\">One connected system.<br><span class=\"text-[#C2410C]\">More room to grow.</span></h2>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".section-heading--column > .text-\\[\\#C2410C\\]"
+              ],
+              "html": "<span class=\"text-[#C2410C]\">More room to grow.</span>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".max-w-\\[620px\\] > .section-copy.intro-gap.text-\\[\\#52616D\\]"
+              ],
+              "html": "<p class=\"section-copy intro-gap text-[#52616D]\">I connect your website, CRM and everyday tools so enquiries reach the right person, routine tasks run automatically and you can see what's working.</p>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".py-3:nth-child(1) > .max-w-\\[104px\\].leading-\\[1\\.45\\].text-\\[\\#182630\\]"
+              ],
+              "html": "<p class=\"mt-3 max-w-[104px] text-[13px] leading-[1.45] text-[#182630]\">Faster replies</p>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".sm\\:border-l.sm\\:border-\\[\\#101D26\\]\\/10.sm\\:pl-6:nth-child(2) > .max-w-\\[104px\\].leading-\\[1\\.45\\].text-\\[\\#182630\\]"
+              ],
+              "html": "<p class=\"mt-3 max-w-[104px] text-[13px] leading-[1.45] text-[#182630]\">Less manual work</p>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".sm\\:border-l.sm\\:border-\\[\\#101D26\\]\\/10.sm\\:pl-6:nth-child(3) > .max-w-\\[104px\\].leading-\\[1\\.45\\].text-\\[\\#182630\\]"
+              ],
+              "html": "<p class=\"mt-3 max-w-[104px] text-[13px] leading-[1.45] text-[#182630]\">Clearer decisions</p>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".sm\\:border-l.sm\\:border-\\[\\#101D26\\]\\/10.sm\\:pl-6:nth-child(4) > .max-w-\\[104px\\].leading-\\[1\\.45\\].text-\\[\\#182630\\]"
+              ],
+              "html": "<p class=\"mt-3 max-w-[104px] text-[13px] leading-[1.45] text-[#182630]\">Room to grow</p>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".border-\\[\\#17242E\\]\\/35"
+              ],
+              "html": "<span class=\"border-b border-[#17242E]/35 pb-[2px]\">See it in action</span>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".max-w-\\[420px\\]"
+              ],
+              "html": "<p class=\"mt-4 max-w-[420px] caption text-[#52616D]\">We'll map the bottlenecks and the most useful next step for your business.</p>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".KYTxOq_labelTopLeft > .KYTxOq_flowText"
+              ],
+              "html": "<span class=\"KYTxOq_flowText\">Enquiries<span aria-hidden=\"true\" class=\"KYTxOq_labelHighlight\">Enquiries</span></span>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".KYTxOq_labelTopRight > .KYTxOq_flowText"
+              ],
+              "html": "<span class=\"KYTxOq_flowText\">Insights<span aria-hidden=\"true\" class=\"KYTxOq_labelHighlight\">Insights</span></span>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".KYTxOq_labelBottomLeft > .KYTxOq_flowText"
+              ],
+              "html": "<span class=\"KYTxOq_flowText\">Tasks<span aria-hidden=\"true\" class=\"KYTxOq_labelHighlight\">Tasks</span></span>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".KYTxOq_labelBottomRight > .KYTxOq_flowText"
+              ],
+              "html": "<span class=\"KYTxOq_flowText\">Updates<span aria-hidden=\"true\" class=\"KYTxOq_labelHighlight\">Updates</span></span>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "#system-diagram-caption"
+              ],
+              "html": "<figcaption id=\"system-diagram-caption\" class=\"KYTxOq_caption\"><span aria-hidden=\"true\" class=\"KYTxOq_statusDot\"></span>One enquiry. Every next step connected.</figcaption>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "a[href$=\"#business-platform\"] > .text-\\[18px\\].leading-none.button-arrow"
+              ],
+              "html": "<span aria-hidden=\"true\" class=\"button-arrow text-[18px] leading-none\">→</span>",
+              "summary": "Fix any of the following:\n  Element content contains only non-text characters"
+            },
+            {
+              "target": [
+                "a[href$=\"#ai-operations\"] > .text-\\[18px\\].leading-none.button-arrow"
+              ],
+              "html": "<span aria-hidden=\"true\" class=\"button-arrow text-[18px] leading-none\">→</span>",
+              "summary": "Fix any of the following:\n  Element content contains only non-text characters"
+            },
+            {
+              "target": [
+                "a[href$=\"#client-platform\"] > .text-\\[18px\\].leading-none.button-arrow"
+              ],
+              "html": "<span aria-hidden=\"true\" class=\"button-arrow text-[18px] leading-none\">→</span>",
+              "summary": "Fix any of the following:\n  Element content contains only non-text characters"
+            },
+            {
+              "target": [
+                ".self-start > .text-\\[18px\\].button-arrow[aria-hidden=\"true\"]"
+              ],
+              "html": "<span aria-hidden=\"true\" class=\"button-arrow text-[18px]\">→</span>",
+              "summary": "Fix any of the following:\n  Element content contains only non-text characters"
+            },
+            {
+              "target": [
+                ".lg\\:col-start-1.gap-4.items-center > .eyebrow.text-white\\/65"
+              ],
+              "html": "<span class=\"eyebrow text-white/65\">Selected Work</span>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "._09F5kq_introHeading > .block:nth-child(1)"
+              ],
+              "html": "<span class=\"block\">Less busywork.</span>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".text-\\[var\\(--accent\\)\\].block"
+              ],
+              "html": "<span class=\"block text-[var(--accent)]\">More business.</span>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".min-\\[1536px\\]\\:max-w-\\[320px\\]"
+              ],
+              "html": "<p class=\"section-copy intro-gap max-w-[560px] text-white/70 lg:col-start-1 min-[1536px]:max-w-[320px]\">See how custom platforms, automation and better digital experiences turn everyday bottlenecks into room to grow.</p>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".\\[text-shadow\\:0_2px_16px_rgba\\(0\\,0\\,0\\,0\\.72\\)\\] > .min-h-8.border-white\\/\\[0\\.12\\].bg-\\[\\#03070b\\]\\/35"
+              ],
+              "html": "<span class=\"inline-flex min-h-8 w-fit max-w-full items-center rounded-full border border-white/[0.12] bg-[#03070b]/35 px-3.5 py-1.5 eyebrow text-white/75\">Featured Project</span>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".card-title--featured"
+              ],
+              "html": "<h3 class=\"card-title card-title--featured mt-6 max-w-[400px] text-white\">Business Platform</h3>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".max-w-\\[400px\\].text-white\\/75.body-copy"
+              ],
+              "html": "<p class=\"mt-4 max-w-[400px] body-copy text-white/75\">One operating system instead of fragmented tools, manual handoffs and disconnected information.</p>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".pr-2 > .leading-\\[1\\.15\\].tracking-\\[-0\\.035em\\].text-\\[20px\\]"
+              ],
+              "html": "<div class=\"font-medium leading-[1.15] tracking-[-0.035em] text-white tabular-nums text-[20px]\">Unified</div>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".pr-2 > .max-w-\\[108px\\].break-words.text-\\[12px\\]"
+              ],
+              "html": "<p class=\"mt-2 max-w-[108px] break-words text-[12px] leading-[1.5] text-white/70\">business operations</p>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".border-l.border-white\\/\\[0\\.1\\].sm\\:px-3:nth-child(2) > .leading-\\[1\\.15\\].tracking-\\[-0\\.035em\\].text-\\[20px\\]"
+              ],
+              "html": "<div class=\"font-medium leading-[1.15] tracking-[-0.035em] text-white tabular-nums text-[20px]\">Automated</div>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".border-l.border-white\\/\\[0\\.1\\].sm\\:px-3:nth-child(2) > .max-w-\\[108px\\].break-words.text-\\[12px\\]"
+              ],
+              "html": "<p class=\"mt-2 max-w-[108px] break-words text-[12px] leading-[1.5] text-white/70\">repetitive workflows</p>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".border-l.border-white\\/\\[0\\.1\\].sm\\:px-3:nth-child(3) > .leading-\\[1\\.15\\].tracking-\\[-0\\.035em\\].text-\\[20px\\]"
+              ],
+              "html": "<div class=\"font-medium leading-[1.15] tracking-[-0.035em] text-white tabular-nums text-[20px]\">Scalable</div>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".border-l.border-white\\/\\[0\\.1\\].sm\\:px-3:nth-child(3) > .max-w-\\[108px\\].break-words.text-\\[12px\\]"
+              ],
+              "html": "<p class=\"mt-2 max-w-[108px] break-words text-[12px] leading-[1.5] text-white/70\">technical foundation</p>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".max-w-\\[380px\\]"
+              ],
+              "html": "<p class=\"mt-6 max-w-[380px] small-copy text-white/65\">One connected system for customers, operations and visibility — without the usual manual handoffs.</p>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements"
+            },
+            {
+              "target": [
+                "#ai-operations > .h-full.min-h-\\[380px\\].relative > .\\[text-shadow\\:0_2px_14px_rgba\\(0\\,0\\,0\\,0\\.72\\)\\].min-\\[1280px\\]\\:max-w-\\[70\\%\\].sm\\:max-w-\\[65\\%\\] > .min-h-8.border-white\\/\\[0\\.12\\].bg-\\[\\#03070b\\]\\/35"
+              ],
+              "html": "<span class=\"inline-flex min-h-8 w-fit max-w-full items-center rounded-full border border-white/[0.12] bg-[#03070b]/35 px-3.5 py-1.5 eyebrow text-white/75\">Automation &amp; Applied AI</span>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "#ai-operations > .h-full.min-h-\\[380px\\].relative > .\\[text-shadow\\:0_2px_14px_rgba\\(0\\,0\\,0\\,0\\.72\\)\\].min-\\[1280px\\]\\:max-w-\\[70\\%\\].sm\\:max-w-\\[65\\%\\] > .max-w-\\[320px\\].mt-6.card-title"
+              ],
+              "html": "<h3 class=\"card-title mt-6 max-w-[320px] text-white\">AI Operations System</h3>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "#ai-operations > .h-full.min-h-\\[380px\\].relative > .\\[text-shadow\\:0_2px_14px_rgba\\(0\\,0\\,0\\,0\\.72\\)\\].min-\\[1280px\\]\\:max-w-\\[70\\%\\].sm\\:max-w-\\[65\\%\\] > .max-w-\\[340px\\].text-white\\/75.body-copy"
+              ],
+              "html": "<p class=\"mt-4 max-w-[340px] body-copy text-white/75\">Turn repetitive processes and scattered information into workflows that move on their own.</p>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "#client-platform > .h-full.min-h-\\[380px\\].relative > .\\[text-shadow\\:0_2px_14px_rgba\\(0\\,0\\,0\\,0\\.72\\)\\].min-\\[1280px\\]\\:max-w-\\[70\\%\\].sm\\:max-w-\\[65\\%\\] > .min-h-8.border-white\\/\\[0\\.12\\].bg-\\[\\#03070b\\]\\/35"
+              ],
+              "html": "<span class=\"inline-flex min-h-8 w-fit max-w-full items-center rounded-full border border-white/[0.12] bg-[#03070b]/35 px-3.5 py-1.5 eyebrow text-white/75\">Web &amp; Client Platform</span>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "#client-platform > .h-full.min-h-\\[380px\\].relative > .\\[text-shadow\\:0_2px_14px_rgba\\(0\\,0\\,0\\,0\\.72\\)\\].min-\\[1280px\\]\\:max-w-\\[70\\%\\].sm\\:max-w-\\[65\\%\\] > .max-w-\\[320px\\].mt-6.card-title"
+              ],
+              "html": "<h3 class=\"card-title mt-6 max-w-[320px] text-white\">Client Platform</h3>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "#client-platform > .h-full.min-h-\\[380px\\].relative > .\\[text-shadow\\:0_2px_14px_rgba\\(0\\,0\\,0\\,0\\.72\\)\\].min-\\[1280px\\]\\:max-w-\\[70\\%\\].sm\\:max-w-\\[65\\%\\] > .max-w-\\[340px\\].text-white\\/75.body-copy"
+              ],
+              "html": "<p class=\"mt-4 max-w-[340px] body-copy text-white/75\">A digital experience that earns trust, communicates value and moves the customer forward.</p>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".text-\\[24px\\]"
+              ],
+              "html": "<p class=\"text-[24px] font-medium leading-[1.2] tracking-[-0.025em] text-white sm:text-[28px]\">Daniel VLKO</p>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".max-w-\\[340px\\].mt-2.text-white\\/75"
+              ],
+              "html": "<p class=\"small-copy mt-2 max-w-[340px] text-white/75\">Software developer &amp; automation architect</p>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "path": "/contact",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": [
+            {
+              "target": [
+                ".border-white\\/\\[0\\.065\\].hover\\:border-white\\/\\[0\\.12\\].hover\\:bg-white\\/\\[0\\.035\\]:nth-child(6) > .tracking-\\[0\\.17em\\].text-\\[8px\\].uppercase"
+              ],
+              "html": "<span class=\"\n                            block\n\n                            text-[8px]\n                            font-semibold\n                            uppercase\n                            tracking-[0.17em]\n\n                            text-white/65\n                          \">",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined because it's partially obscured by another element"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "geometry": [
+    {
+      "width": 320,
+      "height": 568,
+      "ctaBottom": 694.15625,
+      "logosTop": 720.15625,
+      "clearance": 26
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "ctaBottom": 607.03125,
+      "logosTop": 796,
+      "clearance": 188.96875
+    }
+  ],
+  "scope": "Automated Chromium WCAG-tagged rules; manual screen-reader/assistive-device acceptance not established."
+}

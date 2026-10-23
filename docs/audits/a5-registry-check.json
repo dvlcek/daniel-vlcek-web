@@ -1,0 +1,13 @@
+{
+  "source": "https://www.orsr.sk/vypis.asp?ID=771082&SID=2&P=0",
+  "date": "2026-10-23",
+  "httpStatus": 200,
+  "checks": {
+    "57790647": true,
+    "VLKO Ventures": true,
+    "202436/B": true,
+    "Karpatsk": true,
+    "11.08.2026": true
+  },
+  "note": "No director or shareholder personal addresses extracted; tax/VAT not reverified."
+}

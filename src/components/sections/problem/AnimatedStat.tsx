@@ -1,7 +1,16 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { useInView, useReducedMotion } from "motion/react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useInView } from "motion/react";
+
+const reducedMotionQuery = "(prefers-reduced-motion: reduce)";
+function subscribeToMotionPreference(callback: () => void) {
+  const media = window.matchMedia(reducedMotionQuery);
+  media.addEventListener("change", callback);
+  return () => media.removeEventListener("change", callback);
+}
+const getMotionPreference = () => window.matchMedia(reducedMotionQuery).matches;
+const getServerMotionPreference = () => false;
 
 type AnimatedStatProps = {
   value: number;
@@ -25,7 +34,7 @@ export function AnimatedStat({
     amount: 0.7,
   });
 
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = useSyncExternalStore(subscribeToMotionPreference, getMotionPreference, getServerMotionPreference);
 
   const [displayValue, setDisplayValue] = useState(0);
 
@@ -34,10 +43,7 @@ export function AnimatedStat({
       return;
     }
 
-    if (reduceMotion) {
-      setDisplayValue(value);
-      return;
-    }
+    if (reduceMotion) return;
 
     const start = performance.now();
 
@@ -64,13 +70,13 @@ export function AnimatedStat({
   }, [duration, isInView, reduceMotion, value]);
 
   return (
-    <span
-      ref={ref}
-      aria-label={`${prefix}${value}${suffix}`}
-    >
+    <span ref={ref}>
+      <span aria-hidden="true">
       {prefix}
-      {displayValue.toFixed(decimals)}
+      {(reduceMotion ? value : displayValue).toFixed(decimals)}
       {suffix}
+      </span>
+      <span className="sr-only">{prefix}{value.toFixed(decimals)}{suffix}</span>
     </span>
   );
 }

@@ -8,7 +8,7 @@ import { legalDetails } from "@/lib/legal-details";
 export function LegalPage({ title, intro, children }: { title: string; intro: string; children: ReactNode }) {
   return (
     <>
-      <main className="min-h-[70vh] bg-[#F6F3EE] text-[#071017]">
+      <main id="main-content" tabIndex={-1} className="min-h-[70vh] bg-[#F6F3EE] text-[#071017]">
         <Container className="py-10 sm:py-16">
           <Link href="/" className="inline-flex min-h-11 items-center gap-3 rounded-sm text-[14px] text-[#52616D] transition-colors hover:text-[#071017] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#C2410C]">
             <ArrowLeft size={16} aria-hidden="true" /> Back to the website

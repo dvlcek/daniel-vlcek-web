@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 import { HeroBackground } from "@/components/sections/hero/HeroBackground";
 import { Container } from "@/components/ui/Container";
@@ -57,7 +58,7 @@ export function Hero() {
             flex
             min-h-[100dvh]
             justify-center
-            pb-[190px]
+            pb-[190px] max-[359px]:pb-[230px]
             pt-[28vh]
             sm:pb-[200px]
             sm:pt-[26vh]
@@ -68,10 +69,10 @@ export function Hero() {
           <div className="mx-auto w-full max-w-[960px] text-center">
             {/* Positioning */}
             <p
-              className="eyebrow mb-6 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-white/50"
+              className="eyebrow mb-6 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-white/75"
             >
               Web Development
-              <span className="mx-3 text-white/22">·</span>
+              <span className="mx-3 text-white/65">·</span>
               Automation Systems
             </p>
 
@@ -93,7 +94,7 @@ export function Hero() {
 
             {/* Supporting copy */}
             <p
-              className="section-copy intro-gap mx-auto max-w-[600px] text-white/64"
+              className="section-copy intro-gap mx-auto max-w-[600px] text-white/65"
               style={{
                 textShadow: "0 3px 16px rgba(0,0,0,0.82)",
               }}
@@ -107,7 +108,7 @@ export function Hero() {
             <div className="action-gap flex flex-col items-center justify-center gap-3 sm:flex-row">
               <Link
                 href="/contact" data-contact-source="hero"
-                className="button-primary
+                className="button-primary button-accent
                   group
                   inline-flex
                   button-size
@@ -214,7 +215,7 @@ export function Hero() {
             >
 
               <p
-                className="eyebrow text-white/36"
+                className="eyebrow text-white/65"
               >
                 Platforms I build with
               </p>
@@ -248,7 +249,10 @@ export function Hero() {
                     sm:min-w-[90px]
                   "
                 >
-                  <img
+                  <Image
+                    width={118}
+                    height={50}
+                    unoptimized
                     src={platform.src}
                     alt={platform.name}
                     draggable={false}

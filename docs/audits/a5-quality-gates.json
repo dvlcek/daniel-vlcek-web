@@ -1,0 +1,68 @@
+{
+  "date": "2026-10-23",
+  "checks": [
+    {
+      "name": "typescript",
+      "exitCode": 0,
+      "seconds": 12.29,
+      "result": "PASS",
+      "summary": ""
+    },
+    {
+      "name": "lint",
+      "exitCode": 0,
+      "seconds": 10.77,
+      "result": "PASS",
+      "summary": "\n> daniel-vlcek-web@0.1.0 lint\n> eslint .\n\n"
+    },
+    {
+      "name": "security",
+      "exitCode": 0,
+      "seconds": 4.35,
+      "result": "PASS",
+      "summary": "\n> daniel-vlcek-web@0.1.0 test:security\n> tsx --test tests/security.test.ts\n\n\u2714 same email creates separate owned leads; B cannot reuse, modify or confirm A (81.7665ms)\n\u2714 missing, invalid, tampered and expired capabilities fail closed (19.7547ms)\n\u2714 legitimate intake retry/refresh reuses only owned lead (3.9986ms)\n\u2714 normal confirmation and replay produce one booking/event without repeated email (20.5315ms)\n\u2714 concurrent same-attempt initialization cannot issue two capabilities (4.5132ms)\n\u2714 concurrent confirmations cannot reserve twice (18.8919ms)\n\u2714 session fixation is rejected; cookie attributes are production safe (2.9999ms)\n\u2714 durable limiter model rejects bursts atomically and resets predictably (2.386ms)\n\u2714 untrusted IP headers cannot bypass network limits; trusted IPv6 groups /64 (6.9129ms)\n\u2714 login is throttled even when spoofed headers change; existing admin sessions still verify (6.6791ms)\n\u2714 valid admin login preserves redirect and session cookie contract (2.1045ms)\n\u2714 malformed JSON shapes and oversized streamed bodies reject safely (4.3356ms)\n\u2714 contact validation and ordinary valid submission remain compatible (3.1925ms)\n\u2714 missing storage/secret and foreign origins fail closed (3.8515ms)\n\u2714 sanitized diagnostics never include capability or provider payload (2.6706ms)\n\u2714 management token remains required; nonexistent and unauthorized IDs have same status (9.4956ms)\n\u2714 contact rate limit returns 429 with no email even with changing spoofed IPs (16.6749ms)\n\u2714 availability rejects impossible dates and oversized ranges before calendar calls (11.4482ms)\n\u2714 storage outage blocks intake and outbound work without leaking diagnostics (2.928ms)\n\u2139 tests 19\n\u2139 suites 0\n\u2139 pass 19\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 3580.9308\n"
+    },
+    {
+      "name": "calendar",
+      "exitCode": 0,
+      "seconds": 4.07,
+      "result": "PASS",
+      "summary": "\n> daniel-vlcek-web@0.1.0 test:booking\n> tsx --test tests/booking-calendar.test.ts\n\n\u2714 calendar errors, missing calendars and malformed periods fail closed (4.8711ms)\n\u2714 busy UTC instants survive the Vienna DST boundary (19.6772ms)\n\u2714 reschedule fails closed on a truncated calendar event list (0.7763ms)\n\u2714 internal Google event uses UTC instants/Vienna timezone and never adds customer attendees (1.1716ms)\n\u2714 management secrets remain in fragments and ICS preserves UTC/DST timing (1.1302ms)\n\u2139 tests 5\n\u2139 suites 0\n\u2139 pass 5\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 3194.3303\n"
+    },
+    {
+      "name": "privacy",
+      "exitCode": 0,
+      "seconds": 0.2,
+      "result": "PASS",
+      "summary": "Privacy checks passed: consent parsing, expiration, withdrawal, blocked storage and sensitive URL exclusion.\n"
+    },
+    {
+      "name": "tracking",
+      "exitCode": 0,
+      "seconds": 0.49,
+      "result": "PASS",
+      "summary": "Contact checks passed: launch-mode routing, consent, source labels, conversion events, sensitive-route exclusion and telemetry failures.\n"
+    },
+    {
+      "name": "prisma-validation",
+      "exitCode": 0,
+      "seconds": 1.79,
+      "result": "PASS",
+      "summary": "\u25c7 injected env (19) from .env.local // tip: \u2301 auth for agents [www.vestauth.com]\n\u25c7 injected env (0) from .env // tip: \u25c8 encrypted .env [www.dotenvx.com]\nThe schema at prisma\\schema.prisma is valid \ud83d\ude80\nLoaded Prisma config from prisma.config.ts.\n\nPrisma schema loaded from prisma\\schema.prisma.\n"
+    },
+    {
+      "name": "lock-plan",
+      "exitCode": 0,
+      "seconds": 1.64,
+      "result": "PASS",
+      "summary": "\nup to date in 1s\n\n172 packages are looking for funding\n  run `npm fund` for details\n"
+    }
+  ],
+  "database": "BLOCKED: no explicitly isolated Neon target",
+  "browser": "BLOCKED: no enabled browser surfaces; iab unavailable; A4 evidence historical",
+  "externalMutations": false,
+  "node": "v24.18.0",
+  "npm": "11.16.0",
+  "a5TestCount": 29,
+  "reminders": "PASS 5/5; see a5-reminder-tests.json"
+}

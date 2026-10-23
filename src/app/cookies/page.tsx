@@ -1,13 +1,9 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/metadata";
 import { LegalPage } from "@/components/legal/LegalPage";
 import { PrivacySettingsButton } from "@/components/site/PrivacyProvider";
 import { legalDetails } from "@/lib/legal-details";
 
-export const metadata: Metadata = {
-  title: "Cookies & privacy choices",
-  alternates: { canonical: "/cookies" },
-  robots: { index: legalDetails.reviewed, follow: true },
-};
+export const metadata = pageMetadata("Cookies & privacy choices", "Essential booking storage and optional analytics on danielvlko.com. Manage your privacy choices. Draft pending review.", "/cookies", { index: legalDetails.reviewed });
 
 export default function CookiesNotice() {
   return (

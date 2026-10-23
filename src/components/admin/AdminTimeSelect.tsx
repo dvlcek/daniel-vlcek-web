@@ -280,27 +280,12 @@ export function AdminTimeSelect({
       [],
     );
 
-  useEffect(
-    () => {
-      if (
-        controlled
-      ) {
-        const next =
-          normalizeFinalTime(
-            value ??
-              "",
-          );
-
-        setQuery(
-          next,
-        );
-      }
-    },
-    [
-      controlled,
-      value,
-    ],
-  );
+  // Synchronize controlled edits before rendering, without an effect cascade.
+  const [previousValue, setPreviousValue] = useState(currentValue);
+  if (previousValue !== currentValue) {
+    setPreviousValue(currentValue);
+    setQuery(currentValue);
+  }
 
   const filteredOptions =
     useMemo(
@@ -516,38 +501,14 @@ export function AdminTimeSelect({
     ],
   );
 
-  useEffect(
-    () => {
-      if (
-        !open ||
-        typing
-      ) {
-        return;
-      }
-
-      const currentIndex =
-        allOptions.findIndex(
-          (
-            option,
-          ) =>
-            option.value ===
-            currentValue,
-        );
-
-      setHighlightedIndex(
-        currentIndex >=
-          0
-          ? currentIndex
-          : 0,
-      );
-    },
-    [
-      allOptions,
-      currentValue,
-      open,
-      typing,
-    ],
-  );
+  const highlightContext = `${open}:${typing}:${currentValue}`;
+  const [previousHighlightContext, setPreviousHighlightContext] = useState(highlightContext);
+  if (previousHighlightContext !== highlightContext) {
+    setPreviousHighlightContext(highlightContext);
+    if (open && !typing) {
+      setHighlightedIndex(Math.max(0, allOptions.findIndex(option => option.value === currentValue)));
+    }
+  }
 
   useEffect(
     () => {

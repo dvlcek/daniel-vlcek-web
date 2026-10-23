@@ -1,0 +1,69 @@
+{
+  "date": "2026-10-23T09:01:07.524Z",
+  "result": "PASS for metadata/indexing/sitemap/icons",
+  "routes": [
+    {
+      "path": "/",
+      "title": "Daniel VLKO | Software Developer & Automation Architect",
+      "canonical": "https://danielvlko.com",
+      "robots": "index, follow",
+      "indexingHeader": null
+    },
+    {
+      "path": "/contact",
+      "title": "Contact & Free Discovery Call | Daniel VLKO",
+      "canonical": "https://danielvlko.com/contact",
+      "robots": "index, follow",
+      "indexingHeader": null
+    },
+    {
+      "path": "/legal",
+      "title": "Legal notice / Impressum | Daniel VLKO",
+      "canonical": "https://danielvlko.com/legal",
+      "robots": "noindex, follow",
+      "indexingHeader": null
+    },
+    {
+      "path": "/privacy",
+      "title": "Privacy notice | Daniel VLKO",
+      "canonical": "https://danielvlko.com/privacy",
+      "robots": "noindex, follow",
+      "indexingHeader": null
+    },
+    {
+      "path": "/cookies",
+      "title": "Cookies & privacy choices | Daniel VLKO",
+      "canonical": "https://danielvlko.com/cookies",
+      "robots": "noindex, follow",
+      "indexingHeader": null
+    },
+    {
+      "path": "/coming-soon",
+      "title": "Website launch in progress | Daniel VLKO",
+      "canonical": "https://danielvlko.com/coming-soon",
+      "robots": "noindex, nofollow",
+      "indexingHeader": null
+    },
+    {
+      "path": "/booking/manage",
+      "title": "Manage booking | Daniel VLKO",
+      "canonical": "https://danielvlko.com/booking/manage",
+      "robots": "noindex, nofollow",
+      "indexingHeader": "noindex, nofollow, nosnippet"
+    },
+    {
+      "path": "/admin/login",
+      "title": "Admin sign in | Daniel VLKO",
+      "canonical": "https://danielvlko.com/admin/login",
+      "robots": "noindex, nofollow",
+      "indexingHeader": "noindex, nofollow, nosnippet"
+    }
+  ],
+  "sitemap": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n<url>\n<loc>https://danielvlko.com/</loc>\n<priority>1</priority>\n</url>\n<url>\n<loc>https://danielvlko.com/contact</loc>\n<priority>0.7</priority>\n</url>\n</urlset>\n",
+  "icons": [
+    "/favicon.ico",
+    "/icon.svg",
+    "/apple-icon.png"
+  ],
+  "productionTouched": false
+}

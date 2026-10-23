@@ -1,46 +1,8 @@
-import type { Metadata } from "next";
-
+import { pageMetadata } from "@/lib/metadata";
 import { ComingSoon } from "@/components/launch/ComingSoon";
 import { Footer } from "@/components/layout/Footer";
 
-export const metadata: Metadata = {
-  metadataBase: new URL(
-    "https://danielvlko.com",
-  ),
-
-  title:
-    "Daniel VLKO — Software Developer & Automation Architect",
-
-  description:
-    "Custom software, automation, AI-assisted workflows and digital systems built to help businesses operate smarter, faster and with less friction.",
-
-  alternates: {
-    canonical:
-      "https://danielvlko.com",
-  },
-
-  robots: {
-    index: false,
-    follow: false,
-  },
-
-  openGraph: {
-    title:
-      "Daniel VLKO — Software Developer & Automation Architect",
-
-    description:
-      "I build systems for a more efficient tomorrow.",
-
-    url:
-      "https://danielvlko.com",
-
-    siteName:
-      "Daniel VLKO",
-
-    type:
-      "website",
-  },
-};
+export const metadata = pageMetadata("Website launch in progress", "Daniel VLKO is preparing the website. Contact Daniel to discuss software development and automation.", "/coming-soon", { index: false, follow: false });
 
 export default function ComingSoonPage() {
   return <><ComingSoon /><Footer /></>;

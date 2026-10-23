@@ -1,0 +1,28 @@
+{
+  "date": "2026-10-23T09:04:59.227244+00:00",
+  "typescript": "PASS",
+  "eslint": "PASS (zero errors/warnings)",
+  "build": "PASS (Next 16.4.2)",
+  "prismaValidation": "PASS (7.10.1)",
+  "lockAndNpmLs": "PASS; ci dry-run only",
+  "securityTests": 19,
+  "calendarTests": 5,
+  "postgresTests": 15,
+  "browserTests": 14,
+  "testFailures": 0,
+  "privacyAndTrackingScripts": "PASS",
+  "fullAudit": {
+    "status": "OPEN/FAIL",
+    "critical": 0,
+    "high": 5,
+    "scope": "development-only braces/lint chain"
+  },
+  "productionAudit": {
+    "status": "PASS",
+    "findings": 0
+  },
+  "primaryCtaContrast": 6.147065621121954,
+  "accessibility": "PARTIAL: zero automated confirmed violations; manual contrast/assistive/zoom/device review pending",
+  "productionAcceptance": "NOT VERIFIED",
+  "productionTouched": false
+}

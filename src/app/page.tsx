@@ -1,3 +1,5 @@
+import { pageMetadata } from "@/lib/metadata";
+import { siteConfig } from "@/lib/site";
 import { Header } from "@/components/layout/Header";
 import { Hero } from "@/components/sections/hero/Hero";
 import { Problem } from "@/components/sections/problem/Problem";
@@ -9,12 +11,14 @@ import { WhyWorkWithDaniel } from "@/components/sections/about/WhyWorkWithDaniel
 import { FinalCTA } from "@/components/sections/contact/FinalCTA";
 import { Footer } from "@/components/layout/Footer";
 
+export const metadata = pageMetadata(siteConfig.title, siteConfig.description, "/");
+
 export default function HomePage() {
   return (
     <>
-      <main>
+      <Header />
+      <main id="main-content" tabIndex={-1}>
         <div className="relative">
-          <Header />
           <Hero />
         </div>
 

@@ -1,25 +1,8 @@
-import type {
-  MetadataRoute,
-} from "next";
+import type { MetadataRoute } from "next";
+import { siteConfig } from "@/lib/site";
+import { legalDetails } from "@/lib/legal-details";
 
-import {
-  siteConfig,
-} from "@/lib/site";
-
-export default function sitemap():
-  MetadataRoute.Sitemap {
-  return [
-    {
-      url:
-        `${siteConfig.url}/`,
-
-      lastModified:
-        new Date(),
-
-      changeFrequency:
-        "weekly",
-
-      priority: 1,
-    },
-  ];
+export default function sitemap(): MetadataRoute.Sitemap {
+  const paths = ["/", "/contact", ...(legalDetails.reviewed ? ["/legal", "/privacy", "/cookies"] : [])];
+  return paths.map(path => ({ url: new URL(path, siteConfig.url).href, priority: path === "/" ? 1 : 0.7 }));
 }

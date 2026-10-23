@@ -233,7 +233,7 @@ const fieldClassName = `
   transition-all
   duration-200
 
-  placeholder:text-white/24
+  placeholder:text-white/65
 
   hover:border-white/[0.14]
 
@@ -252,7 +252,7 @@ const labelClassName = `
   uppercase
   tracking-[0.22em]
 
-  text-white/38
+  text-white/65
 `;
 
 /* =========================================================
@@ -616,7 +616,7 @@ function BookingStepper({
                 : `
                   border-white/[0.13]
                   bg-white/[0.04]
-                  text-white/55
+                  text-white/65
                 `
             }
           `}
@@ -645,7 +645,7 @@ function BookingStepper({
               active ===
               "time"
                 ? "text-white/75"
-                : "text-white/38"
+                : "text-white/65"
             }
           `}
         >
@@ -702,7 +702,7 @@ function BookingStepper({
               active ===
               "details"
                 ? "text-white/75"
-                : "text-white/22"
+                : "text-white/65"
             }
           `}
         >
@@ -734,7 +734,7 @@ function BookingStepper({
                 : `
                   border-white/[0.07]
                   bg-white/[0.015]
-                  text-white/22
+                  text-white/65
                 `
             }
           `}
@@ -1065,39 +1065,13 @@ function AvailabilityPicker({
      CALENDAR MONTH SYNC
   ======================================================= */
 
-  useEffect(
-    () => {
-      if (
-        !selectedDate ||
-        monthKeys.length ===
-          0
-      ) {
-        return;
-      }
-
-      const selectedMonth =
-        getMonthKey(
-          selectedDate,
-        );
-
-      const index =
-        monthKeys.indexOf(
-          selectedMonth,
-        );
-
-      if (
-        index >= 0
-      ) {
-        setCalendarMonthIndex(
-          index,
-        );
-      }
-    },
-    [
-      selectedDate,
-      monthKeys,
-    ],
-  );
+  const selectedMonthIndex = selectedDate ? monthKeys.indexOf(getMonthKey(selectedDate)) : -1;
+  const calendarSelectionKey = `${selectedDate}:${monthKeys.join(",")}`;
+  const [previousCalendarSelectionKey, setPreviousCalendarSelectionKey] = useState(calendarSelectionKey);
+  if (previousCalendarSelectionKey !== calendarSelectionKey) {
+    setPreviousCalendarSelectionKey(calendarSelectionKey);
+    if (selectedMonthIndex >= 0) setCalendarMonthIndex(selectedMonthIndex);
+  }
 
   /* =======================================================
      LOADING
@@ -1235,7 +1209,7 @@ function AvailabilityPicker({
             1.5
           }
           className="
-            text-white/25
+            text-white/65
           "
         />
 
@@ -1243,7 +1217,7 @@ function AvailabilityPicker({
           className="
             mt-4
             text-[12px]
-            text-white/48
+            text-white/65
           "
         >
           {error}
@@ -1266,7 +1240,7 @@ function AvailabilityPicker({
             px-5
             text-[10px]
             font-semibold
-            text-white/60
+            text-white/65
             transition-all
 
             hover:border-white/[0.18]
@@ -1322,7 +1296,7 @@ function AvailabilityPicker({
             1.5
           }
           className="
-            text-white/24
+            text-white/65
           "
         />
 
@@ -1343,7 +1317,7 @@ function AvailabilityPicker({
             max-w-[320px]
             text-[10.5px]
             leading-[1.65]
-            text-white/30
+            text-white/65
           "
         >
           There are currently
@@ -1382,7 +1356,7 @@ function AvailabilityPicker({
               uppercase
               tracking-[0.2em]
 
-              text-white/23
+              text-white/65
             "
           >
             Available dates
@@ -1394,7 +1368,7 @@ function AvailabilityPicker({
 
               text-[9px]
 
-              text-white/19
+              text-white/65
             "
           >
             {pickerMode ===
@@ -1442,7 +1416,7 @@ function AvailabilityPicker({
             text-[9px]
             font-semibold
 
-            text-white/43
+            text-white/65
 
             transition-all
             duration-200
@@ -1554,7 +1528,7 @@ function AvailabilityPicker({
 
                   bg-white/[0.02]
 
-                  text-white/38
+                  text-white/65
 
                   transition-all
 
@@ -1602,7 +1576,7 @@ function AvailabilityPicker({
 
                   bg-white/[0.02]
 
-                  text-white/38
+                  text-white/65
 
                   transition-all
 
@@ -1790,7 +1764,7 @@ function AvailabilityPicker({
                             ${
                               active
                                 ? "text-[#FF7040]"
-                                : "text-white/25"
+                                : "text-white/65"
                             }
                           `}
                         >
@@ -1867,7 +1841,7 @@ function AvailabilityPicker({
                       1.6
                     }
                     className="
-                      text-white/25
+                      text-white/65
 
                       transition-colors
 
@@ -1882,7 +1856,7 @@ function AvailabilityPicker({
                       text-[9px]
                       font-semibold
 
-                      text-white/42
+                      text-white/65
 
                       transition-colors
 
@@ -2003,7 +1977,7 @@ function AvailabilityPicker({
                     uppercase
                     tracking-[0.16em]
 
-                    text-white/18
+                    text-white/65
                   "
                 >
                   Select an available
@@ -2055,7 +2029,7 @@ function AvailabilityPicker({
 
                     rounded-full
 
-                    text-white/35
+                    text-white/65
 
                     transition-all
 
@@ -2118,7 +2092,7 @@ function AvailabilityPicker({
 
                     rounded-full
 
-                    text-white/35
+                    text-white/65
 
                     transition-all
 
@@ -2189,7 +2163,7 @@ function AvailabilityPicker({
                         uppercase
                         tracking-[0.14em]
 
-                        text-white/17
+                        text-white/65
                       "
                     >
                       {day}
@@ -2304,7 +2278,7 @@ function AvailabilityPicker({
 
                                   bg-white/[0.018]
 
-                                  text-white/57
+                                  text-white/65
 
                                   hover:border-white/[0.10]
                                   hover:bg-white/[0.045]
@@ -2382,7 +2356,7 @@ function AvailabilityPicker({
 
                     text-[8px]
 
-                    text-white/20
+                    text-white/65
                   "
                 >
                   <span
@@ -2403,7 +2377,7 @@ function AvailabilityPicker({
                   className="
                     text-[8px]
 
-                    text-white/14
+                    text-white/65
                   "
                 >
                   Next 30 days
@@ -2451,7 +2425,7 @@ function AvailabilityPicker({
                   uppercase
                   tracking-[0.2em]
 
-                  text-white/23
+                  text-white/65
                 "
               >
                 Available times
@@ -2484,7 +2458,7 @@ function AvailabilityPicker({
                   uppercase
                   tracking-[0.14em]
 
-                  text-white/20
+                  text-white/65
                 "
               >
                 <Clock3
@@ -2580,7 +2554,7 @@ function AvailabilityPicker({
 
                             bg-white/[0.022]
 
-                            text-white/55
+                            text-white/65
 
                             hover:border-white/[0.15]
                             hover:bg-white/[0.04]
@@ -2608,6 +2582,7 @@ function AvailabilityPicker({
 ========================================================= */
 
 export function BookingWizard() {
+  const focusConfirmationHeading = useCallback((heading: HTMLHeadingElement | null) => { heading?.focus(); }, []);
   const bookingAttemptRef = useRef<string | null>(null);
   const reduceMotion =
     useReducedMotion();
@@ -2802,14 +2777,19 @@ export function BookingWizard() {
       ],
     );
 
-  useEffect(
-    () => {
-      void loadAvailability();
-    },
-    [
-      loadAvailability,
-    ],
-  );
+  useEffect(() => {
+    let active = true;
+    void requestAvailability().then(data => {
+      if (!active) return;
+      applyAvailability(data);
+      setAvailabilityStatus("idle");
+    }).catch(error => {
+      if (!active) return;
+      setAvailabilityStatus("error");
+      setAvailabilityError(error instanceof Error ? error.message : "Could not load availability.");
+    });
+    return () => { active = false; };
+  }, [applyAvailability]);
 
   /* =======================================================
      DETAILS
@@ -2823,6 +2803,7 @@ export function BookingWizard() {
       value:
         string,
     ) => {
+      setSubmitError("");
       setDetails(
         (
           current,
@@ -2988,6 +2969,10 @@ export function BookingWizard() {
           !confirmResult.ok ||
           !confirmResult.booking
         ) {
+          if (confirmResponse.status === 403) {
+            bookingAttemptRef.current = null;
+            try { sessionStorage.removeItem(storageKey); } catch { /* Storage may be unavailable. */ }
+          }
           if (
             confirmResponse.status ===
             409
@@ -3182,7 +3167,7 @@ export function BookingWizard() {
                 text-[11px]
                 leading-[1.7]
 
-                text-white/34
+                text-white/65
               "
             >
               Pick an available
@@ -3191,7 +3176,7 @@ export function BookingWizard() {
             </p>
 
             {submitError && (
-              <div
+              <div role="alert" id="booking-form-error"
                 className="
                   mt-5
 
@@ -3207,7 +3192,7 @@ export function BookingWizard() {
 
                   text-[10.5px]
 
-                  text-white/60
+                  text-white/65
                 "
               >
                 {
@@ -3356,7 +3341,7 @@ export function BookingWizard() {
                       text-[11px]
                       leading-[1.7]
 
-                      text-white/34
+                      text-white/65
                     "
                   >
                     So I can come into
@@ -3424,7 +3409,7 @@ export function BookingWizard() {
                         uppercase
                         tracking-[0.14em]
 
-                        text-white/20
+                        text-white/65
                       "
                     >
                       Change time
@@ -3434,6 +3419,13 @@ export function BookingWizard() {
               </div>
 
               <form
+                aria-describedby={submitError ? "booking-form-error" : undefined}
+                onInvalid={event => {
+                  const field = event.target as HTMLInputElement;
+                  if (field !== field.form?.querySelector(":invalid")) return;
+                  setSubmitStatus("error");
+                  setSubmitError(`${field.labels?.[0]?.textContent?.replace("*", "").trim() ?? "Field"}: ${field.validationMessage}`);
+                }}
                 onSubmit={
                   handleBookingSubmit
                 }
@@ -3469,7 +3461,7 @@ export function BookingWizard() {
                   </label>
                 </div>
 
-                <p className="mb-5 text-[12px] leading-6 text-white/60">
+                <p className="mb-5 text-[12px] leading-6 text-white/65">
                   Your details are used to arrange and manage this call. Read the{" "}
                   <a href="/privacy" className="rounded-sm underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#FF8054]">privacy notice</a>.
                 </p>
@@ -3601,7 +3593,7 @@ export function BookingWizard() {
                         uppercase
                         tracking-[0.22em]
 
-                        text-white/38
+                        text-white/65
                       "
                     >
                       Website
@@ -3613,7 +3605,7 @@ export function BookingWizard() {
                         uppercase
                         tracking-[0.14em]
 
-                        text-white/17
+                        text-white/65
                       "
                     >
                       Optional
@@ -3700,7 +3692,7 @@ export function BookingWizard() {
                           text-[9.5px]
                           leading-[1.6]
 
-                          text-white/27
+                          text-white/65
                         "
                       >
                         What&apos;s
@@ -3721,7 +3713,7 @@ export function BookingWizard() {
                         uppercase
                         tracking-[0.14em]
 
-                        text-white/17
+                        text-white/65
                       "
                     >
                       Optional
@@ -3778,7 +3770,7 @@ export function BookingWizard() {
                       transition-all
                       duration-200
 
-                      placeholder:text-white/20
+                      placeholder:text-white/65
 
                       hover:border-white/[0.13]
 
@@ -3792,7 +3784,7 @@ export function BookingWizard() {
                 {submitStatus ===
                   "error" &&
                   submitError && (
-                    <div
+                    <div role="alert" id="booking-form-error"
                       className="
                         mt-5
 
@@ -3856,7 +3848,7 @@ export function BookingWizard() {
                       text-[10px]
                       font-semibold
 
-                      text-white/35
+                      text-white/65
 
                       transition-colors
 
@@ -3876,7 +3868,7 @@ export function BookingWizard() {
                   </button>
 
                   <motion.button
-                    type="submit"
+                    type="submit" data-booking-submit
                     disabled={
                       submitStatus ===
                       "loading"
@@ -3962,7 +3954,7 @@ export function BookingWizard() {
                     text-[8.5px]
                     leading-[1.55]
 
-                    text-white/17
+                    text-white/65
                   "
                 >
                   No payment. No
@@ -4084,6 +4076,8 @@ export function BookingWizard() {
               </p>
 
               <h3
+                ref={focusConfirmationHeading}
+                tabIndex={-1}
                 className="
                   mt-3
 
@@ -4108,7 +4102,7 @@ export function BookingWizard() {
                   text-[11px]
                   leading-[1.7]
 
-                  text-white/31
+                  text-white/65
                 "
               >
                 Your discovery call
@@ -4152,7 +4146,7 @@ export function BookingWizard() {
 
                     text-[13px]
 
-                    text-white/48
+                    text-white/65
                   "
                 >
                   {formatBookingTimeRange(
@@ -4181,7 +4175,7 @@ export function BookingWizard() {
                       1.6
                     }
                     className="
-                      text-white/18
+                      text-white/65
                     "
                   />
 
@@ -4191,7 +4185,7 @@ export function BookingWizard() {
                       uppercase
                       tracking-[0.15em]
 
-                      text-white/19
+                      text-white/65
                     "
                   >
                     {
@@ -4209,7 +4203,7 @@ export function BookingWizard() {
                   text-[11px]
                   leading-[1.7]
 
-                  text-white/37
+                  text-white/65
                 "
               >
                 {confirmationEmailSent
@@ -4218,7 +4212,7 @@ export function BookingWizard() {
                       Confirmation sent to{" "}
                       <span
                         className="
-                          text-white/60
+                          text-white/65
                         "
                       >
                         {
@@ -4240,7 +4234,7 @@ export function BookingWizard() {
                   text-[10px]
                   leading-[1.7]
 
-                  text-white/23
+                  text-white/65
                 "
               >
                 Your Google Meet link
@@ -4268,7 +4262,7 @@ export function BookingWizard() {
                   text-[8.5px]
                   leading-[1.7]
 
-                  text-white/16
+                  text-white/65
                 "
               >
                 Need to make a

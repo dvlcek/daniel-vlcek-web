@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -16,6 +16,29 @@ const navigation = [
 export function Header() {
   const pathname = usePathname();
   const [activeSection, setActiveSection] = useState<string | null>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDialogElement>(null);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    const dialog = menuRef.current;
+    const menuButton = menuButtonRef.current;
+    if (!dialog) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    dialog.showModal();
+    dialog.querySelector<HTMLAnchorElement>("a")?.focus();
+    const desktop = window.matchMedia("(min-width: 1024px)");
+    const closeOnDesktop = () => { if (desktop.matches) setMenuOpen(false); };
+    desktop.addEventListener("change", closeOnDesktop);
+    return () => {
+      desktop.removeEventListener("change", closeOnDesktop);
+      dialog.close();
+      document.body.style.overflow = previousOverflow;
+      menuButton?.focus({ preventScroll: true });
+    };
+  }, [menuOpen]);
 
   useEffect(() => {
     if (pathname !== "/") return;
@@ -131,6 +154,18 @@ export function Header() {
             })}
           </nav>
 
+          <div className="flex items-center gap-2">
+          <button
+            ref={menuButtonRef}
+            type="button"
+            aria-expanded={menuOpen}
+            aria-controls="mobile-navigation"
+            aria-haspopup="dialog"
+            onClick={() => setMenuOpen(true)}
+            className="min-h-11 px-2 text-xs text-white lg:hidden focus-visible:outline-2 focus-visible:outline-[var(--accent)]"
+          >
+            Menu
+          </button>
           {/* CTA */}
           <Link
             href="/contact" data-contact-source="header"
@@ -139,11 +174,11 @@ export function Header() {
               flex
               min-h-11
               items-center
-              gap-4
+              gap-2 sm:gap-4
               rounded-full
               border
               border-white/30
-              px-5
+              px-3 sm:px-5
               button-text
               text-white
               hover:border-white/50
@@ -154,13 +189,47 @@ export function Header() {
 
             <span
               aria-hidden="true"
-              className="button-arrow text-[var(--accent)]"
+              className="button-arrow hidden sm:inline text-[var(--accent)]"
             >
               →
             </span>
           </Link>
+          </div>
         </div>
       </Container>
+      <dialog
+        ref={menuRef}
+        id="mobile-navigation"
+        aria-label="Mobile navigation"
+        onCancel={() => setMenuOpen(false)}
+        onClose={() => setMenuOpen(false)}
+        onKeyDown={(event) => {
+          if (event.key !== "Tab") return;
+          const items = [...event.currentTarget.querySelectorAll<HTMLElement>("a[href], button:not([disabled])")];
+          const first = items[0];
+          const last = items.at(-1);
+          if (event.shiftKey && document.activeElement === first) {
+            event.preventDefault(); last?.focus();
+          } else if (!event.shiftKey && document.activeElement === last) {
+            event.preventDefault(); first?.focus();
+          }
+        }}
+        onClick={(event) => { if (event.target === event.currentTarget) setMenuOpen(false); }}
+        className="fixed inset-0 m-0 h-dvh max-h-none w-full max-w-none border-0 bg-[#020608] p-0 text-white backdrop:bg-black/60 lg:hidden"
+      >
+        <Container>
+          <div className="flex h-[82px] items-center justify-between border-b border-white/5">
+            <span className="text-[13px] font-semibold uppercase tracking-[0.28em]">Daniel VLKO</span>
+            <button type="button" onClick={() => setMenuOpen(false)} className="min-h-11 px-2 text-sm focus-visible:outline-2 focus-visible:outline-[var(--accent)]">Close menu</button>
+          </div>
+          <nav aria-label="Mobile sections" className="flex flex-col gap-3 py-8">
+            {navigation.map((item) => (
+              <Link key={item.id} href={item.href} onClick={() => setMenuOpen(false)} className="min-h-11 py-3 nav-text focus-visible:outline-2 focus-visible:outline-[var(--accent)]">{item.label}</Link>
+            ))}
+            <Link href="/contact" data-contact-source="header" onClick={() => setMenuOpen(false)} className="min-h-11 py-3 nav-text text-[var(--accent)] focus-visible:outline-2 focus-visible:outline-[var(--accent)]">Let&apos;s Talk</Link>
+          </nav>
+        </Container>
+      </dialog>
     </header>
   );
 }

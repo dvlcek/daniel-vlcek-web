@@ -205,7 +205,7 @@ export function FinalCTA() {
                 style={{
                   color: "#FFFFFF",
                 }}
-                className="button-primary
+                className="button-primary button-accent
                   group
 
                   inline-flex

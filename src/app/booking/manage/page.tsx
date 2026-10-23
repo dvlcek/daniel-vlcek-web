@@ -1,33 +1,15 @@
-import type {
-  Metadata,
-} from "next";
-
+import { pageMetadata } from "@/lib/metadata";
 import {
   ManageBookingClient,
 } from "./ManageBookingClient";
 import { Footer } from "@/components/layout/Footer";
 
-export const metadata:
-  Metadata = {
-    title:
-      "Manage booking | Daniel VLKO",
-
-    description:
-      "Manage your discovery call with Daniel VLKO.",
-
-    robots: {
-      index: false,
-      follow: false,
-    },
-
-    referrer:
-      "no-referrer",
-  };
+export const metadata = { ...pageMetadata("Manage booking", "Reschedule or cancel your discovery call with Daniel VLKO using your private booking link.", "/booking/manage", { index: false, follow: false }), referrer: "no-referrer" as const };
 
 export default function ManageBookingPage() {
   return (
     <>
-      <main
+      <main id="main-content" tabIndex={-1}
         className="
           min-h-screen
 

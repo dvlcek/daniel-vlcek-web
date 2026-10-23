@@ -1,0 +1,24 @@
+{
+  "date": "2026-10-23T09:01:25.470Z",
+  "browser": "Playwright Chromium",
+  "widths": [
+    320,
+    375,
+    768,
+    1024,
+    1440,
+    1920
+  ],
+  "stats": {
+    "startTime": "2026-10-23T09:00:17.710Z",
+    "duration": 67729.927,
+    "expected": 14,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "environment": "Local production UI build over real loopback HTTPS; API handlers via guarded HTTP fixture bridge; owned disposable PostgreSQL; Google and Resend stubbed",
+  "productionCookies": "Secure/HttpOnly/SameSite Strict tested over local TLS with an ephemeral self-signed certificate; not evidence of deployed TLS or ingress",
+  "productionAcceptance": "NOT VERIFIED",
+  "externalDelivery": false
+}

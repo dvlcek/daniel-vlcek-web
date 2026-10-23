@@ -13,7 +13,7 @@
 
 @media (hover: hover) and (pointer: fine) {
   .step:hover .number {
-    color: #ff5a1f;
+    color: #c2410c;
   }
 
   .step:hover .lineAccent {

@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import {
   useEffect,
   useMemo,
@@ -35,8 +37,6 @@ type Booking = {
   timezone: string;
   status: string;
 
-  clientName: string;
-  clientEmail: string;
 };
 
 type Slot = {
@@ -148,12 +148,7 @@ function readCredentials():
         token,
       };
 
-      sessionStorage.setItem(
-        SESSION_KEY,
-        JSON.stringify(
-          credentials,
-        ),
-      );
+      try { sessionStorage.setItem(SESSION_KEY, JSON.stringify(credentials)); } catch { /* Refresh recovery requires storage. */ }
 
       window.history.replaceState(
         null,
@@ -165,10 +160,8 @@ function readCredentials():
     }
   }
 
-  const stored =
-    sessionStorage.getItem(
-      SESSION_KEY,
-    );
+  let stored: string | null = null;
+  try { stored = sessionStorage.getItem(SESSION_KEY); } catch { return null; }
 
   if (!stored) {
     return null;
@@ -193,9 +186,7 @@ function readCredentials():
       };
     }
   } catch {
-    sessionStorage.removeItem(
-      SESSION_KEY,
-    );
+    try { sessionStorage.removeItem(SESSION_KEY); } catch { /* Storage may be blocked. */ }
   }
 
   return null;
@@ -318,48 +309,22 @@ export function ManageBookingClient() {
       }
     };
 
-  useEffect(
-    () => {
-      const input =
-        readCredentials();
-
-      if (!input) {
-        setError(
-          "This booking link is invalid or has expired.",
-        );
-
-        setView(
-          "error",
-        );
-
-        return;
-      }
-
-      setCredentials(
-        input,
-      );
-
-      void loadBooking(
-        input,
-      ).catch(
-        (
-          loadError,
-        ) => {
-          setError(
-            loadError instanceof
-              Error
-              ? loadError.message
-              : "Could not load this booking.",
-          );
-
-          setView(
-            "error",
-          );
-        },
-      );
-    },
-    [],
-  );
+  useEffect(() => {
+    let active = true;
+    // Read the browser-only fragment after mount; storage can be blocked.
+    void Promise.resolve().then(async () => {
+      if (!active) return;
+      const input = readCredentials();
+      if (!input) throw new Error("This booking link is invalid or has expired.");
+      setCredentials(input);
+      await loadBooking(input);
+    }).catch(loadError => {
+      if (!active) return;
+      setError(loadError instanceof Error ? loadError.message : "Could not load this booking.");
+      setView("error");
+    });
+    return () => { active = false; };
+  }, []);
 
   const availableDays =
     useMemo(
@@ -867,11 +832,7 @@ export function ManageBookingClient() {
                     text-white/33
                   "
                 >
-                  Hi{" "}
-                  {
-                    booking.clientName
-                  }
-                  . If something
+                  If something
                   has changed,
                   you can move or
                   cancel the call
@@ -1701,7 +1662,7 @@ export function ManageBookingClient() {
                   released.
                 </p>
 
-                <a
+                <Link
                   href="/"
                   className="
                     mt-7
@@ -1721,7 +1682,7 @@ export function ManageBookingClient() {
                   "
                 >
                   Back to Daniel VLKO
-                </a>
+                </Link>
               </motion.div>
             )}
         </AnimatePresence>

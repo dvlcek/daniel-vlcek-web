@@ -1,5 +1,20 @@
 # Legal publication status
 
+## A5 review status - 23 October 2026
+
+**BLOCKED for final legal publication.** Actual legal/privacy/cookies pages and
+PrivacyProvider/contact/native booking/provider code were compared in the
+[A5 legal implementation review and owner checklist](audits/a5-release-review.md#legal-implementation-comparison).
+The stale Cal.com embed statement below is corrected. No legal text, company
+fields, reviewed=false, draft notice or indexing approval was changed. Fresh
+ORSR checks match company/ICO/entry/address stem/incorporation date; full postal,
+court and tax/VAT details remain supported only by the earlier recorded review
+and require current confirmation. Local/staging technical checks are not human
+legal approval. Processing contracts, regions/transfers, retention/deletion,
+phone disclosure, B2B/consumer/Austrian targeting and final text approval remain
+open. Use the A5 checklist before considering the historical notes below final.
+
+
 **Draft only.** CTA and footer improvements do not establish legal compliance.
 The legal pages show a review notice and are `noindex` while
 `src/lib/legal-details.ts` has `reviewed: false`.
@@ -72,9 +87,11 @@ are omitted after review; omission is not evidence that a field is optional.
   allowlist. Analytics components do not mount on admin or booking management
   routes. A production network inspection is still required to verify SDK,
   hosting and deployment behavior.
-- Cal.com embeds load after a separate, informed “Load booking calendar” choice,
-  with email as an alternative. That functional choice is independent of analytics.
-  Closing the iframe does not erase provider-side data/storage.
+- The active booking flow is first-party BookingWizard -> booking APIs -> Neon ->
+  Google Calendar -> Resend -> admin. No Cal.com embed or separate calendar-embed
+  consent exists in the current implementation. Essential booking storage is
+  independent of optional analytics consent. Closing the wizard does not cancel
+  an appointment already submitted.
 - Removed the unsolicited Cal.com prefetch on the holding page, which used a
   timer/hover before any calendar choice despite the holding page using a
   first-party booking wizard.

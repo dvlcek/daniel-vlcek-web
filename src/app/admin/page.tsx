@@ -903,7 +903,7 @@ export default async function AdminDashboardPage({
       );
 
   return (
-    <main className={styles.workspace}>
+    <main id="main-content" tabIndex={-1} className={styles.workspace}>
       <div className={styles.shell}>
         <AdminNavigation timezone={bookingConfig.timezone} />
         <div className={styles.content}>

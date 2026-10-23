@@ -1,12 +1,8 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/metadata";
 import { LegalPage } from "@/components/legal/LegalPage";
 import { legalContactEmail, legalDetails } from "@/lib/legal-details";
 
-export const metadata: Metadata = {
-  title: "Legal notice / Impressum",
-  alternates: { canonical: "/legal" },
-  robots: { index: legalDetails.reviewed, follow: true },
-};
+export const metadata = pageMetadata("Legal notice / Impressum", "Company identification, business registration and legal contact information for Daniel VLKO. Draft pending legal review.", "/legal", { index: legalDetails.reviewed });
 
 export default function LegalNotice() {
   const fields = [

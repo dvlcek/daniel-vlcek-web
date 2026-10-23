@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-23T07:26:13.304Z",
+  "date": "2026-10-23T09:01:25.526Z",
   "database": "dv_a2_acceptance_test",
   "host": "127.0.0.1",
   "disposable": true,
@@ -8,7 +8,7 @@
   "previousRecords": "PASS",
   "indexesAndForeignKeys": "PASS",
   "integrationTests": "PASS",
-  "browser": "NOT VERIFIED",
+  "browser": "Isolated Chromium PASS; see a4-browser-acceptance.json. Production NOT VERIFIED.",
   "vercelIngress": "NOT VERIFIED",
   "productionTouched": false
 }

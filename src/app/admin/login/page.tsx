@@ -1,3 +1,7 @@
+import { pageMetadata } from "@/lib/metadata";
+
+export const metadata = pageMetadata("Admin sign in", "Private sign-in for Daniel VLKO administration.", "/admin/login", { index: false, follow: false });
+
 import {
   redirect,
 } from "next/navigation";
@@ -49,7 +53,7 @@ export default async function AdminLoginPage({
     );
 
   return (
-    <main
+    <main id="main-content" tabIndex={-1}
       className="
         min-h-screen
         bg-[#050708]

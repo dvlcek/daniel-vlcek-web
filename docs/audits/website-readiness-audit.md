@@ -1,10 +1,85 @@
 # Daniel VLKO — Website Readiness Audit
 
+## Phase A5 - staging preparation and release rehearsal - 23 October 2026
+
+**Production verdict: NOT READY. A5 is PARTIAL; operational acceptance is BLOCKED.**
+A1-A4 is preserved. Integration branch remains at c409c18 with the working changes
+uncommitted. Local recovery branches preserve the reviewed snapshots; no main change,
+push, Docker, external deployment/settings mutation, database connection/migration,
+real email/Calendar event or legal publication was performed. `.env.local` is unchanged.
+
+- **PASS:** fresh TypeScript, ESLint, Next 16.4.2 production build, Prisma validation,
+  lock install-plan check, privacy/tracking checks, 19 security + 5 calendar + 5 new
+  reminder mock tests (29 total). See [A5 gates](a5-quality-gates.json),
+  [build](a5-build.json) and [reminders](a5-reminder-tests.json).
+- **PASS / PARTIAL:** fresh production audit zero findings; full audit remains
+  FAIL/open with five high development-only braces-chain entries and no upstream
+  patched version. No dependency change or force fix. Owner risk disposition pending.
+- **BLOCKED:** no explicitly isolated Neon target; static migration/schema review
+  is PARTIAL and no database execution occurred. Existing Docker-only acceptance
+  runners were not used. A4 PostgreSQL/browser evidence remains historical.
+- **BLOCKED:** legal human approval, missing processing/retention/transfer/contact
+  decisions; reviewed=false, notices and noindex retained. Targeted fresh official
+  registry checks pass; tax/VAT/full postal/court details were not freshly reverified.
+- **NOT VERIFIED:** Vercel Preview secrets/ingress, DB/provider isolation, domains,
+  runtime limits and rollback. No committed cron schedule exists. Holding mode
+  keeps contact/APIs accessible and cannot serve as a booking write freeze.
+- **PARTIAL / BLOCKED:** native booking and reminder mocks pass; live providers,
+  scheduling, outage reconciliation and failed-confirmation recovery await controlled
+  staging acceptance. Existing email idempotency keys are tested, not live proof.
+- **BLOCKED:** A5 manual accessibility: browser inventory empty and iab unavailable.
+  Human screen-reader, real zoom/reflow and manual contrast remain unverified.
+
+Read the [release checklist](../RELEASE_CHECKLIST.md) for the exact environment matrix,
+Neon migration sequence/rollback limits, protected staging instructions, controlled
+provider cases, manual accessibility journeys, approval records and post-release
+checks. [A5 review](a5-release-review.md) contains the precise legal approval
+checklist, dependency reachability/risk and all remaining production blockers.
+[Backup file list](a5-backup-files.txt) is the exact candidate change list;
+[a5-preflight.json](a5-preflight.json) records initial Git/checkpoint evidence.
+
+Recommended next action: review the candidate and supply an explicitly isolated
+synthetic/schema-only Neon target plus named safe staging/provider test scope.
+Production GO requires legal, operational, security and accessibility sign-off;
+none is inferred here. A4 and earlier reports below remain historical.
+
+
 Date: 12 October 2026 (Europe/Vienna). Target: danielvlko.com. Scope: current repository, homepage first; audit and planning only.
 
 ## 1. Executive Summary
 
-### Integration update - 23 October 2026
+### Phase A4 technical hardening - 23 October 2026
+
+**Production verdict: NOT READY.** A1/A2/A3 safeguards and the integration branch/commit remain intact; `.env.example` and secret files are preserved. No production migration, deployment, push or provider delivery was performed.
+
+| Area | A4 current evidence/status |
+|---|---|
+| Dependency security | Full audit 14 -> 5 affected entries; critical 1 -> 0; production-only 8 -> 0. Remaining five high entries are one unpatched, dev-only ESLint/glob/braces chain. No major app/Prisma upgrade or force fix. [Entry/advisory review](a4-dependency-review.md) records versions, exposure and remediation. Full audit remains OPEN. |
+| AUD-09/10 / SEO | Unique branded metadata, self-canonicals and OG/Twitter; private metadata/headers noindex; sitemap contains only completed home/contact; draft legal noindex/review status retained. ICO/SVG/Apple icons implemented. Local route tests PASS; deployed indexing NOT VERIFIED. |
+| AUD-04/05/12/13 / accessibility | Confirmed contrast, focus, skip-link, validation announcement, confirmation focus, stat naming and reduced-motion corrections implemented. Axe scans on homepage/contact at 320/1440 report zero confirmed violations. Image/gradient manual-review items and assistive/zoom/device acceptance remain open; no WCAG certification claimed. |
+| 320px hero | Narrow-only 40px clearance adjustment: -14px overlap -> 26px gap; desktop 1440 gap unchanged at 188.96875px. Six widths and three short/narrow heights checked. |
+| AUD-14 / quality | TypeScript, full lint, production build, Prisma, 19 security, 5 calendar, 15 real isolated PostgreSQL tests and privacy/tracking scripts PASS. Final unfiltered browser suite PASS: 14/14; total 53 security/calendar/SQL/browser cases, zero final failures. [Browser evidence](a4-browser-acceptance.json). |
+| AUD-06/07/25 / operations | Native BookingWizard and A2 protections retained. Real delivery, recovery/reminder operations, deployment routing/ingress/configuration/migration remain NOT VERIFIED. |
+| AUD-08 / legal | OPEN: reviewed remains false; approval/content/provider/retention prerequisites preserved. |
+
+[Current launch report](../LAUNCH_READINESS.md) contains file inventory, evidence links, reproducible commands and recommended Phase A5 tasks. Historical A3/A2/integration findings below are retained and superseded only where the current evidence establishes a correction.
+
+### A3/mobile acceptance update - 23 October 2026
+
+**Launch verdict: NOT READY.** This batch preserves integration branch `integration/website-launch-sync` / `c409c18`, A1 destinations and A2 security boundaries. The original safe `.env.example` modification is untouched. No deployment, production migration, push, real email or calendar mutation occurred.
+
+| Issues | Current batch status |
+|---|---|
+| AUD-06 / A3 native booking | PARTIAL overall. Native booking acceptance uses real handlers and disposable PostgreSQL with Google/Resend stubs. Confirmation-time expiry recovery, blocked-storage management and calendar availability failure handling corrected. 11/11 local HTTPS browser tests PASS, including management lifecycle and authenticated admin data. Production provider/routing/recovery/reminder acceptance remains open. |
+| AUD-07/25 | PARTIAL overall. 19 security regressions and 15 actual PostgreSQL tests PASS. Existing ownership/origin/quota protections retained; deployed ingress/configuration remain NOT VERIFIED. |
+| AUD-14 | RESOLVED for lint: seven errors and one warning corrected at their causes, zero suppressions. Full ESLint, standalone TypeScript, build and Prisma validation PASS. Five new isolated calendar/URL/ICS contracts PASS. |
+| AUD-04/05/12/13/20 | Mobile navigation IMPLEMENTED: correct homepage anchors/contact, native dialog, keyboard wrapping, Escape, focus return, scroll restoration, responsive closure and no added motion. Six-width local HTTPS Chromium checks PASS: keyboard, cookies, overflow, legal routes, consent and both motion modes. Contrast/screen-reader/200% reflow/performance/other engines remain unverified. Existing hero label/CTA crowding at 320px still needs visual review. |
+| AUD-08 | Still OPEN for legal review: draft pages, `reviewed: false`, noindex and production processing/retention/configuration blockers preserved. Existing privacy/tracking scripts PASS. |
+| Dependency security | Additional release-review blocker: production npm audit reports eight affected dependency entries (one critical, six high, one moderate). No unrelated upgrades or audit-fix performed. |
+
+[Current launch report](../LAUNCH_READINESS.md) contains detailed changes, reproducible isolated commands, file inventory, test-environment limits, known delivery/reconciliation gaps and the unchanged authorized production release sequence. [Browser summary](a3-browser-acceptance.json) and [dependency advisory summary](dependency-audit-summary.json) record the current evidence. Historical integration/A2 descriptions below are retained; this update supersedes their lint/mobile/browser availability statements.
+
+### Integration update - 23 October 2026 (historical baseline)
 
 **Launch verdict: NOT READY.** Remote `952bc8faea1ea02ec9ca78acc8ec133025e1ddc1` is integrated with checkpoint `8223157483938c7fa148c319586a4b19881449db` on `integration/website-launch-sync`. Original local/main HEAD remains `da1a90217fcad9ff5b8df1e0789b70f09c116c56`. This update supersedes historical descriptions of the active contact provider, old design, duplicate footers, and test availability below. See [launch readiness](../LAUNCH_READINESS.md) for complete evidence, conflict decisions and release sequence.
 

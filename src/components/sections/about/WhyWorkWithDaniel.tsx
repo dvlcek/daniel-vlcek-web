@@ -51,7 +51,7 @@ export function WhyWorkWithDaniel() {
           >
             <motion.div variants={reveal} className="flex items-center gap-4">
               <span aria-hidden="true" className="h-px w-8 bg-[#FF5A1F]" />
-              <span className="eyebrow text-[#697781]">
+              <span className="eyebrow text-[#5F6C76]">
                 About Daniel
               </span>
             </motion.div>
@@ -63,7 +63,7 @@ export function WhyWorkWithDaniel() {
             >
               Business thinking.
               <br />
-              <span className="text-[#FF5A1F]">Technical execution.</span>
+              <span className="text-[#C2410C]">Technical execution.</span>
             </motion.h2>
 
             <motion.div variants={reveal} className="section-copy intro-gap space-y-4 text-[#596773]">

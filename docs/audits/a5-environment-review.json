@@ -1,0 +1,35 @@
+{
+  "date": "2026-10-23",
+  "scope": "Names in local .env.local only; not values, validity, provider access or Vercel configuration",
+  "presentNames": [
+    "ADMIN_PASSWORD",
+    "ADMIN_SESSION_SECRET",
+    "BOOKING_FROM_EMAIL",
+    "BOOKING_MANAGE_SECRET",
+    "BOOKING_ORGANIZER_EMAIL",
+    "BOOKING_REPLY_TO_EMAIL",
+    "COMING_SOON_ENABLED",
+    "CONTACT_FROM_EMAIL",
+    "CONTACT_TO_EMAIL",
+    "CRON_SECRET",
+    "DATABASE_URL",
+    "DIRECT_URL",
+    "GOOGLE_CALENDAR_CLIENT_ID",
+    "GOOGLE_CALENDAR_CLIENT_SECRET",
+    "GOOGLE_CALENDAR_ID",
+    "GOOGLE_CALENDAR_REDIRECT_URI",
+    "GOOGLE_CALENDAR_REFRESH_TOKEN",
+    "NEXT_PUBLIC_CAL_LINK",
+    "RESEND_API_KEY",
+    "SITE_URL",
+    "VERCEL_OIDC_TOKEN"
+  ],
+  "missingRequiredNames": [
+    "SECURITY_RATE_LIMIT_SECRET",
+    "SECURITY_ALLOWED_ORIGINS"
+  ],
+  "localEnvironmentUnchanged": true,
+  "isolatedNeonTarget": "NOT VERIFIED: no explicitly identified isolated test target supplied",
+  "vercelConfig": "No vercel.json; local .vercel link exists but remote settings not inspected",
+  "browser": "BLOCKED: CUA inventory empty; iab unavailable"
+}

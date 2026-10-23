@@ -92,7 +92,7 @@ function SelectedWorkIntro({ reduceMotion }: { reduceMotion: boolean | null }) {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.48, delay: 0.27, ease }}
-        className={`button-primary ${styles.introAction} group action-gap inline-flex button-size w-fit items-center justify-center rounded-full bg-[var(--accent)] button-text text-white shadow-[0_8px_30px_rgba(255,90,31,0.14)] hover:bg-[var(--accent-hover)] hover:shadow-[0_12px_35px_rgba(255,90,31,0.20)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--accent)]`}
+        className={`button-primary button-accent ${styles.introAction} group action-gap inline-flex button-size w-fit items-center justify-center rounded-full bg-[var(--accent)] button-text text-white shadow-[0_8px_30px_rgba(255,90,31,0.14)] hover:bg-[var(--accent-hover)] hover:shadow-[0_12px_35px_rgba(255,90,31,0.20)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--accent)]`}
       >
         <span>Explore selected work</span>
         <ArrowRight size={17} aria-hidden="true" strokeWidth={1.7} className="button-arrow" />

@@ -1,12 +1,8 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/metadata";
 import { LegalPage } from "@/components/legal/LegalPage";
 import { legalContactEmail, legalDetails } from "@/lib/legal-details";
 
-export const metadata: Metadata = {
-  title: "Privacy notice",
-  alternates: { canonical: "/privacy" },
-  robots: { index: legalDetails.reviewed, follow: true },
-};
+export const metadata = pageMetadata("Privacy notice", "How Daniel VLKO processes browsing, enquiry and appointment information, including optional analytics and your privacy rights. Draft pending review.", "/privacy", { index: legalDetails.reviewed });
 
 export default function PrivacyNotice() {
   return (

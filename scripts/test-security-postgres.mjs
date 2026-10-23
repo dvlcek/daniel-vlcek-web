@@ -49,12 +49,17 @@ try {
   const port = inspectOwned();
   assert(port > 0 && port !== 5432, "Refuse default/existing database port.");
   const connectionString = `postgresql://${username}:${password}@127.0.0.1:${port}/${database}`;
+  // The image briefly accepts Unix-socket connections during initialization.
+  // Wait for the owned mapped TCP endpoint used by Prisma, not pg_isready's socket.
   for (let tries = 0; tries < 30; tries++) {
-    try { docker(["exec", name, "pg_isready", "-U", username, "-d", database]); break; }
-    catch { if (tries === 29) throw new Error("Disposable PostgreSQL was not ready."); await new Promise(done => setTimeout(done, 500)); }
+    client = new pg.Client({ connectionString, connectionTimeoutMillis: 3000 });
+    try { await client.connect(); break; }
+    catch {
+      await client.end(); client = undefined;
+      if (tries === 29) throw new Error("Disposable PostgreSQL TCP endpoint was not ready.");
+      await new Promise(done => setTimeout(done, 500));
+    }
   }
-  client = new pg.Client({ connectionString, connectionTimeoutMillis: 3000 });
-  await client.connect();
   const identity = (await client.query("SELECT current_database() AS db, current_user AS role, version() AS version")).rows[0];
   assert.equal(identity.db, database); assert.equal(identity.role, username);
   assert.equal((await client.query("SELECT count(*)::integer AS count FROM information_schema.tables WHERE table_schema='public'")).rows[0].count, 0);
@@ -88,10 +93,14 @@ try {
   console.log("PASS: previous schema migrated; representative records unchanged; six security indexes and both foreign keys present.");
   await runNode(["node_modules/tsx/dist/cli.mjs", "--test", "tests/security.postgres.test.ts"], env);
   await runNode([prisma, "migrate", "status", "--config", "tests/prisma-acceptance.config.ts"], env);
+  if (process.argv.includes("--browser")) {
+    const { runBrowserAcceptance } = await import("./run-browser-acceptance.mjs");
+    await runBrowserAcceptance(env);
+  }
   writeFileSync("docs/audits/a2-postgres-acceptance.json", JSON.stringify({
     date: new Date().toISOString(), database: database, host: "127.0.0.1", disposable: true,
     postgres: identity.version.split(" on ")[0], migration: "PASS", previousRecords: "PASS", indexesAndForeignKeys: "PASS", integrationTests: "PASS",
-    browser: "NOT VERIFIED", vercelIngress: "NOT VERIFIED", productionTouched: false,
+    browser: process.argv.includes("--browser") && !process.env.A3_TEST_GREP ? "Isolated Chromium PASS; see a4-browser-acceptance.json. Production NOT VERIFIED." : "NOT VERIFIED", vercelIngress: "NOT VERIFIED", productionTouched: false,
   }, null, 2) + "\n");
 } catch {
   console.error("PostgreSQL acceptance failed or unavailable; credentials and provider payloads omitted.");
