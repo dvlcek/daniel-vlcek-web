@@ -1,0 +1,29 @@
+{
+  "scope": "Offline config refusal/schema validation only; no DB contacted",
+  "cases": [
+    {
+      "case": "missing-opt-in",
+      "expectedExitCode": 1,
+      "exitCode": 1,
+      "status": "PASS"
+    },
+    {
+      "case": "invalid-url",
+      "expectedExitCode": 1,
+      "exitCode": 1,
+      "status": "PASS"
+    },
+    {
+      "case": "pooled-refused",
+      "expectedExitCode": 1,
+      "exitCode": 1,
+      "status": "PASS"
+    },
+    {
+      "case": "offline-schema-validation",
+      "expectedExitCode": 0,
+      "exitCode": 0,
+      "status": "PASS"
+    }
+  ]
+}

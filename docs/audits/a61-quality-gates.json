@@ -1,0 +1,120 @@
+{
+  "date": "2026-10-23",
+  "branch": "release/danielvlko-rc1",
+  "testedCodeCommit": "1f4a4f4812becf3f9ab07c4223643d35c72e8d29",
+  "environment": "Separate worktree; no local env files copied; inherited application/provider names shadowed; dummy offline DB; no Docker",
+  "node": "v24.18.0",
+  "npm": "11.16.0",
+  "checks": [
+    {
+      "gate": "npm-ci",
+      "command": "npm.cmd ci --no-audit",
+      "exitCode": 0,
+      "status": "PASS",
+      "seconds": 79.08,
+      "output": "\nadded 550 packages in 1m\n\n172 packages are looking for funding\n  run `npm fund` for details\nnpm warn deprecated node-domexception@1.0.0: Use your platform's native DOMException instead\nnpm warn deprecated eslint@9.39.5: This version is no longer supported. Please see https://eslint.org/version-support for other options.\nnpm warn allow-scripts 4 packages have install scripts not yet covered by allowScripts:\nnpm warn allow-scripts   @prisma/engines@7.10.1 (postinstall: node scripts/postinstall.js)\nnpm warn allow-scripts   esbuild@0.28.2 (postinstall: node install.js)\nnpm warn allow-scripts   prisma@7.10.1 (preinstall: node scripts/preinstall-entry.js)\nnpm warn allow-scripts   unrs-resolver@1.12.2 (postinstall: node postinstall.js)\nnpm warn allow-scripts\nnpm warn allow-scripts Run `npm approve-scripts --allow-scripts-pending` to review, or `npm approve-scripts <pkg>` to allow.\n"
+    },
+    {
+      "gate": "lint",
+      "command": "npm.cmd run lint",
+      "exitCode": 0,
+      "status": "PASS",
+      "seconds": 19.76,
+      "output": "\n> daniel-vlcek-web@0.1.0 lint\n> eslint .\n\n"
+    },
+    {
+      "gate": "security",
+      "command": "npm.cmd run test:security",
+      "exitCode": 0,
+      "status": "PASS",
+      "seconds": 6.94,
+      "output": "\n> daniel-vlcek-web@0.1.0 test:security\n> tsx --test tests/security.test.ts\n\n\u2714 same email creates separate owned leads; B cannot reuse, modify or confirm A (151.2092ms)\n\u2714 missing, invalid, tampered and expired capabilities fail closed (203.0429ms)\n\u2714 legitimate intake retry/refresh reuses only owned lead (8.0927ms)\n\u2714 normal confirmation and replay produce one booking/event without repeated email (125.5628ms)\n\u2714 concurrent same-attempt initialization cannot issue two capabilities (12.6307ms)\n\u2714 concurrent confirmations cannot reserve twice (75.5328ms)\n\u2714 session fixation is rejected; cookie attributes are production safe (7.9002ms)\n\u2714 durable limiter model rejects bursts atomically and resets predictably (6.0495ms)\n\u2714 untrusted IP headers cannot bypass network limits; trusted IPv6 groups /64 (32.8808ms)\n\u2714 login is throttled even when spoofed headers change; existing admin sessions still verify (18.3223ms)\n\u2714 valid admin login preserves redirect and session cookie contract (9.9502ms)\n\u2714 malformed JSON shapes and oversized streamed bodies reject safely (17.9085ms)\n\u2714 contact validation and ordinary valid submission remain compatible (18.4712ms)\n\u2714 missing storage/secret and foreign origins fail closed (22.4902ms)\n\u2714 sanitized diagnostics never include capability or provider payload (6.3668ms)\n\u2714 management token remains required; nonexistent and unauthorized IDs have same status (31.0254ms)\n\u2714 contact rate limit returns 429 with no email even with changing spoofed IPs (36.4758ms)\n\u2714 availability rejects impossible dates and oversized ranges before calendar calls (7.3601ms)\n\u2714 storage outage blocks intake and outbound work without leaking diagnostics (4.5466ms)\n\u2139 tests 19\n\u2139 suites 0\n\u2139 pass 19\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 6173.9158\n",
+      "environment": "Local env files absent; inherited local application names removed, not set to empty strings"
+    },
+    {
+      "gate": "calendar",
+      "command": "npm.cmd run test:booking",
+      "exitCode": 0,
+      "status": "PASS",
+      "seconds": 5.6,
+      "output": "\n> daniel-vlcek-web@0.1.0 test:booking\n> tsx --test tests/booking-calendar.test.ts\n\n\u2714 calendar errors, missing calendars and malformed periods fail closed (10.6243ms)\n\u2714 busy UTC instants survive the Vienna DST boundary (43.026ms)\n\u2714 reschedule fails closed on a truncated calendar event list (2.598ms)\n\u2714 internal Google event uses UTC instants/Vienna timezone and never adds customer attendees (2.5974ms)\n\u2714 management secrets remain in fragments and ICS preserves UTC/DST timing (2.5041ms)\n\u2139 tests 5\n\u2139 suites 0\n\u2139 pass 5\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 4672.3797\n"
+    },
+    {
+      "gate": "reminders",
+      "command": "node --import tsx --test tests/booking-reminders.test.ts",
+      "exitCode": 0,
+      "status": "PASS",
+      "seconds": 1.49,
+      "output": "\u2714 30m reminder includes Meet, records success and sequential retry sends nothing (145.8734ms)\n\u2714 email outage retains retry eligibility and recovers on the next worker run (5.6554ms)\n\u2714 missing Meet can be repaired before start; cancelled and past bookings never send (8.2042ms)\n\u2714 24h reminder requires 48h advance and expires four hours after its target (5.8372ms)\n\u2714 overlapping workers reuse the provider idempotency key and only one database marker wins (7.7853ms)\n\u2139 tests 5\n\u2139 suites 0\n\u2139 pass 5\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 1333.3688\n"
+    },
+    {
+      "gate": "privacy",
+      "command": "node --import tsx scripts/check-privacy.ts",
+      "exitCode": 0,
+      "status": "PASS",
+      "seconds": 0.56,
+      "output": "Privacy checks passed: consent parsing, expiration, withdrawal, blocked storage and sensitive URL exclusion.\n"
+    },
+    {
+      "gate": "tracking",
+      "command": "node --import tsx scripts/check-contact-tracking.ts",
+      "exitCode": 0,
+      "status": "PASS",
+      "seconds": 0.83,
+      "output": "Contact checks passed: launch-mode routing, consent, source labels, conversion events, sensitive-route exclusion and telemetry failures.\n"
+    },
+    {
+      "gate": "prisma",
+      "command": "node node_modules/prisma/build/index.js validate",
+      "exitCode": 0,
+      "status": "PASS",
+      "seconds": 3.25,
+      "output": "\u25c7 injected env (0) from .env.local // tip: \u25c8 encrypted .env [www.dotenvx.com]\n\u25c7 injected env (0) from .env // tip: \u2318 multiple files { path: ['.env.local', '.env'] }\nThe schema at prisma\\schema.prisma is valid \ud83d\ude80\nLoaded Prisma config from prisma.config.ts.\n\nPrisma schema loaded from prisma\\schema.prisma.\n"
+    },
+    {
+      "gate": "production-audit",
+      "command": "npm.cmd audit --omit=dev --json",
+      "exitCode": 0,
+      "status": "PASS",
+      "seconds": 2.76,
+      "output": "{\n  \"auditReportVersion\": 2,\n  \"vulnerabilities\": {},\n  \"metadata\": {\n    \"vulnerabilities\": {\n      \"info\": 0,\n      \"low\": 0,\n      \"moderate\": 0,\n      \"high\": 0,\n      \"critical\": 0,\n      \"total\": 0\n    },\n    \"dependencies\": {\n      \"prod\": 239,\n      \"dev\": 379,\n      \"optional\": 116,\n      \"peer\": 0,\n      \"peerOptional\": 0,\n      \"total\": 656\n    }\n  }\n}\n"
+    },
+    {
+      "gate": "full-audit",
+      "command": "npm.cmd audit --json",
+      "exitCode": 1,
+      "status": "FAIL",
+      "seconds": 2.78,
+      "output": "{\n  \"auditReportVersion\": 2,\n  \"vulnerabilities\": {\n    \"@next/eslint-plugin-next\": {\n      \"name\": \"@next/eslint-plugin-next\",\n      \"severity\": \"high\",\n      \"isDirect\": false,\n      \"via\": [\n        \"fast-glob\"\n      ],\n      \"effects\": [\n        \"eslint-config-next\"\n      ],\n      \"range\": \">=14.3.0-canary.0\",\n      \"nodes\": [\n        \"node_modules/@next/eslint-plugin-next\"\n      ],\n      \"fixAvailable\": {\n        \"name\": \"eslint-config-next\",\n        \"version\": \"14.2.35\",\n        \"isSemVerMajor\": true\n      }\n    },\n    \"braces\": {\n      \"name\": \"braces\",\n      \"severity\": \"high\",\n      \"isDirect\": false,\n      \"via\": [\n        {\n          \"source\": 1240992,\n          \"name\": \"braces\",\n          \"dependency\": \"braces\",\n          \"title\": \"braces vulnerable to stack-exhaustion denial of service through deeply nested patterns\",\n          \"url\": \"https://github.com/advisories/GHSA-vfj7-8cjw-p6xm\",\n          \"severity\": \"high\",\n          \"cwe\": [\n            \"CWE-674\"\n          ],\n          \"cvss\": {\n            \"score\": 7.5,\n            \"vectorString\": \"CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H\"\n          },\n          \"range\": \"<=3.0.3\"\n        }\n      ],\n      \"effects\": [\n        \"micromatch\"\n      ],\n      \"range\": \"*\",\n      \"nodes\": [\n        \"node_modules/braces\"\n      ],\n      \"fixAvailable\": {\n        \"name\": \"eslint-config-next\",\n        \"version\": \"14.2.35\",\n        \"isSemVerMajor\": true\n      }\n    },\n    \"eslint-config-next\": {\n      \"name\": \"eslint-config-next\",\n      \"severity\": \"high\",\n      \"isDirect\": true,\n      \"via\": [\n        \"@next/eslint-plugin-next\"\n      ],\n      \"effects\": [],\n      \"range\": \">=14.3.0-canary.0\",\n      \"nodes\": [\n        \"node_modules/eslint-config-next\"\n      ],\n      \"fixAvailable\": {\n        \"name\": \"eslint-config-next\",\n        \"version\": \"14.2.35\",\n        \"isSemVerMajor\": true\n      }\n    },\n    \"fast-glob\": {\n      \"name\": \"fast-glob\",\n      \"severity\": \"high\",\n      \"isDirect\": false,\n      \"via\": [\n        \"micromatch\"\n      ],\n      \"effects\": [\n        \"@next/eslint-plugin-next\"\n      ],\n      \"range\": \"*\",\n      \"nodes\": [\n        \"node_modules/fast-glob\"\n      ],\n      \"fixAvailable\": {\n        \"name\": \"eslint-config-next\",\n        \"version\": \"14.2.35\",\n        \"isSemVerMajor\": true\n      }\n    },\n    \"micromatch\": {\n      \"name\": \"micromatch\",\n      \"severity\": \"high\",\n      \"isDirect\": false,\n      \"via\": [\n        \"braces\"\n      ],\n      \"effects\": [\n        \"fast-glob\"\n      ],\n      \"range\": \">=0.2.0\",\n      \"nodes\": [\n        \"node_modules/micromatch\"\n      ],\n      \"fixAvailable\": {\n        \"name\": \"eslint-config-next\",\n        \"version\": \"14.2.35\",\n        \"isSemVerMajor\": true\n      }\n    }\n  },\n  \"metadata\": {\n    \"vulnerabilities\": {\n      \"info\": 0,\n      \"low\": 0,\n      \"moderate\": 0,\n      \"high\": 5,\n      \"critical\": 0,\n      \"total\": 5\n    },\n    \"dependencies\": {\n      \"prod\": 239,\n      \"dev\": 379,\n      \"optional\": 116,\n      \"peer\": 0,\n      \"peerOptional\": 0,\n      \"total\": 656\n    }\n  }\n}\n"
+    },
+    {
+      "gate": "build",
+      "command": "npm.cmd run build",
+      "exitCode": 0,
+      "status": "PASS",
+      "seconds": 58.44,
+      "output": "\n> daniel-vlcek-web@0.1.0 build\n> next build\n\n\u25b2 Next.js 16.4.2 (Turbopack)\n\u2713 Running next.config.ts took 97ms\n\n  Creating an optimized production build ...\n\u2713 Compiled successfully in 27.8s\n  Running TypeScript ...\n  Finished TypeScript in 20.7s ...\n  Collecting page data using 7 workers ...\n  Generating static pages using 7 workers (0/19) ...\n  Generating static pages using 7 workers (4/19) \n  Generating static pages using 7 workers (9/19) \n  Generating static pages using 7 workers (14/19) \n\u2713 Generating static pages using 7 workers (19/19) in 1666ms\n  Finalizing page optimization ...\n\nRoute (app)\n\u250c \u25cb /\n\u251c \u25cb /_not-found\n\u251c \u0192 /admin\n\u251c \u0192 /admin/login\n\u251c \u0192 /api/admin/availability/overrides\n\u251c \u0192 /api/admin/availability/overrides/delete\n\u251c \u0192 /api/admin/availability/rules\n\u251c \u0192 /api/admin/bookings/status\n\u251c \u0192 /api/admin/leads/status\n\u251c \u0192 /api/admin/login\n\u251c \u0192 /api/admin/logout\n\u251c \u0192 /api/booking/availability\n\u251c \u0192 /api/booking/cancel\n\u251c \u0192 /api/booking/confirm\n\u251c \u0192 /api/booking/intake\n\u251c \u0192 /api/booking/manage\n\u251c \u0192 /api/booking/reschedule\n\u251c \u0192 /api/contact\n\u251c \u0192 /api/cron/booking-reminders\n\u251c \u0192 /api/cron/security-cleanup\n\u251c \u25cb /apple-icon.png\n\u251c \u25cb /booking/manage\n\u251c \u25cb /coming-soon\n\u251c \u25cb /contact\n\u251c \u25cb /cookies\n\u251c \u25cb /icon.svg\n\u251c \u25cb /legal\n\u251c \u25cb /opengraph-image\n\u251c \u25cb /privacy\n\u251c \u25cb /robots.txt\n\u251c \u25cb /sitemap.xml\n\u251c \u25cb /twitter-image\n\u2514 \u25cb /work\n\n\n\u0192 Proxy (Middleware)\n\n\u25cb  (Static)   prerendered as static content\n\u0192  (Dynamic)  server-rendered on demand\n\n"
+    },
+    {
+      "gate": "typescript",
+      "command": "node node_modules/typescript/bin/tsc --noEmit",
+      "exitCode": 0,
+      "status": "PASS",
+      "seconds": 41.96,
+      "output": ""
+    }
+  ],
+  "postgresIntegration": "NOT VERIFIED: no explicitly isolated target; existing runner requires Docker",
+  "chromium": "NOT VERIFIED: browser tool inventory empty and DB fixture unavailable; historical A4 evidence retained",
+  "screenReader": "NOT VERIFIED",
+  "initialSecurityAttempt": {
+    "gate": "security",
+    "command": "npm.cmd run test:security",
+    "exitCode": 1,
+    "status": "FAIL",
+    "seconds": 6.94,
+    "output": "\n> daniel-vlcek-web@0.1.0 test:security\n> tsx --test tests/security.test.ts\n\nAPI operation failed {\n  operation: 'Booking confirmation email failed:',\n  code: 'unavailable'\n}\nAPI operation failed {\n  operation: 'Booking confirmation email failed:',\n  code: 'unavailable'\n}\n\u2714 same email creates separate owned leads; B cannot reuse, modify or confirm A (125.9694ms)\n\u2714 missing, invalid, tampered and expired capabilities fail closed (38.0708ms)\n\u2714 legitimate intake retry/refresh reuses only owned lead (10.2945ms)\n\u2716 normal confirmation and replay produce one booking/event without repeated email (40.1516ms)\n\u2714 concurrent same-attempt initialization cannot issue two capabilities (19.0594ms)\n\u2716 concurrent confirmations cannot reserve twice (60.356ms)\n\u2714 session fixation is rejected; cookie attributes are production safe (6.4528ms)\n\u2714 durable limiter model rejects bursts atomically and resets predictably (5.4888ms)\n\u2714 untrusted IP headers cannot bypass network limits; trusted IPv6 groups /64 (25.9488ms)\n\u2714 login is throttled even when spoofed headers change; existing admin sessions still verify (42.0154ms)\n\u2714 valid admin login preserves redirect and session cookie contract (9.1323ms)\n\u2714 malformed JSON shapes and oversized streamed bodies reject safely (14.0172ms)\n\u2714 contact validation and ordinary valid submission remain compatible (13.9995ms)\n\u2714 missing storage/secret and foreign origins fail closed (5.5901ms)\n\u2714 sanitized diagnostics never include capability or provider payload (5.6114ms)\n\u2714 management token remains required; nonexistent and unauthorized IDs have same status (24.6046ms)\n\u2714 contact rate limit returns 429 with no email even with changing spoofed IPs (11.18ms)\n\u2714 availability rejects impossible dates and oversized ranges before calendar calls (6.3492ms)\n\u2714 storage outage blocks intake and outbound work without leaking diagnostics (5.1042ms)\n\u2139 tests 19\n\u2139 suites 0\n\u2139 pass 17\n\u2139 fail 2\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 6027.4934\n\n\u2716 failing tests:\n\ntest at tests\\security.test.ts:164:1\n\u2716 normal confirmation and replay produce one booking/event without repeated email (40.1516ms)\n  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n  \n  0 !== 1\n  \n      at TestContext.<anonymous> (C:\\Users\\danko\\Desktop\\daniel-vlcek-web\\danielvlko-rc1\\tests\\security.test.ts:168:85)\n      at async Test.run (node:internal/test_runner/test:1332:7)\n      at async Test.processPendingSubtests (node:internal/test_runner/test:911:7) {\n    generatedMessage: true,\n    code: 'ERR_ASSERTION',\n    actual: 0,\n    expected: 1,\n    operator: 'strictEqual',\n    diff: 'simple'\n  }\n\ntest at tests\\security.test.ts:181:1\n\u2716 concurrent confirmations cannot reserve twice (60.356ms)\n  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n  \n  0 !== 1\n  \n      at TestContext.<anonymous> (C:\\Users\\danko\\Desktop\\daniel-vlcek-web\\danielvlko-rc1\\tests\\security.test.ts:184:73)\n      at async Test.run (node:internal/test_runner/test:1332:7)\n      at async Test.processPendingSubtests (node:internal/test_runner/test:911:7) {\n    generatedMessage: true,\n    code: 'ERR_ASSERTION',\n    actual: 0,\n    expected: 1,\n    operator: 'strictEqual',\n    diff: 'simple'\n  }\n"
+  },
+  "securityRerunReason": "Initial orchestration set BOOKING_FROM_EMAIL empty, disabling nullish fallback. Removed inherited app names in isolated worktree; 19/19 pass without application changes.",
+  "finalMockTestCount": 29
+}

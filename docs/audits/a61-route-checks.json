@@ -1,0 +1,70 @@
+{
+  "date": "2026-10-23",
+  "environment": "RC1 clean production build, loopback HTTP, no browser/DB/provider fixture",
+  "routes": [
+    {
+      "path": "/",
+      "status": 200,
+      "finalPath": "/"
+    },
+    {
+      "path": "/contact",
+      "status": 200,
+      "finalPath": "/contact"
+    },
+    {
+      "path": "/legal",
+      "status": 200,
+      "finalPath": "/legal"
+    },
+    {
+      "path": "/privacy",
+      "status": 200,
+      "finalPath": "/privacy"
+    },
+    {
+      "path": "/cookies",
+      "status": 200,
+      "finalPath": "/cookies"
+    },
+    {
+      "path": "/coming-soon",
+      "status": 200,
+      "finalPath": "/coming-soon"
+    },
+    {
+      "path": "/work",
+      "status": 200,
+      "finalPath": "/"
+    },
+    {
+      "path": "/booking/manage",
+      "status": 200,
+      "finalPath": "/booking/manage"
+    },
+    {
+      "path": "/admin/login",
+      "status": 200,
+      "finalPath": "/admin/login"
+    },
+    {
+      "path": "/robots.txt",
+      "status": 200,
+      "finalPath": "/robots.txt"
+    },
+    {
+      "path": "/sitemap.xml",
+      "status": 200,
+      "finalPath": "/sitemap.xml"
+    },
+    {
+      "path": "/icon.svg",
+      "status": 200,
+      "finalPath": "/icon.svg"
+    }
+  ],
+  "internalDestinationsChecked": 22,
+  "failures": [],
+  "status": "PASS",
+  "limits": "Rendered HTML links and fragment IDs only; not interactive menu/booking/browser/zoom acceptance"
+}

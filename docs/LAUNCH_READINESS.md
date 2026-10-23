@@ -1,5 +1,28 @@
 # Launch readiness ? 23 October 2026
 
+## Phase A6.1 - verified RC1 and controlled staging preparation
+
+**DONE locally; NOT READY for production.** Release source is the complete A5 tree
+at `1f4a4f4812becf3f9ab07c4223643d35c72e8d29`, not integration HEAD c409c18.
+`release/danielvlko-rc1` is preserved in a separate worktree; original integration,
+backups and local environment remain intact. Final SHA is resolved with
+`git rev-parse release/danielvlko-rc1` and recorded in the delivery handoff.
+
+Gitleaks tree/release/full-history scans PASS with one exact reviewed false-positive
+rule for the public privacy storage key. Actual npm ci, lint, TypeScript/build,
+Prisma validation, 29 mocked tests, privacy/tracking and rendered route/link checks
+PASS. Production audit PASS (zero); full audit remains FAIL/open (five high dev-only).
+New PostgreSQL/Chromium/manual accessibility acceptance is NOT VERIFIED. No isolated
+Neon target, Preview deployment, provider write or production operation occurred.
+
+See [release record](RELEASE_CANDIDATE.md) for source/secret/test evidence and the
+eight mandatory gates; [executable staging setup](STAGING_SETUP.md) for owner actions,
+exact environment names, guarded Prisma commands and provider/cron cleanup.
+Gate 1 PASS locally; Gates 2-8 remain blocked or unverified. Legal drafts/noindex and
+reviewed=false remain. Advisory acceptance and human accessibility/legal approval
+are still required. Earlier A5/A4 sections below are historical evidence.
+
+
 ## Phase A5 - staging preparation and release rehearsal - 23 October 2026
 
 **Production verdict: NOT READY. A5 is PARTIAL; operational acceptance is BLOCKED.**

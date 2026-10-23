@@ -1,0 +1,20 @@
+{
+  "date": "2026-10-23",
+  "releaseBranch": "release/danielvlko-rc1",
+  "worktree": "C:\\Users\\danko\\Desktop\\daniel-vlcek-web\\danielvlko-rc1",
+  "sourceCommit": "1f4a4f4812becf3f9ab07c4223643d35c72e8d29",
+  "remoteMainVerifiedBy": "git ls-remote origin refs/heads/main",
+  "remoteMain": "952bc8faea1ea02ec9ca78acc8ec133025e1ddc1",
+  "preservedRefs": {
+    "integration/website-launch-sync": "c409c186537a7e2a51649d7c7d562b27dc2d588a",
+    "backup/a1-a4-pre-a5-20261023": "0386fe7540da34bee96ea14dc9c46e1f3d32b5cd",
+    "backup/integration-a5-20261023": "1f4a4f4812becf3f9ab07c4223643d35c72e8d29",
+    "origin/main": "952bc8faea1ea02ec9ca78acc8ec133025e1ddc1"
+  },
+  "backupFileCount": 82,
+  "backupBlobComparison": "PASS 82/82",
+  "originalIndexStaged": [],
+  "sourceRuntimeChanges": "None; native booking, A2/A4, legal drafts and case study data identical to A5 backup",
+  "originalEnvHashUnchanged": true,
+  "operationalTargets": "No explicitly isolated Neon target supplied; local app URLs not contacted; no cloud settings mutated"
+}

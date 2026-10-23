@@ -1,0 +1,10 @@
+title = "Daniel VLKO release secret scanning"
+[extend]
+useDefault = true
+[[allowlists]]
+description = "Public localStorage preference key, not an authentication credential"
+condition = "AND"
+targetRules = ["generic-api-key"]
+regexTarget = "secret"
+paths = ['(^|/)src/lib/privacy\.ts$']
+regexes = ['^dv_privacy_choice_v1$']
