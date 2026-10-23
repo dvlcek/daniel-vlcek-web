@@ -11,20 +11,22 @@ import { Footer } from "@/components/layout/Footer";
 
 export default function HomePage() {
   return (
-    <main>
-      <div className="relative">
-        <Header />
-        <Hero />
-      </div>
+    <>
+      <main>
+        <div className="relative">
+          <Header />
+          <Hero />
+        </div>
 
-      <Problem />
-      <System />
-      <WhatIBuild />
-      <SelectedWork />
-      <Process />
-      <WhyWorkWithDaniel />
-      <FinalCTA />
+        <Problem />
+        <System />
+        <WhatIBuild />
+        <SelectedWork />
+        <Process />
+        <WhyWorkWithDaniel />
+        <FinalCTA />
+      </main>
       <Footer />
-    </main>
+    </>
   );
 }

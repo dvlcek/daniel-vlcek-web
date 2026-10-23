@@ -68,15 +68,7 @@ export function Hero() {
           <div className="mx-auto w-full max-w-[960px] text-center">
             {/* Positioning */}
             <p
-              className="
-                mb-5
-                text-[10px]
-                font-medium
-                uppercase
-                tracking-[0.26em]
-                text-white/50
-                sm:text-[11px]
-              "
+              className="eyebrow mb-6 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-white/50"
             >
               Web Development
               <span className="mx-3 text-white/22">·</span>
@@ -85,15 +77,7 @@ export function Hero() {
 
             {/* Headline */}
             <h1
-              className="
-                text-[42px]
-                font-normal
-                leading-[0.97]
-                tracking-[-0.04em]
-                sm:text-[60px]
-                lg:text-[72px]
-                xl:text-[82px]
-              "
+              className="display-heading"
               style={{
                 textShadow:
                   "0 4px 20px rgba(0,0,0,0.72), 0 16px 56px rgba(0,0,0,0.52)",
@@ -109,17 +93,7 @@ export function Hero() {
 
             {/* Supporting copy */}
             <p
-              className="
-                mx-auto
-                mt-7
-                max-w-[600px]
-                text-[15px]
-                font-normal
-                leading-[1.6]
-                tracking-[-0.005em]
-                text-white/64
-                sm:text-[16px]
-              "
+              className="section-copy intro-gap mx-auto max-w-[600px] text-white/64"
               style={{
                 textShadow: "0 3px 16px rgba(0,0,0,0.82)",
               }}
@@ -130,26 +104,20 @@ export function Hero() {
             </p>
 
             {/* CTA */}
-            <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+            <div className="action-gap flex flex-col items-center justify-center gap-3 sm:flex-row">
               <Link
-                href="/contact"
-                className="
+                href="/contact" data-contact-source="hero"
+                className="button-primary
                   group
                   inline-flex
-                  h-12
+                  button-size
                   items-center
                   justify-center
-                  gap-5
                   rounded-full
                   bg-[var(--accent)]
-                  px-7
-                  text-sm
-                  font-medium
+                  button-text
                   text-white
                   shadow-[0_8px_30px_rgba(255,90,31,0.14)]
-                  transition-all
-                  duration-200
-                  hover:-translate-y-0.5
                   hover:shadow-[0_12px_35px_rgba(255,90,31,0.20)]
                 "
               >
@@ -157,11 +125,7 @@ export function Hero() {
 
                 <span
                   aria-hidden="true"
-                  className="
-                    transition-transform
-                    duration-200
-                    group-hover:translate-x-1
-                  "
+                  className="button-arrow"
                 >
                   →
                 </span>
@@ -169,22 +133,18 @@ export function Hero() {
 
               <Link
                 href="/#work"
-                className="
+                className="button-secondary
                   inline-flex
-                  h-12
+                  button-size
                   items-center
                   justify-center
                   rounded-full
                   border
                   border-white/[0.16]
                   bg-black/10
-                  px-7
-                  text-sm
-                  font-medium
+                  button-text
                   text-white/88
                   backdrop-blur-sm
-                  transition-colors
-                  duration-200
                   hover:border-white/30
                   hover:bg-white/[0.04]
                   hover:text-white
@@ -252,41 +212,12 @@ export function Hero() {
                 gap-5
               "
             >
-              <div
-                className="
-                  h-px
-                  w-[80px]
-                  bg-gradient-to-r
-                  from-transparent
-                  to-white/[0.10]
-                  sm:w-[150px]
-                "
-              />
 
               <p
-                className="
-                  shrink-0
-                  text-[9px]
-                  font-medium
-                  uppercase
-                  tracking-[0.32em]
-                  text-white/36
-                  sm:text-[10px]
-                "
+                className="eyebrow text-white/36"
               >
                 Platforms I build with
               </p>
-
-              <div
-                className="
-                  h-px
-                  w-[80px]
-                  bg-gradient-to-l
-                  from-transparent
-                  to-white/[0.10]
-                  sm:w-[150px]
-                "
-              />
             </div>
 
             {/* Logos */}

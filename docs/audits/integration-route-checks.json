@@ -1,0 +1,122 @@
+{
+  "checkedAt": "2026-10-23T07:31:58.026577+00:00",
+  "configuration": "Process-only fixtures; launch gate disabled locally; no remote database/providers used",
+  "/": {
+    "status": 200,
+    "title": "Daniel VLKO | Software Developer & Automation Architect",
+    "footers": 1,
+    "robots": [
+      "index, follow"
+    ]
+  },
+  "/contact": {
+    "status": 200,
+    "title": "Contact & Free Discovery Call | Daniel VLKO",
+    "footers": 1,
+    "robots": [
+      "index, follow"
+    ]
+  },
+  "/work": {
+    "status": 307,
+    "title": "Daniel VLKO | Software Developer & Automation Architect",
+    "footers": 0,
+    "robots": [
+      "index, follow"
+    ],
+    "location": "/#work"
+  },
+  "/privacy": {
+    "status": 200,
+    "title": "Privacy notice | Daniel VLKO",
+    "footers": 1,
+    "robots": [
+      "noindex, follow"
+    ]
+  },
+  "/cookies": {
+    "status": 200,
+    "title": "Cookies & privacy choices | Daniel VLKO",
+    "footers": 1,
+    "robots": [
+      "noindex, follow"
+    ]
+  },
+  "/legal": {
+    "status": 200,
+    "title": "Legal notice / Impressum | Daniel VLKO",
+    "footers": 1,
+    "robots": [
+      "noindex, follow"
+    ]
+  },
+  "/coming-soon": {
+    "status": 200,
+    "title": "Daniel VLKO \u2014 Software Developer & Automation Architect | Daniel VLKO",
+    "footers": 1,
+    "robots": [
+      "noindex, nofollow"
+    ]
+  },
+  "/booking/manage": {
+    "status": 200,
+    "title": "Manage booking | Daniel VLKO | Daniel VLKO",
+    "footers": 1,
+    "robots": [
+      "noindex, nofollow"
+    ]
+  },
+  "/admin": {
+    "status": 307,
+    "title": "Daniel VLKO | Software Developer & Automation Architect",
+    "footers": 0,
+    "robots": [
+      "index, follow"
+    ],
+    "location": "/admin/login"
+  },
+  "/admin/login": {
+    "status": 200,
+    "title": "Daniel VLKO | Software Developer & Automation Architect",
+    "footers": 0,
+    "robots": [
+      "index, follow"
+    ]
+  },
+  "/robots.txt": {
+    "status": 200,
+    "title": "",
+    "footers": 0,
+    "robots": []
+  },
+  "/sitemap.xml": {
+    "status": 200,
+    "title": "",
+    "footers": 0,
+    "robots": []
+  },
+  "/opengraph-image": {
+    "status": 200,
+    "contentType": "image/png"
+  },
+  "/favicon.ico": {
+    "status": 404,
+    "title": "Daniel VLKO | Software Developer & Automation Architect404: This page could not be found.",
+    "footers": 0,
+    "robots": [
+      "noindex",
+      "index, follow"
+    ]
+  },
+  "internalLinks": {
+    "/": 200,
+    "/contact": 200,
+    "/legal": 200,
+    "/privacy": 200,
+    "/cookies": 200
+  },
+  "limitations": [
+    "HTTP/source verification only; no browser, viewport, cookies, hydration, actual provider or authenticated admin acceptance.",
+    "favicon.ico remains 404; sitemap includes only homepage; inherited metadata requires separate release review."
+  ]
+}

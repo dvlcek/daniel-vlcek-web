@@ -2,6 +2,8 @@
 
 import { motion, useReducedMotion } from "motion/react";
 
+import { Container } from "@/components/ui/Container";
+
 import { AnimatedStat } from "@/components/sections/problem/AnimatedStat";
 import { ProblemSignal } from "@/components/sections/problem/ProblemSignal";
 
@@ -98,28 +100,7 @@ export function Problem() {
           MAIN CONTENT
       ===================================================== */}
 
-      <div
-        className="
-          relative
-          z-10
-          mx-auto
-          w-full
-          max-w-[1480px]
-          px-5
-          pb-[132px]
-          pt-24
-
-          sm:px-7
-
-          md:px-10
-          md:pb-[145px]
-          md:pt-28
-
-          xl:px-12
-          xl:pb-[155px]
-          xl:pt-[124px]
-        "
-      >
+      <Container className="relative z-10 section-space">
         {/* ==================================================
             HEADER
         ================================================== */}
@@ -145,22 +126,10 @@ export function Problem() {
             duration: 0.65,
             ease: [0.22, 1, 0.36, 1],
           }}
-          className="mx-auto max-w-[1040px] text-center"
+          className="section-intro mx-auto text-center"
         >
           <h2
-            className="
-              text-[38px]
-              text-balance
-              font-normal
-              leading-[1.08]
-              tracking-[-0.04em]
-
-              sm:text-[46px]
-
-              md:text-[54px]
-
-              xl:text-[60px]
-            "
+            className="section-heading section-heading--center"
           >
             Your business has moved forward.
 
@@ -175,18 +144,7 @@ export function Problem() {
           </h2>
 
           <p
-            className="
-              mx-auto
-              mt-5
-              max-w-[720px]
-              text-[14px]
-              leading-[1.7]
-              text-white/64
-
-              sm:text-[15px]
-
-              xl:text-[16px]
-            "
+            className="section-copy intro-gap mx-auto text-white/64"
           >
             A slow website loses enquiries. Manual work eats into your day.
             Disconnected tools make every next step harder than it needs to be.
@@ -215,7 +173,7 @@ export function Problem() {
           }}
           className="
             mx-auto
-            mt-16
+            content-gap
             grid
             max-w-[1360px]
             gap-4
@@ -224,7 +182,6 @@ export function Problem() {
 
             lg:grid-cols-3
 
-            xl:mt-[72px]
             xl:grid-cols-5
             xl:gap-4
           "
@@ -270,9 +227,7 @@ export function Problem() {
                 border
                 border-white/[0.055]
                 bg-white/[0.012]
-                px-6
-                pb-7
-                pt-6
+                p-6
                 text-center
 
                 transition-[border-color,background-color]
@@ -285,33 +240,13 @@ export function Problem() {
               <ProblemSignal type={problem.type} />
 
               <h3
-                className="
-                  mt-4
-                  text-balance
-                  text-[15px]
-                  font-medium
-                  leading-[1.25]
-                  tracking-[-0.025em]
-                  text-white/92
-
-                  xl:flex
-                  xl:min-h-[40px]
-                  xl:items-center
-                  xl:justify-center
-                  xl:text-[16px]
-                "
+                className="card-title card-title--small mt-4 text-white/92 xl:flex xl:min-h-12 xl:items-center xl:justify-center"
               >
                 {problem.title}
               </h3>
 
               <p
-                className="
-                  mt-3
-                  text-pretty
-                  text-[14px]
-                  leading-[1.72]
-                  text-white/64
-                "
+                className="small-copy mt-3 text-white/64"
               >
                 {problem.description}
               </p>
@@ -346,7 +281,7 @@ export function Problem() {
           }}
           className="
             mx-auto
-            mt-[68px]
+            content-gap
             h-px
             w-full
             max-w-[1220px]
@@ -457,31 +392,13 @@ export function Problem() {
                 </p>
 
                 <p
-                  className="
-                    mt-4
-                    text-[12px]
-                    font-medium
-                    leading-[1.4]
-                    tracking-[-0.015em]
-                    text-white/72
-
-                    sm:text-[13px]
-
-                    xl:text-[14px]
-                  "
+                  className="button-text mt-4 text-white/72"
                 >
                   {stat.label}
                 </p>
 
                 <p
-                  className="
-                    mx-auto
-                    mt-2
-                    max-w-[270px]
-                    text-[13px]
-                    leading-[1.55]
-                    text-white/60
-                  "
+                  className="small-copy mx-auto mt-2 max-w-[270px] text-white/60"
                 >
                   {stat.description}
                 </p>
@@ -493,8 +410,7 @@ export function Problem() {
                   className="
                     mt-3
                     rounded-sm
-                    text-[11px]
-                    leading-[1.5]
+                    caption
                     text-white/55
                     underline
                     decoration-white/20
@@ -512,7 +428,7 @@ export function Problem() {
             ))}
           </div>
         </motion.div>
-      </div>
+      </Container>
     </section>
   );
 }

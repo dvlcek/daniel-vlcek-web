@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { ComingSoon } from "@/components/launch/ComingSoon";
+import { Footer } from "@/components/layout/Footer";
 
 export const metadata: Metadata = {
   metadataBase: new URL(
@@ -42,5 +43,5 @@ export const metadata: Metadata = {
 };
 
 export default function ComingSoonPage() {
-  return <ComingSoon />;
+  return <><ComingSoon /><Footer /></>;
 }

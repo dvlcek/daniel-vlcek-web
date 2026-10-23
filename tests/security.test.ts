@@ -83,10 +83,11 @@ function fixture() {
 let state: ReturnType<typeof fixture>;
 let events = 0;
 let outbound = 0;
+let emailPayloads: { html?: string; text?: string }[] = [];
 const savedEnv = { ...process.env };
 const origin = "https://example.test";
 beforeEach(() => {
-  state = fixture(); events = 0; outbound = 0;
+  state = fixture(); events = 0; outbound = 0; emailPayloads = [];
   Object.assign(process.env, {
     NODE_ENV: "test", SECURITY_ALLOWED_ORIGINS: origin, SECURITY_RATE_LIMIT_SECRET: "test-only-secret-that-is-at-least-32-characters",
     SECURITY_TRUST_PROXY: "", VERCEL: "", ADMIN_PASSWORD: "fixture-password", ADMIN_SESSION_SECRET: "fixture-admin-session-secret-at-least-32-chars",
@@ -100,7 +101,7 @@ beforeEach(() => {
   mock.method(GoogleCalendarProvider.prototype, "cancelEvent", async () => { throw new Error("Unexpected fixture calendar cancellation"); });
   mock.method(GoogleCalendarProvider.prototype, "updateEvent", async () => { throw new Error("Unexpected fixture calendar update"); });
   // Hard outbound boundary: even a missed provider mock cannot contact a real service.
-  mock.method(globalThis, "fetch", async () => { outbound++; return new Response(JSON.stringify({ id: "fixture-email" }), { headers: { "content-type": "application/json" } }); });
+  mock.method(globalThis, "fetch", async (_input: unknown, options?: RequestInit) => { outbound++; emailPayloads.push(JSON.parse(String(options?.body ?? "{}"))); return new Response(JSON.stringify({ id: "fixture-email" }), { headers: { "content-type": "application/json" } }); });
 });
 afterEach(() => {
   mock.restoreAll();
@@ -238,9 +239,14 @@ test("malformed JSON shapes and oversized streamed bodies reject safely", async 
 });
 
 test("contact validation and ordinary valid submission remain compatible", async () => {
+  process.env.NEXT_PUBLIC_CAL_LINK = "https://obsolete.example.test/old-calendar";
   assert.equal((await contact(request("/api/contact", { ...details, email: "invalid" }))).status, 400);
   assert.equal((await contact(request("/api/contact", details))).status, 200);
   assert.equal(outbound, 2); // mock internal notification + mock client confirmation
+  const confirmation = emailPayloads[1];
+  assert(confirmation.html?.includes('href="https://danielvlko.com/contact"'));
+  assert(confirmation.text?.includes("https://danielvlko.com/contact"));
+  assert(!JSON.stringify(emailPayloads).includes("obsolete.example.test"));
 });
 
 test("missing storage/secret and foreign origins fail closed", async () => {

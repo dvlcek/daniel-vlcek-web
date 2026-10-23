@@ -4,6 +4,7 @@ import { ArrowRight } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
 
 import { Container } from "@/components/ui/Container";
+import styles from "./Process.module.css";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -47,6 +48,7 @@ export function Process() {
       className="
         relative
         overflow-hidden
+        scroll-mt-20
         bg-[#F6F3EE]
         text-[#071017]
       "
@@ -62,91 +64,13 @@ export function Process() {
       ====================================================== */}
 
       <Container
-        className="
-          relative
-          z-10
-
-          pb-16
-          pt-[165px]
-
-          md:pb-20
-          md:pt-[185px]
-
-          xl:pb-24
-          xl:pt-[195px]
-
-          2xl:pb-26
-          2xl:pt-[210px]
-        "
+        className="relative z-10 section-space section-space--curve"
       >
         {/* ====================================================
             INTRO
         ==================================================== */}
 
-        <div className="max-w-[920px]">
-          {/* EYEBROW */}
-
-          {/* <motion.div
-            initial={
-              reduceMotion
-                ? false
-                : {
-                    opacity: 0,
-                    x: -12,
-                  }
-            }
-            whileInView={{
-              opacity: 1,
-              x: 0,
-            }}
-            viewport={{
-              once: true,
-              amount: 0.8,
-            }}
-            transition={{
-              duration: 0.55,
-              ease,
-            }}
-            className="flex items-center gap-4"
-          >
-            <motion.span
-              initial={
-                reduceMotion
-                  ? false
-                  : {
-                      scaleX: 0,
-                    }
-              }
-              whileInView={{
-                scaleX: 1,
-              }}
-              viewport={{
-                once: true,
-              }}
-              transition={{
-                duration: 0.55,
-                delay: 0.08,
-                ease,
-              }}
-              style={{
-                transformOrigin: "left",
-              }}
-              className="h-px w-8 bg-[#FF5A1F]"
-            />
-
-            <span
-              className="
-                text-[9px]
-                font-semibold
-                uppercase
-                tracking-[0.34em]
-                text-[#697781]
-              "
-            >
-              My Process
-            </span>
-          </motion.div> */}
-
+        <div className="section-intro">
           {/* HEADLINE */}
 
           <motion.h2
@@ -171,19 +95,7 @@ export function Process() {
               delay: 0.06,
               ease,
             }}
-            className="
-              mt-9
-
-              text-[44px]
-              font-semibold
-              leading-[0.96]
-              tracking-[-0.06em]
-
-              sm:text-[54px]
-              md:text-[60px]
-              xl:text-[66px]
-              2xl:text-[72px]
-            "
+            className="section-heading"
           >
             Understand first.
             <br />
@@ -216,17 +128,7 @@ export function Process() {
               delay: 0.14,
               ease,
             }}
-            className="
-              mt-7
-              max-w-[720px]
-
-              text-[16px]
-              leading-7
-              text-[#596773]
-
-              md:text-[18px]
-              md:leading-8
-            "
+            className="section-copy intro-gap text-[#596773]"
           >
             I start with the business, not the technology. Then I design,
             build and improve the system around what actually creates value.
@@ -237,7 +139,7 @@ export function Process() {
             PROCESS STEPS
         ==================================================== */}
 
-        <motion.div
+        <motion.ol
           initial="hidden"
           whileInView="visible"
           viewport={{
@@ -254,19 +156,7 @@ export function Process() {
               },
             },
           }}
-          className="
-            mt-16
-            grid
-            gap-12
-
-            sm:grid-cols-2
-
-            xl:mt-[72px]
-            xl:grid-cols-4
-            xl:gap-10
-
-            2xl:gap-14
-          "
+          className="content-gap list-none p-0 grid gap-x-8 gap-y-10 sm:grid-cols-2 xl:grid-cols-4"
         >
           {steps.map((step) => (
             <ProcessStep
@@ -275,7 +165,7 @@ export function Process() {
               reduceMotion={Boolean(reduceMotion)}
             />
           ))}
-        </motion.div>
+        </motion.ol>
 
         {/* ====================================================
             CTA
@@ -302,38 +192,35 @@ export function Process() {
             delay: 0.38,
             ease,
           }}
-          className="mt-14"
+          className="action-gap"
         >
           <a
-            href="/contact"
+            href="/contact" data-contact-source="process"
             style={{
               color: "#FFFFFF",
             }}
-            className="
+            className="button-primary
               group
 
               inline-flex
-              h-[52px]
+              button-size
 
               items-center
               justify-center
-              gap-8
 
               rounded-full
 
               bg-[#071017]
 
-              px-7
 
-              text-[14px]
-              font-medium
+              button-text
 
               shadow-[0_12px_34px_rgba(7,16,23,0.12)]
 
-              transition-all
-              duration-300
 
-              hover:-translate-y-0.5
+              focus-visible:outline-2
+              focus-visible:outline-offset-4
+              focus-visible:outline-[#C2410C]
               hover:bg-[#101C24]
               hover:shadow-[0_16px_42px_rgba(7,16,23,0.16)]
             "
@@ -348,16 +235,12 @@ export function Process() {
 
             <ArrowRight
               size={17}
+              aria-hidden="true"
               strokeWidth={1.6}
               style={{
                 color: "#FFFFFF",
               }}
-              className="
-                transition-transform
-                duration-300
-
-                group-hover:translate-x-1
-              "
+              className="button-arrow"
             />
           </a>
         </motion.div>
@@ -381,247 +264,52 @@ type ProcessStepProps = {
   reduceMotion: boolean;
 };
 
-function ProcessStep({
-  step,
-  reduceMotion,
-}: ProcessStepProps) {
+function ProcessStep({ step, reduceMotion }: ProcessStepProps) {
   return (
-    <motion.article
+    <motion.li
       variants={{
-        hidden: reduceMotion
-          ? {}
-          : {
-              opacity: 0,
-              y: 18,
-            },
-
+        hidden: reduceMotion ? {} : { opacity: 0, y: 14 },
         visible: {
           opacity: 1,
           y: 0,
-
-          transition: {
-            duration: 0.58,
-            ease,
-          },
+          transition: { duration: reduceMotion ? 0 : 0.5, ease },
         },
       }}
-      className="
-        group
-        relative
-        min-w-0
-      "
+      className={`${styles.step} relative min-w-0`}
     >
-      {/* NUMBER + LINE */}
-
-      <div
-        className="
-          flex
-          items-center
-          gap-6
-        "
-      >
-        <motion.span
-          variants={{
-            hidden: reduceMotion
-              ? {}
-              : {
-                  opacity: 0,
-                  y: 8,
-                },
-
-            visible: {
-              opacity: 1,
-              y: 0,
-
-              transition: {
-                duration: 0.5,
-                ease,
-              },
-            },
-          }}
-          className="
-            shrink-0
-
-            text-[52px]
-            font-medium
-            leading-none
-            tracking-[-0.06em]
-
-            text-[#CDD1D4]
-
-            transition-colors
-            duration-300
-
-            group-hover:text-[#FF5A1F]
-
-            md:text-[58px]
-            xl:text-[60px]
-            2xl:text-[66px]
-          "
+      <div className="flex items-center gap-6" aria-hidden="true">
+        <span
+          className={`${styles.number} shrink-0 text-[52px] font-medium leading-none tracking-[-0.06em] text-[#CDD1D4] tabular-nums md:text-[58px] xl:text-[60px] 2xl:text-[66px]`}
         >
           {step.number}
-        </motion.span>
+        </span>
 
-        {/* DRAWING LINE */}
-
-        <div
-          className="
-            relative
-            h-px
-            flex-1
-            overflow-hidden
-
-            bg-[#071017]/10
-          "
-        >
+        <div className="relative h-px flex-1 overflow-hidden bg-[#071017]/10">
           <motion.span
             variants={{
-              hidden: reduceMotion
-                ? {}
-                : {
-                    scaleX: 0,
-                  },
-
+              hidden: reduceMotion ? {} : { scaleX: 0 },
               visible: {
                 scaleX: 1,
-
-                transition: {
-                  duration: 0.7,
-                  delay: 0.08,
-                  ease,
-                },
+                transition: { duration: reduceMotion ? 0 : 0.6, delay: reduceMotion ? 0 : 0.08, ease },
               },
             }}
-            style={{
-              transformOrigin: "left",
-            }}
-            className="
-              absolute
-              inset-0
-
-              bg-[#071017]/16
-
-              transition-colors
-              duration-300
-
-              group-hover:bg-[#FF5A1F]/55
-            "
+            style={{ transformOrigin: "left" }}
+            className="absolute inset-0 bg-[#071017]/16"
           />
+          <span className={styles.lineAccent} />
         </div>
       </div>
 
-      {/* TITLE */}
-
-      <motion.h3
-        variants={{
-          hidden: reduceMotion
-            ? {}
-            : {
-                opacity: 0,
-                y: 8,
-              },
-
-          visible: {
-            opacity: 1,
-            y: 0,
-
-            transition: {
-              duration: 0.5,
-              delay: 0.08,
-              ease,
-            },
-          },
-        }}
-        className="
-          mt-8
-
-          text-[22px]
-          font-semibold
-          leading-none
-          tracking-[-0.04em]
-
-          text-[#071017]
-
-          md:text-[24px]
-        "
-      >
+      <h3 className="card-title mt-6 text-[#071017]">
         {step.title}
-      </motion.h3>
-
-      {/* KICKER */}
-
-      <motion.p
-        variants={{
-          hidden: reduceMotion
-            ? {}
-            : {
-                opacity: 0,
-                y: 6,
-              },
-
-          visible: {
-            opacity: 1,
-            y: 0,
-
-            transition: {
-              duration: 0.45,
-              delay: 0.12,
-              ease,
-            },
-          },
-        }}
-        className="
-          mt-2.5
-
-          text-[13px]
-          font-medium
-          leading-5
-
-          text-[#65727C]
-
-          md:text-[14px]
-        "
-      >
+      </h3>
+      <p className="small-copy mt-3 font-medium text-[#65727C]">
         {step.kicker}
-      </motion.p>
-
-      {/* DESCRIPTION */}
-
-      <motion.p
-        variants={{
-          hidden: reduceMotion
-            ? {}
-            : {
-                opacity: 0,
-                y: 6,
-              },
-
-          visible: {
-            opacity: 1,
-            y: 0,
-
-            transition: {
-              duration: 0.45,
-              delay: 0.16,
-              ease,
-            },
-          },
-        }}
-        className="
-          mt-4
-          max-w-[310px]
-
-          text-[14px]
-          leading-[1.65]
-
-          text-[#5F6C76]
-
-          md:text-[15px]
-        "
-      >
+      </p>
+      <p className="body-copy mt-4 max-w-[310px] text-[#5F6C76]">
         {step.description}
-      </motion.p>
-    </motion.article>
+      </p>
+    </motion.li>
   );
 }
 
@@ -666,7 +354,7 @@ function ProcessTransition() {
 
           rounded-[50%]
 
-          bg-[#040B10]
+          bg-[#03070b]
 
           md:top-[-214px]
           md:h-[305px]
@@ -696,8 +384,8 @@ function ProcessTransition() {
           background: `
             radial-gradient(
               ellipse at center,
-              rgba(7,16,23,0.14) 0%,
-              rgba(7,16,23,0.05) 45%,
+              rgba(3,7,11,0.10) 0%,
+              rgba(3,7,11,0.04) 45%,
               transparent 72%
             )
           `,

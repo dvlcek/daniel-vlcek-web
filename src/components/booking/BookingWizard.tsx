@@ -1,5 +1,7 @@
 "use client";
 
+import { trackContactEvent } from "@/lib/contact-analytics";
+
 import {
   FormEvent,
   useCallback,
@@ -3047,6 +3049,7 @@ export function BookingWizard() {
         setView(
           "success",
         );
+        trackContactEvent("booking_confirmed");
       } catch (error) {
         setSubmitStatus(
           "error",
@@ -3247,6 +3250,7 @@ export function BookingWizard() {
               onSlotSelect={(
                 slot,
               ) => {
+                trackContactEvent("booking_time_selected");
                 setSelectedSlot(
                   slot,
                 );
@@ -3464,6 +3468,11 @@ export function BookingWizard() {
                     />
                   </label>
                 </div>
+
+                <p className="mb-5 text-[12px] leading-6 text-white/60">
+                  Your details are used to arrange and manage this call. Read the{" "}
+                  <a href="/privacy" className="rounded-sm underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#FF8054]">privacy notice</a>.
+                </p>
 
                 {/* NAME + EMAIL */}
 

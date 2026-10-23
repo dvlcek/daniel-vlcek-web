@@ -95,8 +95,7 @@ export function Header() {
                     group
                     relative
                     py-2
-                    text-[13px]
-                    font-medium
+                    nav-text
                     transition-colors
                     duration-200
                     ${
@@ -134,22 +133,19 @@ export function Header() {
 
           {/* CTA */}
           <Link
-            href="/contact"
-            className="
+            href="/contact" data-contact-source="header"
+            className="button-secondary
               group
               flex
-              h-10
+              min-h-11
               items-center
               gap-4
               rounded-full
               border
               border-white/30
               px-5
-              text-[13px]
-              font-medium
+              button-text
               text-white
-              transition-all
-              duration-200
               hover:border-white/50
               hover:bg-white/[0.04]
             "
@@ -158,12 +154,7 @@ export function Header() {
 
             <span
               aria-hidden="true"
-              className="
-                text-[var(--accent)]
-                transition-transform
-                duration-200
-                group-hover:translate-x-1
-              "
+              className="button-arrow text-[var(--accent)]"
             >
               →
             </span>

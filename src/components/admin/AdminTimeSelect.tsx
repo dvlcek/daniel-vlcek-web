@@ -753,7 +753,7 @@ export function AdminTimeSelect({
           border
           bg-[#162026]
           shadow-[0_4px_16px_rgba(0,0,0,0.10)]
-          transition-all
+          transition-colors
 
           ${
             open
@@ -763,8 +763,8 @@ export function AdminTimeSelect({
 
           ${
             compact
-              ? "h-[36px]"
-              : "h-[42px]"
+              ? "h-[40px]"
+              : "h-[44px]"
           }
 
           ${
@@ -775,6 +775,7 @@ export function AdminTimeSelect({
         `}
       >
         <div
+          data-time-icon
           className="
             pointer-events-none
             absolute
@@ -809,6 +810,7 @@ export function AdminTimeSelect({
         <input
           ref={inputRef}
           type="text"
+          aria-label={name === "start" ? "Start time" : name === "end" ? "End time" : "Time"}
           inputMode="numeric"
           autoComplete="off"
           spellCheck={false}
@@ -879,8 +881,8 @@ export function AdminTimeSelect({
 
             ${
               compact
-                ? "pl-8 pr-8 text-[11px]"
-                : "pl-9 pr-9 text-[12px]"
+                ? "pl-7 pr-7 text-[13px]"
+                : "pl-9 pr-9 text-[14px]"
             }
           `}
         />
@@ -913,8 +915,8 @@ export function AdminTimeSelect({
             items-center
             justify-center
             rounded-[7px]
-            text-white/35
-            transition-all
+            text-white/60
+            transition-colors
 
             hover:bg-white/[0.06]
             hover:text-white/70
@@ -970,7 +972,7 @@ export function AdminTimeSelect({
             <div>
               <div
                 className="
-                  text-[11px]
+                  text-[13px]
                   font-semibold
                   text-white/65
                 "
@@ -981,8 +983,8 @@ export function AdminTimeSelect({
               <div
                 className="
                   mt-0.5
-                  text-[9px]
-                  text-white/30
+                  text-[12px]
+                  text-white/55
                 "
               >
                 Type to search
@@ -997,8 +999,8 @@ export function AdminTimeSelect({
                   bg-white/[0.05]
                   px-2
                   py-1
-                  text-[9px]
-                  text-white/35
+                  text-[12px]
+                  text-white/60
                 "
               >
                 {
@@ -1044,7 +1046,7 @@ export function AdminTimeSelect({
                   px-3
                   py-2.5
                   text-left
-                  transition-all
+                  transition-colors
 
                   ${
                     highlightedIndex ===
@@ -1057,7 +1059,7 @@ export function AdminTimeSelect({
                 <div>
                   <div
                     className="
-                      text-[12px]
+                      text-[14px]
                       font-semibold
                       text-[#FF8054]
                     "
@@ -1070,8 +1072,8 @@ export function AdminTimeSelect({
                   <div
                     className="
                       mt-0.5
-                      text-[9px]
-                      text-white/30
+                      text-[12px]
+                      text-white/55
                     "
                   >
                     Use custom time
@@ -1136,7 +1138,7 @@ export function AdminTimeSelect({
                       px-3
                       py-2
                       text-left
-                      transition-all
+                      transition-colors
 
                       ${
                         highlighted
@@ -1153,7 +1155,7 @@ export function AdminTimeSelect({
                   >
                     <span
                       className="
-                        text-[12px]
+                        text-[14px]
                         font-medium
                         tabular-nums
                       "
@@ -1189,9 +1191,9 @@ export function AdminTimeSelect({
                 >
                   <div
                     className="
-                      text-[11px]
+                      text-[13px]
                       font-medium
-                      text-white/45
+                      text-white/70
                     "
                   >
                     No matching time
@@ -1200,9 +1202,9 @@ export function AdminTimeSelect({
                   <div
                     className="
                       mt-1
-                      text-[9px]
+                      text-[12px]
                       leading-[1.5]
-                      text-white/25
+                      text-white/55
                     "
                   >
                     Try 17, 17:30 or 1730.
@@ -1217,8 +1219,8 @@ export function AdminTimeSelect({
               border-white/[0.08]
               px-3
               py-2
-              text-[9px]
-              text-white/25
+              text-[12px]
+              text-white/55
             "
           >
             ↑ ↓ navigate · Enter select

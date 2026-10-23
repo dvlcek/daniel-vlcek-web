@@ -56,9 +56,7 @@ export function WhatIBuild() {
       className="relative overflow-hidden bg-[#F6F3EE] text-[#071017]"
     >
       <Container
-        className="relative pt-20 pb-16 md:pt-24 md:pb-20 xl:pt-28 xl:pb-24">
-        {/* top separator */}
-        <div className="absolute inset-x-0 top-0 h-px bg-[#071017]/8" />
+        className="relative section-space">
 
         {/* ====================================================
             HEADER
@@ -77,20 +75,10 @@ export function WhatIBuild() {
             duration: 0.65,
             ease,
           }}
-          className="mx-auto max-w-[950px] text-center"
+          className="section-intro mx-auto text-center"
         >
           <h2
-            className="
-              text-[38px]
-              text-balance
-              font-normal
-              leading-[1.06]
-              tracking-[-0.04em]
-
-              sm:text-[48px]
-              md:text-[56px]
-              xl:text-[62px]
-            "
+            className="section-heading section-heading--center"
           >
             Turn visitors into customers.
             <br />
@@ -100,16 +88,7 @@ export function WhatIBuild() {
           </h2>
 
           <p
-            className="
-              mx-auto
-              mt-6
-              max-w-[720px]
-              text-[15px]
-              leading-7
-              text-[#52616D]
-
-              md:text-[17px]
-            "
+            className="section-copy intro-gap mx-auto text-[#52616D]"
           >
             Websites that bring enquiries. Software that fits your workflow.
             Automation that takes the repetitive work off your team&apos;s plate.
@@ -135,7 +114,7 @@ export function WhatIBuild() {
             },
           }}
           className="
-            mt-16
+            content-gap
             grid
             border-y
             border-[#071017]/10
@@ -175,10 +154,10 @@ export function WhatIBuild() {
 
                   sm:px-5
 
-                  lg:px-7
+                  lg:px-6
                   lg:py-10
 
-                  xl:px-9
+                  xl:px-8
                 `,
                 index > 0
                   ? `
@@ -241,38 +220,22 @@ export function WhatIBuild() {
                   TEXT
               ============================================== */}
               <div className="mt-7 flex-1">
-                <p className="text-[11px] font-medium tracking-[0.18em] text-[#52616D]">
+                <p className="caption font-medium tracking-[0.18em] text-[#52616D]">
                   {service.number}
                 </p>
 
                 <h3
-                  className="
-                    mt-4
-                    text-[23px]
-                    text-balance
-                    font-medium
-                    leading-[1.2]
-                    tracking-[-0.04em]
-                    text-[#071017]
-
-                    xl:text-[26px]
-                  "
+                  className="card-title mt-4 text-[#071017]"
                 >
                   {service.title}
                 </h3>
 
-                <p className="mt-3 text-[15px] font-medium leading-6 text-[#263640] lg:min-h-12 xl:min-h-6">
+                <p className="body-copy mt-3 font-medium text-[#263640] lg:min-h-14 xl:min-h-7">
                   {service.tagline}
                 </p>
 
                 <p
-                  className="
-                    mt-5
-                    max-w-[390px]
-                    text-[14px]
-                    leading-[1.7]
-                    text-[#52616D]
-                  "
+                  className="body-copy mt-4 max-w-[390px] text-[#52616D]"
                 >
                   {service.description}
                 </p>
@@ -282,11 +245,11 @@ export function WhatIBuild() {
                   EXAMPLES
               ============================================== */}
               <div className="mt-7 border-t border-[#071017]/10 pt-5">
-                <p className="text-[11px] font-medium uppercase tracking-[0.16em] text-[#52616D]">
+                <p className="eyebrow text-[#52616D]">
                   What I build
                 </p>
 
-                <ul className="mt-3 space-y-2 text-[13px] leading-[1.6] text-[#52616D]">
+                <ul className="mt-3 space-y-2 small-copy text-[#52616D]">
                   {service.examples.map((example) => (
                     <li key={example} className="flex items-start gap-2.5">
                       <span aria-hidden="true" className="mt-[8px] h-1 w-1 shrink-0 rounded-full bg-[#C2410C]" />
@@ -302,14 +265,13 @@ export function WhatIBuild() {
               <div className="mt-auto pt-7">
                 <a
                   href={service.href}
-                  className="
+                  className="button-secondary
                     inline-flex
                     min-h-11
                     items-center
                     rounded-sm
                     gap-4
-                    text-[14px]
-                    font-medium
+                    button-text
                     text-[#071017]
                     focus-visible:outline-2
                     focus-visible:outline-offset-4
@@ -332,15 +294,7 @@ export function WhatIBuild() {
 
                   <span
                     aria-hidden="true"
-                    className="
-                      text-[18px]
-                      leading-none
-                      transition-transform
-                      duration-200
-
-                      [@media(hover:hover)_and_(pointer:fine)]:group-hover:translate-x-1
-                      motion-reduce:transform-none
-                    "
+                    className="button-arrow text-[18px] leading-none"
                   >
                     →
                   </span>
@@ -367,14 +321,14 @@ export function WhatIBuild() {
             md:justify-between
           "
         >
-          <p className="max-w-[800px] text-[14px] leading-6 text-[#263640]">
+          <p className="max-w-[800px] body-copy text-[#263640]">
             Start with what your business needs most. Build one focused solution,
             or connect the whole workflow.
           </p>
 
           <Link
-            href="/contact"
-            className="
+            href="/contact" data-contact-source="services"
+            className="button-secondary
               group
               inline-flex
               min-h-11
@@ -383,8 +337,7 @@ export function WhatIBuild() {
               shrink-0
               items-center
               gap-4
-              text-[14px]
-              font-medium
+              button-text
               text-[#071017]
               focus-visible:outline-2
               focus-visible:outline-offset-4
@@ -397,13 +350,7 @@ export function WhatIBuild() {
 
             <span
               aria-hidden="true"
-              className="
-                text-[18px]
-                transition-transform
-                duration-200
-                [@media(hover:hover)_and_(pointer:fine)]:group-hover:translate-x-1
-                motion-reduce:transform-none
-              "
+              className="button-arrow text-[18px]"
             >
               →
             </span>

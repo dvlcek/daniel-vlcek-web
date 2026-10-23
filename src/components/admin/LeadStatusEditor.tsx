@@ -61,7 +61,8 @@ export function LeadStatusEditor({
       action="/api/admin/leads/status"
       className="
         flex
-        min-w-[210px]
+        flex-wrap
+        min-w-0
         items-center
         gap-2
       "
@@ -74,11 +75,13 @@ export function LeadStatusEditor({
 
       <div
         className="
-          min-w-[140px]
+          min-w-0
           flex-1
+          basis-[180px]
         "
       >
         <AdminSelect
+          ariaLabel="Lead status"
           name="status"
           options={options}
           defaultValue={status}
@@ -89,16 +92,16 @@ export function LeadStatusEditor({
       <button
         type="submit"
         className="
-          h-[36px]
+          h-[40px]
           rounded-[9px]
           border
           border-white/[0.11]
           bg-[#162026]
           px-3
-          text-[10px]
+          text-[12px]
           font-semibold
-          text-white/45
-          transition-all
+          text-white/70
+          transition-colors
 
           hover:border-[#FF6B36]/25
           hover:bg-[#1A252B]

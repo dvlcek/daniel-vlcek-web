@@ -1,3 +1,4 @@
+import { siteConfig } from "@/lib/site";
 import { logSecurityFailure } from "@/lib/security/log";
 import { SecurityError, readJson, requireSameOrigin, securityResponse } from "@/lib/security/http";
 import { limitIdentity, limitRequest } from "@/lib/security/rate-limit";
@@ -84,8 +85,7 @@ export async function POST(
     const contactFromEmail =
       process.env.CONTACT_FROM_EMAIL;
 
-    const calLink =
-      process.env.NEXT_PUBLIC_CAL_LINK ?? "";
+    const bookingUrl = new URL("/contact", siteConfig.url).toString();
 
     if (
       !resendApiKey ||
@@ -244,8 +244,8 @@ export async function POST(
     const normalizedWebsite =
       normalizeWebsite(website);
 
-    const normalizedCalLink =
-      normalizeWebsite(calLink);
+    const normalizedBookingUrl =
+      bookingUrl;
 
     const firstName =
       name.split(/\s+/)[0] || name;
@@ -284,10 +284,10 @@ export async function POST(
     const safeSource =
       escapeHtml(source);
 
-    const safeCalLink =
-      normalizedCalLink
+    const safeBookingUrl =
+      normalizedBookingUrl
         ? escapeHtml(
-            normalizedCalLink,
+            normalizedBookingUrl,
           )
         : "";
 
@@ -826,7 +826,7 @@ danielvlko.com
             </div>
 
             ${
-              normalizedCalLink
+              normalizedBookingUrl
                 ? `
                   <!-- CTA SECTION -->
 
@@ -867,7 +867,7 @@ danielvlko.com
                     </p>
 
                     <a
-                      href="${safeCalLink}"
+                      href="${safeBookingUrl}"
                       style="
                         display:inline-block;
                         padding:13px 21px;
@@ -970,14 +970,14 @@ YOUR INQUIRY
 ${message}
 
 ${
-  normalizedCalLink
+  normalizedBookingUrl
     ? `
 WANT TO MOVE THIS FORWARD FASTER?
 
 If this is already a priority, book a free discovery call. We'll look at your current situation, identify the biggest bottlenecks and see where software, automation or AI can create the most leverage.
 
 Book a free discovery call:
-${normalizedCalLink}
+${normalizedBookingUrl}
 `
     : ""
 }

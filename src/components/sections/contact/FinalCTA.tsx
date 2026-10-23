@@ -14,6 +14,7 @@ export function FinalCTA() {
   return (
     <section
       id="contact"
+      aria-labelledby="closing-heading"
       className="
         relative
         isolate
@@ -22,18 +23,10 @@ export function FinalCTA() {
       "
     >
       <FinalCTATransition />
-      <ClosingBackground />
+      <ClosingBackground reduceMotion={Boolean(reduceMotion)} />
 
       <Container
-        className="
-          relative
-          z-10
-
-          py-16
-
-          md:py-[72px]
-          xl:py-20
-        "
+        className="relative z-10 section-space"
       >
         <div
           className="
@@ -101,21 +94,16 @@ export function FinalCTA() {
               />
 
               <span
-                className="
-                  text-[8px]
-                  font-semibold
-                  uppercase
-                  tracking-[0.36em]
-                  text-white/45
-                "
+                className="eyebrow text-white/65"
               >
-                A brighter way forward
+                Your next step
               </span>
             </motion.div>
 
             {/* HEADLINE */}
 
             <motion.h2
+              id="closing-heading"
               initial={
                 reduceMotion
                   ? false
@@ -137,24 +125,13 @@ export function FinalCTA() {
                 delay: 0.05,
                 ease,
               }}
-              className="
-                mt-7
-
-                text-[40px]
-                font-medium
-                leading-[0.98]
-                tracking-[-0.055em]
-
-                sm:text-[48px]
-                md:text-[54px]
-                xl:text-[58px]
-              "
+              className="section-heading intro-gap"
             >
-              Same business.
+              Let&apos;s make your
               <br />
-              A more efficient{" "}
+              business work{" "}
               <span className="text-[#FF5A1F]">
-                future.
+                better.
               </span>
             </motion.h2>
 
@@ -181,20 +158,10 @@ export function FinalCTA() {
                 delay: 0.13,
                 ease,
               }}
-              className="
-                mt-5
-                max-w-[560px]
-
-                text-[14px]
-                leading-6
-                text-white/55
-
-                md:text-[15px]
-                md:leading-7
-              "
+              className="section-copy intro-gap max-w-[560px] text-white/70"
             >
-              Build the systems your business needs to move faster, operate
-              clearer and scale with less friction.
+              Tell me what you want to improve, automate or build. We&apos;ll
+              discuss the priorities and the most useful next step.
             </motion.p>
 
             {/* CTA */}
@@ -221,7 +188,7 @@ export function FinalCTA() {
                 ease,
               }}
               className="
-                mt-7
+                action-gap
 
                 flex
                 flex-col
@@ -234,114 +201,56 @@ export function FinalCTA() {
               {/* PRIMARY */}
 
               <a
-                href="mailto:hello@danielvlko.com"
+                href="/contact" data-contact-source="final-cta"
                 style={{
                   color: "#FFFFFF",
                 }}
-                className="
+                className="button-primary
                   group
 
                   inline-flex
-                  h-[48px]
+                  button-size
 
                   items-center
                   justify-center
-                  gap-6
 
                   rounded-full
 
                   bg-[#FF5A1F]
 
-                  px-6
 
-                  text-[13px]
-                  font-medium
+                  button-text
 
                   shadow-[0_10px_28px_rgba(255,90,31,0.18)]
 
-                  transition-all
-                  duration-300
 
-                  hover:-translate-y-0.5
+                  focus-visible:outline-2
+                  focus-visible:outline-offset-4
+                  focus-visible:outline-[#FF8054]
                   hover:bg-[#FF6932]
                   hover:shadow-[0_14px_34px_rgba(255,90,31,0.22)]
                 "
               >
                 <span style={{ color: "#FFFFFF" }}>
-                  Let&apos;s Talk
+                  Discuss your project
                 </span>
 
                 <ArrowRight
-                  size={15}
+                  size={17}
+                  aria-hidden="true"
                   strokeWidth={1.7}
                   style={{
                     color: "#FFFFFF",
                   }}
-                  className="
-                    transition-transform
-                    duration-300
-
-                    group-hover:translate-x-1
-                  "
+                  className="button-arrow"
                 />
               </a>
 
-              {/* SECONDARY */}
-
               <a
-                href="#work"
-                style={{
-                  color: "#FFFFFF",
-                }}
-                className="
-                  group
-
-                  inline-flex
-                  h-[48px]
-
-                  items-center
-                  justify-center
-                  gap-5
-
-                  rounded-full
-
-                  border
-                  border-white/[0.24]
-
-                  bg-black/[0.08]
-
-                  px-6
-
-                  text-[13px]
-                  font-medium
-
-                  backdrop-blur-sm
-
-                  transition-all
-                  duration-300
-
-                  hover:-translate-y-0.5
-                  hover:border-white/[0.42]
-                  hover:bg-white/[0.035]
-                "
+                href="mailto:hello@danielvlko.com"
+                className="inline-flex min-h-11 items-center justify-center px-3 text-[14px] text-white/70 underline decoration-white/25 underline-offset-4 transition-colors duration-200 hover:text-white hover:decoration-white/50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#FF8054] sm:justify-start"
               >
-                <span style={{ color: "#FFFFFF" }}>
-                  View My Work
-                </span>
-
-                <ArrowRight
-                  size={14}
-                  strokeWidth={1.6}
-                  style={{
-                    color: "#FFFFFF",
-                  }}
-                  className="
-                    transition-transform
-                    duration-300
-
-                    group-hover:translate-x-1
-                  "
-                />
+                hello@danielvlko.com
               </a>
             </motion.div>
           </div>
@@ -413,7 +322,7 @@ function FinalCTATransition() {
    BACKGROUND
 ============================================================ */
 
-function ClosingBackground() {
+function ClosingBackground({ reduceMotion }: { reduceMotion: boolean }) {
   return (
     <div
       aria-hidden="true"
@@ -432,9 +341,7 @@ function ClosingBackground() {
       {/* EARTH */}
 
       <motion.div
-        initial={{
-          scale: 1.02,
-        }}
+        initial={reduceMotion ? false : { scale: 1.02 }}
         whileInView={{
           scale: 1,
         }}
@@ -442,7 +349,7 @@ function ClosingBackground() {
           once: true,
         }}
         transition={{
-          duration: 1.6,
+          duration: reduceMotion ? 0 : 1.2,
           ease,
         }}
         className="
@@ -523,7 +430,7 @@ function ClosingBackground() {
             linear-gradient(
               to bottom,
               transparent,
-              rgba(2,7,11,0.44)
+              #02070B
             )
           `,
         }}
