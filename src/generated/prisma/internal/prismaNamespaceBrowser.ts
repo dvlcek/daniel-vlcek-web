@@ -6,7 +6,7 @@
 /*
  * WARNING: This is an internal file that is subject to change!
  *
- * 🛑 Under no circumstances should you import this file directly! 🛑
+ * ðŸ›‘ Under no circumstances should you import this file directly! ðŸ›‘
  *
  * All exports from this file are wrapped under a `Prisma` namespace object in the browser.ts file.
  * While this enables partial backward compatibility, it is not part of the stable public API.
@@ -56,7 +56,8 @@ export const ModelName = {
   AvailabilityRule: 'AvailabilityRule',
   AvailabilityOverride: 'AvailabilityOverride',
   BookingAttempt: 'BookingAttempt',
-  SecurityRateLimit: 'SecurityRateLimit'
+  SecurityRateLimit: 'SecurityRateLimit',
+  AdminSession: 'AdminSession'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -162,6 +163,17 @@ export const SecurityRateLimitScalarFieldEnum = {
 } as const
 
 export type SecurityRateLimitScalarFieldEnum = (typeof SecurityRateLimitScalarFieldEnum)[keyof typeof SecurityRateLimitScalarFieldEnum]
+
+
+export const AdminSessionScalarFieldEnum = {
+  tokenHash: 'tokenHash',
+  credentialVersion: 'credentialVersion',
+  expiresAt: 'expiresAt',
+  revokedAt: 'revokedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type AdminSessionScalarFieldEnum = (typeof AdminSessionScalarFieldEnum)[keyof typeof AdminSessionScalarFieldEnum]
 
 
 export const SortOrder = {

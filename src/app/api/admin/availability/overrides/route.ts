@@ -1,3 +1,6 @@
+import { readAdminForm } from "@/lib/admin/request";
+import { SecurityError, securityResponse } from "@/lib/security/http";
+import { logSecurityFailure } from "@/lib/security/log";
 import {
   NextRequest,
   NextResponse,
@@ -14,10 +17,6 @@ import {
 import {
   AvailabilityOverrideType,
 } from "@/generated/prisma/enums";
-
-import {
-  isAdminAuthenticated,
-} from "@/lib/admin/auth";
 
 import {
   getDb,
@@ -112,22 +111,9 @@ function parseOverrideType(
 export async function POST(
   request: NextRequest,
 ) {
-  const authenticated =
-    await isAdminAuthenticated();
-
-  if (!authenticated) {
-    return NextResponse.redirect(
-      new URL(
-        "/admin/login",
-        request.url,
-      ),
-      303,
-    );
-  }
-
   try {
     const formData =
-      await request.formData();
+      await readAdminForm(request, "override");
 
     const dateKey =
       formData
@@ -253,10 +239,8 @@ export async function POST(
       request,
     );
   } catch (error) {
-    console.error(
-      "Admin availability override creation failed:",
-      error,
-    );
+    if (error instanceof SecurityError) return securityResponse(error, "admin_mutation");
+    logSecurityFailure("Admin availability override creation failed:", error);
 
     return redirectToAvailability(
       request,

@@ -1,3 +1,5 @@
+import { requireSameOrigin, readBody, readJson, SecurityError, securityResponse } from "@/lib/security/http";
+import { revokeAdminSession } from "@/lib/admin/auth";
 import {
   NextRequest,
   NextResponse,
@@ -24,6 +26,17 @@ export const dynamic =
 export async function POST(
   request: NextRequest,
 ) {
+  try {
+    requireSameOrigin(request);
+    if (request.body) {
+      if (request.headers.get("content-type")?.split(";")[0].trim() === "application/json") {
+        if (Object.keys(await readJson(request, 4096)).length) throw new SecurityError(400, "Invalid request.");
+      } else { await readBody(request, 4096); }
+    }
+    const token = request.cookies.get(ADMIN_COOKIE_NAME)?.value;
+    if (token) await revokeAdminSession(token);
+  } catch (error) { return securityResponse(error, "admin_logout"); }
+
   const response =
     NextResponse.redirect(
       new URL(

@@ -217,3 +217,13 @@ model SecurityRateLimit {
   expiresAt DateTime @db.Timestamptz(3)
   @@index([expiresAt])
 }
+
+// Shared durable privileged sessions. Raw cookie tokens are never persisted.
+model AdminSession {
+  tokenHash String @id
+  credentialVersion String
+  expiresAt DateTime @db.Timestamptz(3)
+  revokedAt DateTime? @db.Timestamptz(3)
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  @@index([expiresAt])
+}

@@ -25,6 +25,7 @@ type Row = Record<string, unknown> & { id: string };
 type Args = { where?: { id?: string; status?: string }; data?: Record<string, unknown> };
 function fixture() {
   const leads = new Map<string, Row>(), attempts = new Map<string, Row>(), bookings = new Map<string, Row>();
+  const sessions = new Map<string, Record<string, unknown>>();
   const counters = new Map<string, { hits: number; expiresAt: number }>();
   let now = Date.now();
   function delegate(rows: Map<string, Row>) {
@@ -46,6 +47,10 @@ function fixture() {
   }
   let tail = Promise.resolve();
   const db = {
+    adminSession: {
+      async create({ data }: { data: Record<string, unknown> }) { sessions.set(String(data.tokenHash), data); return data; },
+      async findUnique({ where }: { where: { tokenHash: string } }) { return sessions.get(where.tokenHash) ?? null; },
+    },
     lead: delegate(leads), bookingAttempt: delegate(attempts),
     booking: {
       ...delegate(bookings),
@@ -220,7 +225,7 @@ test("login is throttled even when spoofed headers change; existing admin sessio
     assert.equal(response.status, i < 5 ? 303 : 429);
     if (i === 5) assert(response.headers.get("retry-after"));
   }
-  const token = createAdminSessionToken(); assert(verifyAdminSessionToken(token)); assert(!verifyAdminSessionToken(token + "x"));
+  const token = await createAdminSessionToken(); assert(await verifyAdminSessionToken(token)); assert(!await verifyAdminSessionToken(token + "x"));
 });
 
 test("valid admin login preserves redirect and session cookie contract", async () => {

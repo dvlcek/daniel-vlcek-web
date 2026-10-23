@@ -1,3 +1,4 @@
+import { logSecurityFailure } from "@/lib/security/log";
 import {
   timingSafeEqual,
 } from "node:crypto";
@@ -147,10 +148,7 @@ export async function GET(
       result,
     });
   } catch (error) {
-    console.error(
-      "Booking reminder worker failed:",
-      error,
-    );
+    logSecurityFailure("Booking reminder worker failed:", error);
 
     return noStoreJson(
       {

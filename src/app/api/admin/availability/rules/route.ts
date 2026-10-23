@@ -1,3 +1,6 @@
+import { readAdminForm } from "@/lib/admin/request";
+import { SecurityError, securityResponse } from "@/lib/security/http";
+import { logSecurityFailure } from "@/lib/security/log";
 import {
   NextRequest,
   NextResponse,
@@ -6,10 +9,6 @@ import {
 import {
   revalidatePath,
 } from "next/cache";
-
-import {
-  isAdminAuthenticated,
-} from "@/lib/admin/auth";
 
 import {
   getDb,
@@ -111,22 +110,9 @@ function timeToMinute(
 export async function POST(
   request: NextRequest,
 ) {
-  const authenticated =
-    await isAdminAuthenticated();
-
-  if (!authenticated) {
-    return NextResponse.redirect(
-      new URL(
-        "/admin/login",
-        request.url,
-      ),
-      303,
-    );
-  }
-
   try {
     const formData =
-      await request.formData();
+      await readAdminForm(request, "rule");
 
     const action =
       formData
@@ -265,10 +251,8 @@ export async function POST(
       request,
     );
   } catch (error) {
-    console.error(
-      "Admin availability rule update failed:",
-      error,
-    );
+    if (error instanceof SecurityError) return securityResponse(error, "admin_mutation");
+    logSecurityFailure("Admin availability rule update failed:", error);
 
     return redirectToAdmin(
       request,

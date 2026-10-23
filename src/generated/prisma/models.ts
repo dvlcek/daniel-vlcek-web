@@ -6,7 +6,7 @@
 /*
  * This is a barrel export file for all models and their related types.
  *
- * 🟢 You can import this file directly.
+ * ðŸŸ¢ You can import this file directly.
  */
 export type * from './models/Lead'
 export type * from './models/Booking'
@@ -14,4 +14,5 @@ export type * from './models/AvailabilityRule'
 export type * from './models/AvailabilityOverride'
 export type * from './models/BookingAttempt'
 export type * from './models/SecurityRateLimit'
+export type * from './models/AdminSession'
 export type * from './commonInputTypes'

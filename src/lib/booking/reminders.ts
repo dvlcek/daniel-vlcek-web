@@ -1,3 +1,4 @@
+import { logSecurityFailure, safeErrorCode } from "@/lib/security/log";
 import {
   DateTime,
 } from "luxon";
@@ -93,9 +94,7 @@ export type BookingReminderRunResult = {
 function getErrorMessage(
   error: unknown,
 ): string {
-  return error instanceof Error
-    ? error.message
-    : "Unknown reminder error.";
+  return `Reminder operation failed (${safeErrorCode(error)}).`;
 }
 
 /* =========================================================
@@ -277,15 +276,7 @@ export async function processBookingReminders(
             manageToken,
         });
     } catch (error) {
-      console.error(
-        "Could not create booking management URL for reminder.",
-        {
-          bookingId:
-            booking.id,
-
-          error,
-        },
-      );
+      logSecurityFailure("Could not create booking management URL for reminder.", error);
 
       result.errors.push({
         bookingId:
@@ -425,15 +416,7 @@ export async function processBookingReminders(
                 1;
             }
           } catch (error) {
-            console.error(
-              "24h booking reminder failed.",
-              {
-                bookingId:
-                  booking.id,
-
-                error,
-              },
-            );
+            logSecurityFailure("24h booking reminder failed.", error);
 
             result.errors.push({
               bookingId:
@@ -558,15 +541,7 @@ export async function processBookingReminders(
                 1;
             }
           } catch (error) {
-            console.error(
-              "30m booking reminder failed.",
-              {
-                bookingId:
-                  booking.id,
-
-                error,
-              },
-            );
+            logSecurityFailure("30m booking reminder failed.", error);
 
             result.errors.push({
               bookingId:

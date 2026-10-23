@@ -44,7 +44,7 @@ beforeEach(() => {
   } as unknown as PrismaClient;
   mock.method(console, "error", () => {});
   mock.method(globalThis, "fetch", async (_url: unknown, options?: RequestInit) => {
-    if (failEmail) throw new Error("Synthetic delivery outage");
+    if (failEmail) throw Object.assign(new Error("cookie=synthetic-secret token=synthetic-secret customer@example.test"), { code: "ETIMEDOUT" });
     idempotencyKeys.push(new Headers(options?.headers).get("idempotency-key"));
     sent.push(JSON.parse(String(options?.body)));
     return new Response(JSON.stringify({ id: `fixture-${sent.length}` }), { headers: { "content-type": "application/json" } });
@@ -94,4 +94,17 @@ test("overlapping workers reuse the provider idempotency key and only one databa
   assert.ok(idempotencyKeys[0]);
   assert.equal(idempotencyKeys[0], idempotencyKeys[1]);
   assert.equal(results.reduce((sum, result) => sum + result.reminder30m.sent, 0), 1);
+});
+
+
+test("reminder delivery errors never expose provider payloads in logs or scheduler results", async () => {
+  failEmail = true;
+  const logs: unknown[][] = [];
+  mock.method(console, "error", (...args: unknown[]) => { logs.push(args); });
+  const result = await processBookingReminders(now);
+  assert.equal(result.errors.length, 1);
+  assert.equal(result.errors[0].message, "Reminder operation failed (unavailable)."); // Resend wraps transport failures without their original code.
+  const output = JSON.stringify({ logs, result });
+  assert(!output.includes("synthetic-secret"));
+  assert(!output.includes("customer@example.test"));
 });

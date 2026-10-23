@@ -4,6 +4,7 @@ import { getDb } from "@/lib/db";
 import { SecurityError } from "./http";
 
 export const RATE_POLICIES = {
+  admin: { network: 120, global: 600, seconds: 60 },
   contact: { network: 5, global: 100, seconds: 900 },
   login: { network: 5, global: 30, seconds: 900 },
   intake: { network: 10, global: 200, seconds: 900 },

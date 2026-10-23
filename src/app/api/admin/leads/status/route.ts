@@ -1,3 +1,6 @@
+import { readAdminForm } from "@/lib/admin/request";
+import { SecurityError, securityResponse } from "@/lib/security/http";
+import { logSecurityFailure } from "@/lib/security/log";
 import {
   NextRequest,
   NextResponse,
@@ -10,10 +13,6 @@ import {
 import {
   LeadStatus,
 } from "@/generated/prisma/enums";
-
-import {
-  isAdminAuthenticated,
-} from "@/lib/admin/auth";
 
 import {
   getDb,
@@ -52,22 +51,9 @@ const allowedStatuses =
 export async function POST(
   request: NextRequest,
 ) {
-  const authenticated =
-    await isAdminAuthenticated();
-
-  if (!authenticated) {
-    return NextResponse.redirect(
-      new URL(
-        "/admin/login",
-        request.url,
-      ),
-      303,
-    );
-  }
-
   try {
     const formData =
-      await request.formData();
+      await readAdminForm(request, "lead");
 
     const leadId =
       formData
@@ -140,10 +126,8 @@ export async function POST(
       303,
     );
   } catch (error) {
-    console.error(
-      "Admin lead status update failed:",
-      error,
-    );
+    if (error instanceof SecurityError) return securityResponse(error, "admin_mutation");
+    logSecurityFailure("Admin lead status update failed:", error);
 
     return NextResponse.redirect(
       new URL(

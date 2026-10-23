@@ -53,7 +53,7 @@ export async function POST(
         ?.toString() ??
       "";
 
-    if (typeof formData.get("password") !== "string" || password.length > 256 || !password) {
+    if (formData.getAll("password").length !== 1 || typeof formData.get("password") !== "string" || password.length > 256 || !password) {
       throw new SecurityError(400, "Invalid request.");
     }
     const valid =
@@ -72,7 +72,7 @@ export async function POST(
     }
 
     const token =
-      createAdminSessionToken();
+      await createAdminSessionToken();
 
     const response =
       NextResponse.redirect(
