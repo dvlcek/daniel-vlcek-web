@@ -1,3 +1,5 @@
+import { randomUUID } from "node:crypto";
+import { lockReservations, requireFreeSlot } from "@/lib/booking/recovery";
 import { readAdminForm } from "@/lib/admin/request";
 import { SecurityError, securityResponse } from "@/lib/security/http";
 import { logSecurityFailure } from "@/lib/security/log";
@@ -110,6 +112,8 @@ export async function POST(
 
         select: {
           id: true,
+          status: true, calendarOperationKey: true, calendarOperation: true, scheduleChangedAt: true, startsAt: true, endsAt: true,
+          activeSlotKey: true, externalCalendarEventId: true,
 
           leadId: true,
 
@@ -132,20 +136,29 @@ export async function POST(
       );
     }
 
+    if (booking.calendarOperation || ![BookingStatus.CONFIRMED, BookingStatus.NO_SHOW].includes(booking.status as "CONFIRMED" | "NO_SHOW")
+      || !booking.activeSlotKey || !booking.externalCalendarEventId) {
+      throw new SecurityError(409, "This booking cannot be changed through a status update.");
+    }
     await db.$transaction(
       async (
         tx,
       ) => {
-        await tx.booking.update({
+        await lockReservations(tx);
+        if (status === BookingStatus.CONFIRMED) await requireFreeSlot(tx, booking.startsAt, booking.endsAt, booking.id);
+        const changed = await tx.booking.updateMany({
           where: {
             id:
               booking.id,
+            status: booking.status, calendarOperationKey: booking.calendarOperationKey, calendarOperation: null, scheduleChangedAt: booking.scheduleChangedAt,
           },
 
           data: {
-            status,
+            status, calendarOperationKey: randomUUID(),
           },
         });
+
+        if (!changed.count) throw new SecurityError(409, "This booking has changed. Please refresh.");
 
         /* ===============================================
            NO SHOW

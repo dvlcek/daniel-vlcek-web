@@ -66,3 +66,51 @@ test("management secrets remain in fragments and ICS preserves UTC/DST timing", 
   assert(ics.includes("DTSTART:20261025T080000Z")); assert(ics.includes("DTEND:20261025T083000Z"));
   assert(ics.includes("ATTENDEE;RSVP=FALSE:mailto:client@test.local"));
 });
+
+
+test("stable create identity and conflict recovery verify booking ownership and schedule", async () => {
+  const id = "dv123abc";
+  let inserted: calendar_v3.Params$Resource$Events$Insert | undefined;
+  let wrongOwner = false;
+  mock.method(calendarApi, "calendar", () => ({ events: {
+    insert: async (input: calendar_v3.Params$Resource$Events$Insert) => { inserted = input; throw Object.assign(new Error("conflict"), { code: 409 }); },
+    get: async () => ({ data: { id, start: { dateTime: startsAt.toISOString() }, end: { dateTime: endsAt.toISOString() }, extendedProperties: { private: { bookingId: wrongOwner ? "other-booking" : "fixture" } } } }),
+  } } as unknown as calendar_v3.Calendar));
+  const calendar = new GoogleCalendarProvider();
+  const input = { externalEventId: id, bookingId: "fixture", title: "Synthetic call", startsAt, endsAt, timezone: "Europe/Vienna" };
+  assert.equal((await calendar.createEvent(input)).externalEventId, id);
+  assert.equal(inserted?.requestBody?.id, id); assert.equal(inserted?.requestBody?.extendedProperties?.private?.bookingId, "fixture");
+  assert.equal(inserted?.requestBody?.conferenceData?.createRequest?.requestId, id);
+  wrongOwner = true; await assert.rejects(calendar.createEvent(input));
+});
+
+test("calendar cancellation converges on scoped 404/410; version conflicts are not swallowed", async () => {
+  let code = 404, request: unknown, options: unknown;
+  mock.method(calendarApi, "calendar", () => ({ events: { delete: async (input: unknown, opts: unknown) => { request = input; options = opts; throw Object.assign(new Error("provider-secret"), { code }); } } } as unknown as calendar_v3.Calendar));
+  const calendar = new GoogleCalendarProvider();
+  await calendar.cancelEvent("fixture-event", "v1"); code = 410; await calendar.cancelEvent("fixture-event", "v1");
+  assert.deepEqual(request, { calendarId: "primary", eventId: "fixture-event" }); assert.deepEqual(options, { headers: { "If-Match": "v1" } });
+  code = 412; await assert.rejects(calendar.cancelEvent("fixture-event", "v1"));
+});
+
+test("Google Meet retrieval reads real video endpoints and repairs failed conferences with a version guard", async () => {
+  let data: calendar_v3.Schema$Event = { id: "fixture-event", etag: "v1", conferenceData: { createRequest: { status: { statusCode: "pending" } } } };
+  let repairs = 0, request: calendar_v3.Params$Resource$Events$Patch | undefined, options: unknown;
+  mock.method(calendarApi, "calendar", () => ({ events: {
+    get: async () => ({ data }),
+    patch: async (input: calendar_v3.Params$Resource$Events$Patch, opts: unknown) => { repairs++; request = input; options = opts; return { data: { id: "fixture-event", conferenceData: { entryPoints: [{ entryPointType: "video", uri: "https://meet.google.com/fixture-only" }] } } }; },
+  } } as unknown as calendar_v3.Calendar));
+  const calendar = new GoogleCalendarProvider();
+  assert.equal((await calendar.getEvent("fixture-event", true))?.meetingUrl, undefined); assert.equal(repairs, 0);
+  data = { ...data, conferenceData: { createRequest: { status: { statusCode: "failure" } } } };
+  assert.equal((await calendar.getEvent("fixture-event", true))?.meetingUrl, "https://meet.google.com/fixture-only");
+  assert.equal(repairs, 1); assert.equal(request?.conferenceDataVersion, 1); assert.deepEqual(options, { headers: { "If-Match": "v1" } });
+  assert.equal(request?.requestBody?.attendees, undefined);
+});
+
+test("calendar patch uses persisted version and preserves UTC timestamps", async () => {
+  let request: calendar_v3.Params$Resource$Events$Patch | undefined, options: unknown;
+  mock.method(calendarApi, "calendar", () => ({ events: { patch: async (input: calendar_v3.Params$Resource$Events$Patch, opts: unknown) => { request = input; options = opts; return { data: { id: "fixture-event" } }; } } } as unknown as calendar_v3.Calendar));
+  await new GoogleCalendarProvider().updateEvent({ externalEventId: "fixture-event", etag: "v1", startsAt, endsAt, timezone: "Europe/Vienna" });
+  assert.deepEqual(options, { headers: { "If-Match": "v1" } }); assert.equal(request?.requestBody?.start?.dateTime, startsAt.toISOString());
+});

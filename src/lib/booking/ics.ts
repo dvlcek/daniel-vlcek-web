@@ -7,6 +7,7 @@ export type BookingIcsStatus =
   | "CANCELLED";
 
 export type BookingIcsInput = {
+  createdAt?: Date;
   bookingId: string;
 
   clientEmail: string;
@@ -130,7 +131,7 @@ export function createBookingIcs(
   input: BookingIcsInput,
 ): string {
   const now =
-    new Date();
+    input.createdAt ?? new Date();
 
   const method =
     input.method ??

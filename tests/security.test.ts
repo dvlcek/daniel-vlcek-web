@@ -22,7 +22,7 @@ import { createBookingToken } from "@/lib/booking/tokens";
 
 // Entirely in-memory test fixture. No dotenv, real DB, real email or calendar I/O.
 type Row = Record<string, unknown> & { id: string };
-type Args = { where?: { id?: string; status?: string }; data?: Record<string, unknown> };
+type Args = { where?: Record<string, unknown> & { id?: string; status?: string }; data?: Record<string, unknown> };
 function fixture() {
   const leads = new Map<string, Row>(), attempts = new Map<string, Row>(), bookings = new Map<string, Row>();
   const sessions = new Map<string, Record<string, unknown>>();
@@ -31,8 +31,11 @@ function fixture() {
   function delegate(rows: Map<string, Row>) {
     return {
       async findUnique({ where }: Args) { return rows.get(where?.id ?? "") ?? null; },
+      async findUniqueOrThrow({ where }: Args) { const row = rows.get(where?.id ?? ""); assert(row); return row; },
       async create({ data }: Args) {
-        const row = { id: randomUUID(), ...data } as Row;
+        const row = { id: randomUUID(), calendarOperation: null, calendarOperationKey: null, calendarOperationEtag: null,
+          calendarLeaseUntil: null, notification: null, notificationSentAt: null, notificationLeaseUntil: null, notificationFirstAttemptAt: null,
+          scheduleChangedAt: new Date(), ...data } as Row;
         rows.set(row.id, row); return row;
       },
       async update({ where, data }: Args) {
@@ -40,7 +43,15 @@ function fixture() {
       },
       async updateMany({ where, data }: Args) {
         const row = rows.get(where?.id ?? "");
-        if (row && (!where?.status || row.status === where.status)) { Object.assign(row, data); return { count: 1 }; }
+        if (!where?.id && rows === attempts) {
+          for (const item of rows.values()) if (item.bookingId === where?.bookingId) Object.assign(item, data);
+          return { count: 1 };
+        }
+        if (row && Object.entries(where ?? {}).every(([key, value]) => {
+          if (key === "OR") return true;
+          if (key === "notification") return JSON.stringify(row[key]) === JSON.stringify((value as { equals: unknown }).equals);
+          return value instanceof Date ? +(row[key] as Date) === +value : row[key] === value;
+        })) { Object.assign(row, data); return { count: 1 }; }
         return { count: 0 };
       },
     };
@@ -54,6 +65,7 @@ function fixture() {
     lead: delegate(leads), bookingAttempt: delegate(attempts),
     booking: {
       ...delegate(bookings),
+      async findUnique({ where }: Args) { const row = bookings.get(where?.id ?? ""); return row ? { ...row, lead: leads.get(String(row.leadId)) } : null; },
       async findFirst() { return [...bookings.values()].find(row => row.status === "PENDING" || row.status === "CONFIRMED") ?? null; },
       async findMany() { return [...bookings.values()].filter(row => row.status !== "CANCELLED"); },
     },
@@ -98,11 +110,11 @@ beforeEach(() => {
     SECURITY_TRUST_PROXY: "", VERCEL: "", ADMIN_PASSWORD: "fixture-password", ADMIN_SESSION_SECRET: "fixture-admin-session-secret-at-least-32-chars",
     GOOGLE_CALENDAR_CLIENT_ID: "fixture", GOOGLE_CALENDAR_CLIENT_SECRET: "fixture", GOOGLE_CALENDAR_REFRESH_TOKEN: "fixture",
     RESEND_API_KEY: "re_fixture", CONTACT_TO_EMAIL: "owner@example.test", CONTACT_FROM_EMAIL: "fixture@example.test",
-    BOOKING_ORGANIZER_EMAIL: "organizer@example.test", BOOKING_REPLY_TO_EMAIL: "reply@example.test",
+    BOOKING_MANAGE_SECRET: "fixture-manage-secret-at-least-32-characters", BOOKING_ORGANIZER_EMAIL: "organizer@example.test", BOOKING_REPLY_TO_EMAIL: "reply@example.test",
   });
   (globalThis as typeof globalThis & { __danielVlkoPrisma?: PrismaClient }).__danielVlkoPrisma = state.db;
   mock.method(GoogleCalendarProvider.prototype, "getBusyPeriods", async () => []);
-  mock.method(GoogleCalendarProvider.prototype, "createEvent", async () => { events++; return { externalEventId: "fixture-event", meetingUrl: "https://example.test/meet" }; });
+  mock.method(GoogleCalendarProvider.prototype, "createEvent", async (input: import("@/lib/booking/calendar/provider").CreateCalendarEventInput) => { events++; return { externalEventId: input.externalEventId!, meetingUrl: "https://example.test/meet" }; });
   mock.method(GoogleCalendarProvider.prototype, "cancelEvent", async () => { throw new Error("Unexpected fixture calendar cancellation"); });
   mock.method(GoogleCalendarProvider.prototype, "updateEvent", async () => { throw new Error("Unexpected fixture calendar update"); });
   // Hard outbound boundary: even a missed provider mock cannot contact a real service.
@@ -310,4 +322,13 @@ test("storage outage blocks intake and outbound work without leaking diagnostics
   const response = await intake(request("/api/booking/intake", { ...details, attemptId: randomUUID() }));
   assert.equal(response.status, 503); assert.equal(state.leads.size, 0); assert.equal(outbound, 0);
   assert(!JSON.stringify(messages).includes("fixture-private-database-connection"));
+});
+
+
+test("legacy confirmed booking replay preserves its recorded email success without sending again", async () => {
+  const a = await start(); const response = await confirm(confirmation(a)); assert.equal(response.status, 201);
+  const row = [...state.bookings.values()][0]; row.notification = null;
+  const before = outbound;
+  const replay = await confirm(confirmation(a)); assert.equal(replay.status, 200);
+  assert.equal((await replay.json()).confirmationEmailSent, true); assert.equal(outbound, before);
 });

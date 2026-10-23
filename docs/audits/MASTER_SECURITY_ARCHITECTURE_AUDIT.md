@@ -1,5 +1,8 @@
 # Master security and architecture audit
 
+> RC2/B2 update, 23 October 2026: B1 is integrated. The B2 section below supersedes the historical booking source findings only; real database/provider and production acceptance remain unverified.
+
+
 > B1 implementation update, 23 October 2026: the original RC1 audit below is historical evidence. The B1 section at the end supersedes its admin request/session/logging findings only. Production was not changed.
 
 
@@ -249,3 +252,34 @@ Tests use synthetic credentials/data, in-memory persistence and intercepted HTTP
 B1 source is ready to integrate into the existing release. **Ready for the next roadmap phase: NO** until the remaining booking and acceptance gates are resolved; source integration is not deployment approval.
 
 Remaining confirmed blockers are unchanged outside B1: SEC-01 old deployed source; REL-03/04 recovery and email retry gaps; REL-05 missing automatic Meet repair; REL-06 unsafe administrative booking status transitions; OPS-01 absent scheduling; legal/operational acceptance. REL-01/02 concurrency risks remain potential and require the next booking batch. REL-06 is documented rather than changed in this request/session/logging batch. No new critical booking issue was discovered. Source integration of B1 does not approve unrestricted public release or waive these gates.
+
+
+## RC2 / B2 targeted booking completion - 23 October 2026
+
+Integration: created `release/danielvlko-rc2` in `../danielvlko-rc2` from RC1 `66fde05cd575f9e773bb9732334587ed80415972`, then fast-forwarded B1 `2d272df7d2ff29237822f4a60759f239ce117cdc`. Merge-base was exact RC1. Existing RC1/B1 and backup refs were not moved; dirty integration files and environments were preserved. B1 origin/body/schema guards, PostgreSQL session revocation, logging, migration and regression tests remain present. No production operations, real email/calendar events, infrastructure or UI changes.
+
+| Finding | B2 source result |
+|---|---|
+| REL-01/02 operation/reservation race paths | One shared transaction advisory lock serializes buffered reservation checks for distinct attempts and both time directions. State changes compare status, schedule and a random operation revision. Completed operation keys remain as revisions, preventing stale ABA updates even with identical timestamps. Provider work uses bounded leases outside transactions; delayed workers cannot acquire a newer ETag or finalize another operation. Real PostgreSQL scheduling/locking remains NOT VERIFIED. |
+| REL-03 calendar recovery | Durable CREATE/RESCHEDULE/CANCEL intent on Booking; deterministic Google event IDs and conference request IDs; verified ownership/time on insert conflict. Persisted ETags protect reschedule/delete retries; 404/410 deletion converges. Timeout or local finalization failure retains PENDING reservation and intent, with sanitized diagnostics. Retry converges forward instead of blindly cancelling an uncertain event or restoring stale state. |
+| REL-04 lifecycle email recovery | Persist current notification snapshot with the finalized booking, derive management links using the existing mechanism, retry confirmation/reschedule/cancellation through replay or the existing worker. Occurrence-specific Resend keys and fixed ICS timestamps preserve byte-identical retries. Ambiguous sends stop automatic retries after 23 hours and report operator action, avoiding reliance on expired deduplication. A newer completed operation supersedes its prior queued notification. Already in-flight provider messages cannot be recalled. Legacy recorded email success is preserved. |
+| REL-05 missing Meet | Read actual Google hangout/video entry points; retrieve and conditionally persist missing links from existing events. Pending conference creation is polled; absent/failed conferences use a deterministic, ETag-guarded repair request. At most five repair candidates per reminder run; missing links/errors remain visible. No meeting URLs are invented. |
+| REL-06 admin transitions | No revival of cancelled, pending, completed or calendar-inconsistent rows via status edits. Intact NO_SHOW restoration requires an atomic free buffered reservation; all edits use optimistic revision checks and the reservation lock. B1 guards remain. |
+
+Recovery uses the existing authenticated reminder endpoint: at most five calendar operations and ten eligible lifecycle emails per run, then existing reminders. The response includes recovery counts and `ok: false` for unresolved attempted work, legacy PENDING detection, expired email retries or missing due Meet links. Logs contain static operations and allowlisted Prisma/network/HTTP codes, never provider payloads or tokens. Scheduling itself remains OPS-01, not implemented here.
+
+Migration `20261023170000_booking_recovery` adds **nine nullable Booking columns** for calendar intent/version/lease/error and notification snapshot/retry state. No new tables, enum changes, data rewrites or backfill. A2 and B1 migrations are unchanged and remain ordered before B2. Regenerated Prisma output accompanies the schema. Offline forward diff exactly matches checked-in SQL; reverse diff removes only these nine columns. **No SQL was executed.**
+
+Deployment compatibility: rehearse on an approved isolated Neon target using the existing direct migration URL. Apply pending A2, B1, then B2 migrations before RC2 runtime. Quiesce booking/admin writes and drain all older instances/workers during cutover: older code does not participate in the new reservation lock or recovery protocol. Keep the same calendar target and secret configuration while operations are pending. For rollback retain additive columns, restrict writes, stop recovery workers and explicitly reconcile/drain pending operations/notifications before older code resumes; dropping columns would discard recovery intent. Real migration/rollback rehearsal is NOT VERIFIED.
+
+Focused files: three existing booking mutation handlers; admin booking-status handler; `src/lib/booking/recovery.ts`; availability/buffer helpers; Google provider/interface; existing email helpers/ICS; reminder engine/endpoint; safe logging helper; Prisma schema/generated output/new migration; five test files; this audit and roadmap. Presentation, consent/SEO/legal, dependency manifests, Vercel settings and VPS plans are unchanged.
+
+Verification:
+
+- `node --import tsx --test tests/admin-security.test.ts tests/security.test.ts tests/booking-calendar.test.ts tests/booking-reminders.test.ts tests/booking-reliability.test.ts`: **78/78 PASS** (19 B1 admin, 20 security/ownership, 9 calendar, 7 reminder, 23 reliability). Includes barrier-controlled distinct attempts, both buffer directions, duplicate requests, cancellation/reschedule ownership, stale workers, provider timeout, failed finalization, email retry/marker loss, missing Meet and invalid admin transitions. All data/providers are synthetic; outbound HTTP is intercepted.
+- Standalone `tsc --noEmit`, full `npm run lint`, `npm run build`, Prisma `validate`, privacy/contact checks and whitespace checks: **PASS**.
+- Exact additive forward/reverse Prisma schema diffs: PASS offline. **Real Neon transaction/concurrency, migration/rollback, process-restart and Google/Resend acceptance: NOT VERIFIED.** Mocks do not prove database isolation or provider delivery.
+
+Remaining release blockers: older deployed source (SEC-01), isolated migration/DB/provider acceptance, scheduling/monitoring (OPS-01 and operational gates), and existing legal readiness. Legacy PENDING rows without durable intent, old failed-email markers without a retry snapshot, remote version conflicts and exhausted retry windows require explicit operator reconciliation; their existence in production was not inspected or inferred. No customer backfill or speculative automatic repair was attempted.
+
+**Ready to begin project subpages: YES for local development on RC2. Unrestricted production release: NO until the above operational gates pass.** No new pages were built in B2.

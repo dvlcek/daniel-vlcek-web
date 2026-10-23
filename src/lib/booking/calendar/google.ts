@@ -2,6 +2,7 @@ import {
   randomUUID,
 } from "node:crypto";
 
+import type { calendar_v3 } from "googleapis";
 import {
   google,
 } from "googleapis";
@@ -432,7 +433,8 @@ export class GoogleCalendarProvider
   async createEvent(
     input: CreateCalendarEventInput,
   ): Promise<CalendarEventResult> {
-    const response =
+    let response;
+    try { response =
       await this.calendar.events.insert({
         calendarId:
           this.calendarId,
@@ -441,6 +443,8 @@ export class GoogleCalendarProvider
           1,
 
         requestBody: {
+          id: input.externalEventId,
+          extendedProperties: input.bookingId ? { private: { bookingId: input.bookingId } } : undefined,
           summary:
             input.title,
 
@@ -469,7 +473,7 @@ export class GoogleCalendarProvider
           conferenceData: {
             createRequest: {
               requestId:
-                randomUUID(),
+                input.externalEventId ?? randomUUID(),
 
               conferenceSolutionKey: {
                 type:
@@ -485,29 +489,16 @@ export class GoogleCalendarProvider
         },
       });
 
-    const eventId =
-      response.data.id;
-
-    if (!eventId) {
-      throw new Error(
-        "Google Calendar did not return an event ID.",
-      );
+    } catch (error) {
+      if (input.externalEventId && googleStatus(error) === 409) {
+        const existing = await this.getEvent(input.externalEventId);
+        if (existing && existing.bookingId === input.bookingId
+          && existing.startsAt?.getTime() === input.startsAt.getTime()
+          && existing.endsAt?.getTime() === input.endsAt.getTime()) return existing;
+      }
+      throw error;
     }
-
-    return {
-      externalEventId:
-        eventId,
-
-      htmlUrl:
-        response.data
-          .htmlLink ??
-        undefined,
-
-      meetingUrl:
-        response.data
-          .hangoutLink ??
-        undefined,
-    };
+    return calendarEvent(response.data);
   }
 
   /* =======================================================
@@ -561,47 +552,52 @@ export class GoogleCalendarProvider
            * Again: no customer attendees.
            */
         },
-      });
+      }, input.etag ? { headers: { "If-Match": input.etag } } : undefined);
 
-    const eventId =
-      response.data.id;
-
-    if (!eventId) {
-      throw new Error(
-        "Google Calendar did not return an event ID.",
-      );
-    }
-
-    return {
-      externalEventId:
-        eventId,
-
-      htmlUrl:
-        response.data
-          .htmlLink ??
-        undefined,
-
-      meetingUrl:
-        response.data
-          .hangoutLink ??
-        undefined,
-    };
+    return calendarEvent(response.data);
   }
 
   /* =======================================================
      DELETE EVENT
   ======================================================= */
 
-  async cancelEvent(
-    externalEventId:
-      string,
-  ): Promise<void> {
-    await this.calendar.events.delete({
-      calendarId:
-        this.calendarId,
-
-      eventId:
-        externalEventId,
-    });
+  async getEvent(externalEventId: string, repairMeeting = false): Promise<CalendarEventResult | null> {
+    let data: calendar_v3.Schema$Event;
+    try { data = (await this.calendar.events.get({ calendarId: this.calendarId, eventId: externalEventId })).data; }
+    catch (error) { if ([404, 410].includes(googleStatus(error))) return null; throw error; }
+    if (data.status === "cancelled") return null;
+    // Pending conferences are polled on the next bounded worker run. Repair only absent/failed requests.
+    if (repairMeeting && !calendarEvent(data).meetingUrl && data.etag
+      && (!data.conferenceData?.createRequest || data.conferenceData.createRequest.status?.statusCode === "failure")) {
+      data = (await this.calendar.events.patch({
+        calendarId: this.calendarId, eventId: externalEventId, conferenceDataVersion: 1,
+        requestBody: { conferenceData: { createRequest: { requestId: `${externalEventId}-meet-repair`, conferenceSolutionKey: { type: "hangoutsMeet" } } } },
+      }, { headers: { "If-Match": data.etag } })).data;
+    }
+    return calendarEvent(data);
   }
+
+  async cancelEvent(externalEventId: string, etag?: string): Promise<void> {
+    try {
+      await this.calendar.events.delete({ calendarId: this.calendarId, eventId: externalEventId }, etag ? { headers: { "If-Match": etag } } : undefined);
+    } catch (error) { if (![404, 410].includes(googleStatus(error))) throw error; }
+  }
+}
+
+export function googleStatus(error: unknown): number {
+  if (!error || typeof error !== "object") return 0;
+  const value = error as { code?: unknown; response?: { status?: unknown } };
+  return Number(value.response?.status ?? value.code) || 0;
+}
+
+function calendarEvent(data: calendar_v3.Schema$Event): CalendarEventResult {
+  if (!data.id) throw new Error("Calendar returned no event identity.");
+  const startsAt = data.start?.dateTime ? new Date(data.start.dateTime) : undefined;
+  const endsAt = data.end?.dateTime ? new Date(data.end.dateTime) : undefined;
+  return {
+    externalEventId: data.id, etag: data.etag ?? undefined,
+    htmlUrl: data.htmlLink ?? undefined,
+    meetingUrl: data.hangoutLink ?? data.conferenceData?.entryPoints?.find(p => p.entryPointType === "video")?.uri ?? undefined,
+    startsAt, endsAt, bookingId: data.extendedProperties?.private?.bookingId,
+  };
 }

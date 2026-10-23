@@ -267,9 +267,9 @@ function periodsOverlap(
     DateTime,
 ): boolean {
   return (
-    candidateStart <
+    candidateStart.minus({ minutes: bookingConfig.bufferBeforeMinutes }) <
       busyEnd &&
-    candidateEnd >
+    candidateEnd.plus({ minutes: bookingConfig.bufferAfterMinutes }) >
       busyStart
   );
 }

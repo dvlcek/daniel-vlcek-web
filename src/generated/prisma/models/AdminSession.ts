@@ -6,7 +6,7 @@
 /*
  * This file exports the `AdminSession` model and its related types.
  *
- * 🟢 You can import this file directly.
+ * ðŸŸ¢ You can import this file directly.
  */
 import type * as runtime from "@prisma/client/runtime/client"
 import type * as $Enums from "../enums"
@@ -95,7 +95,7 @@ export type AdminSessionAggregateArgs<ExtArgs extends runtime.Types.Extensions.I
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
-   * Take `±n` AdminSessions from the position of the cursor.
+   * Take `Â±n` AdminSessions from the position of the cursor.
    */
   take?: number
   /**
@@ -303,10 +303,6 @@ export type AdminSessionMinOrderByAggregateInput = {
   expiresAt?: Prisma.SortOrder
   revokedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-}
-
-export type NullableDateTimeFieldUpdateOperationsInput = {
-  set?: Date | string | null
 }
 
 
@@ -853,7 +849,7 @@ export type AdminSessionFindFirstArgs<ExtArgs extends runtime.Types.Extensions.I
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
-   * Take `±n` AdminSessions from the position of the cursor.
+   * Take `Â±n` AdminSessions from the position of the cursor.
    */
   take?: number
   /**
@@ -901,7 +897,7 @@ export type AdminSessionFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Exten
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
-   * Take `±n` AdminSessions from the position of the cursor.
+   * Take `Â±n` AdminSessions from the position of the cursor.
    */
   take?: number
   /**
@@ -949,7 +945,7 @@ export type AdminSessionFindManyArgs<ExtArgs extends runtime.Types.Extensions.In
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
-   * Take `±n` AdminSessions from the position of the cursor.
+   * Take `Â±n` AdminSessions from the position of the cursor.
    */
   take?: number
   /**

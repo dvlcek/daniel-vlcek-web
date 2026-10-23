@@ -5,6 +5,8 @@ import { createBookingIcs } from "@/lib/booking/ics";
 
 export type SendBookingConfirmationInput = {
   bookingId: string;
+  idempotencyKey?: string;
+  createdAt?: Date;
 
   clientName: string;
   clientEmail: string;
@@ -563,7 +565,7 @@ export async function sendBookingConfirmationEmail(
 
       {
         idempotencyKey:
-          `booking-email/${input.bookingId}/${input.startsAt.getTime()}`,
+          input.idempotencyKey ?? `booking-email/${input.bookingId}/${input.startsAt.getTime()}`,
       },
     );
 

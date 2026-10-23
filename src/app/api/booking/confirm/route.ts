@@ -1,3 +1,5 @@
+import { randomUUID } from "node:crypto";
+import { deliverBookingNotification, lockReservations, recoverCalendarOperation, requireFreeSlot, stableCalendarId } from "@/lib/booking/recovery";
 import { logSecurityFailure } from "@/lib/security/log";
 import { ownedAttempt, readAttemptToken } from "@/lib/booking/session";
 import { SecurityError, readJson, requireSameOrigin, securityResponse } from "@/lib/security/http";
@@ -14,16 +16,11 @@ import {
 import {
   BookingStatus,
   LeadSource,
-  LeadStatus,
 } from "@/generated/prisma/enums";
 
 import {
   getBookingAvailability,
 } from "@/lib/booking/availability";
-
-import {
-  getCalendarProvider,
-} from "@/lib/booking/calendar";
 
 import {
   bookingConfig,
@@ -36,14 +33,6 @@ import {
 import {
   createBookingToken,
 } from "@/lib/booking/tokens";
-
-import {
-  sendBookingConfirmationEmail,
-} from "@/lib/email/booking-confirmation";
-
-import {
-  buildBookingManageUrl,
-} from "@/lib/booking/manage-url";
 
 import {
   getDb,
@@ -110,50 +99,6 @@ function hasErrorCode(
    CALENDAR DESCRIPTION
 ========================================================= */
 
-function buildCalendarDescription(
-  lead: {
-    name: string;
-    email: string;
-
-    company: string | null;
-    website: string | null;
-    message: string | null;
-  },
-): string {
-  const lines = [
-    "Discovery call booked via danielvlko.com",
-    "",
-    `Name: ${lead.name}`,
-    `Email: ${lead.email}`,
-  ];
-
-  if (lead.company) {
-    lines.push(
-      `Company: ${lead.company}`,
-    );
-  }
-
-  if (lead.website) {
-    lines.push(
-      `Website: ${lead.website}`,
-    );
-  }
-
-  if (lead.message) {
-    lines.push(
-      "",
-      "Context:",
-      lead.message,
-    );
-  }
-
-  return lines.join("\n");
-}
-
-/* =========================================================
-   POST /api/booking/confirm
-========================================================= */
-
 export async function POST(
   request: NextRequest,
 ) {
@@ -163,9 +108,7 @@ export async function POST(
     | string
     | null = null;
 
-  let reservedLeadId:
-    | string
-    | null = null;
+
 
   try {
     requireSameOrigin(request);
@@ -218,13 +161,20 @@ export async function POST(
     const capability = readAttemptToken(request, attemptId);
     const attempt = await db.$transaction(tx => ownedAttempt(tx, attemptId, capability, leadId));
     await limitIdentity("confirm", attempt.id);
-    const previous = attempt.bookingId ? await db.booking.findUnique({ where: { id: attempt.bookingId } }) : null;
+    let previous = attempt.bookingId ? await db.booking.findUnique({ where: { id: attempt.bookingId } }) : null;
+    if (previous?.calendarOperation === "CREATE" && previous.startsAt.getTime() === new Date(startsAt).getTime()) {
+      await recoverCalendarOperation(previous.id);
+      previous = await db.booking.findUnique({ where: { id: previous.id } });
+    }
     if (previous && previous.status !== BookingStatus.CANCELLED) {
       if (previous.status === BookingStatus.CONFIRMED && previous.startsAt.getTime() === new Date(startsAt).getTime()) {
+        const confirmationEmailSent = previous.notification
+          ? await deliverBookingNotification(previous.id, request.nextUrl.origin)
+          : attempt.confirmationEmailSent;
         return noStoreJson({ ok: true, booking: {
           id: previous.id, startsAt: previous.startsAt.toISOString(), endsAt: previous.endsAt.toISOString(),
           timezone: previous.timezone, status: previous.status,
-        }, confirmationEmailSent: attempt.confirmationEmailSent, reused: true });
+        }, confirmationEmailSent, reused: true });
       }
       throw new SecurityError(409, "This booking is already completed or processing. Please try again shortly.");
     }
@@ -422,7 +372,7 @@ export async function POST(
     /* =====================================================
        MANAGEMENT TOKEN
 
-       The raw token exists only inside this server request.
+       The random capability is hashed here. Recovery emails use the existing derived management token.
 
        It is used to build the secure Manage booking URL
        included in the branded confirmation email.
@@ -432,9 +382,6 @@ export async function POST(
        The database stores only its SHA-256 hash.
     ===================================================== */
     const {
-      token:
-        manageToken,
-
       tokenHash:
         manageTokenHash,
     } =
@@ -460,42 +407,15 @@ export async function POST(
                 throw new SecurityError(409, "This booking is already completed or processing. Please try again shortly.");
               }
             }
-            const conflict =
-              await tx.booking.findFirst({
-                where: {
-                  status: {
-                    in: [
-                      BookingStatus.PENDING,
-                      BookingStatus.CONFIRMED,
-                    ],
-                  },
-
-                  startsAt: {
-                    lt:
-                      normalizedEndsAt.toJSDate(),
-                  },
-
-                  endsAt: {
-                    gt:
-                      normalizedStartsAt.toJSDate(),
-                  },
-                },
-
-                select: {
-                  id: true,
-                },
-              });
-
-            if (conflict) {
-              return {
-                conflict:
-                  true as const,
-              };
-            }
-
+            await lockReservations(tx);
+            await requireFreeSlot(tx, normalizedStartsAt.toJSDate(), normalizedEndsAt.toJSDate());
+            const bookingId = randomUUID();
             const booking =
               await tx.booking.create({
                 data: {
+                  id: bookingId,
+                  externalCalendarEventId: stableCalendarId(bookingId),
+                  calendarOperation: "CREATE", calendarOperationKey: randomUUID(),
                   leadId:
                     lead.id,
 
@@ -532,25 +452,10 @@ export async function POST(
           },
         );
 
-      if (
-        reservation.conflict
-      ) {
-        return noStoreJson(
-          {
-            ok: false,
-
-            message:
-              "This time was just booked. Please choose another slot.",
-          },
-          409,
-        );
-      }
-
       reservedBookingId =
         reservation.booking.id;
 
-      reservedLeadId =
-        lead.id;
+
     } catch (error) {
       /*
        * activeSlotKey is unique.
@@ -579,452 +484,19 @@ export async function POST(
       throw error;
     }
 
-    /* =====================================================
-       PHASE 2 — GOOGLE CALENDAR
-
-       IMPORTANT:
-
-       Client is intentionally NOT added as
-       a Google Calendar attendee.
-
-       Google only provides:
-       - Daniel's internal event
-       - Google Meet
-       - busy availability
-
-       Resend owns client communication.
-    ===================================================== */
-
-    const calendarProvider =
-      getCalendarProvider();
-
-    if (!calendarProvider) {
-      throw new Error(
-        "Calendar provider is not configured.",
-      );
+    if (!await recoverCalendarOperation(reservedBookingId!)) {
+      throw new SecurityError(503, "Your booking is being reconciled with the calendar. Retry this request shortly.");
     }
-
-    let calendarEvent:
-      Awaited<
-        ReturnType<
-          typeof calendarProvider.createEvent
-        >
-      >;
-
-    try {
-      calendarEvent =
-        await calendarProvider.createEvent({
-          title:
-            `Discovery Call — ${lead.name} × Daniel VLKO`,
-
-          description:
-            buildCalendarDescription(
-              lead,
-            ),
-
-          startsAt:
-            normalizedStartsAt.toJSDate(),
-
-          endsAt:
-            normalizedEndsAt.toJSDate(),
-
-          timezone:
-            bookingConfig.timezone,
-
-          /*
-           * NO attendees.
-           *
-           * We do not want Google to send
-           * customer-facing invitation emails.
-           */
-        });
-    } catch (error) {
-      /* ===================================================
-         GOOGLE FAILED → RELEASE RESERVATION
-      =================================================== */
-
-      try {
-        await db.$transaction(
-          async (tx) => {
-            if (
-              reservedBookingId
-            ) {
-              await tx.booking.update({
-                where: {
-                  id:
-                    reservedBookingId,
-                },
-
-                data: {
-                  status:
-                    BookingStatus.CANCELLED,
-
-                  activeSlotKey:
-                    null,
-                },
-              });
-            }
-
-            if (
-              reservedLeadId
-            ) {
-              await tx.lead.update({
-                where: {
-                  id:
-                    reservedLeadId,
-                },
-
-                data: {
-                  status:
-                    LeadStatus.BOOKING_STARTED,
-                },
-              });
-            }
-          },
-        );
-      } catch (
-        cleanupError
-      ) {
-        logSecurityFailure("CRITICAL: Google failure reservation cleanup failed:", cleanupError);
-      }
-
-      logSecurityFailure("Google Calendar event creation failed:", error);
-
-      return noStoreJson(
-        {
-          ok: false,
-
-          message:
-            "Your time could not be added to the calendar. Please try again.",
-        },
-        503,
-      );
-    }
-
-    /* =====================================================
-       PHASE 3 — FINALIZE DATABASE
-
-       Google event now exists.
-
-       Persist:
-       - CONFIRMED
-       - event ID
-       - Calendar URL
-       - Meet URL
-       - Lead BOOKED
-    ===================================================== */
-
-    try {
-      const finalized =
-        await db.$transaction(
-          async (tx) => {
-            const booking =
-              await tx.booking.update({
-                where: {
-                  id:
-                    reservedBookingId!,
-                },
-
-                data: {
-                  status:
-                    BookingStatus.CONFIRMED,
-
-                  externalCalendarEventId:
-                    calendarEvent
-                      .externalEventId,
-
-                  externalCalendarUrl:
-                    calendarEvent
-                      .htmlUrl ??
-                    null,
-
-                  meetingUrl:
-                    calendarEvent
-                      .meetingUrl ??
-                    null,
-                },
-
-                select: {
-                  id: true,
-
-                  startsAt: true,
-                  endsAt: true,
-
-                  timezone: true,
-
-                  status: true,
-
-                  externalCalendarEventId:
-                    true,
-
-                  externalCalendarUrl:
-                    true,
-
-                  meetingUrl:
-                    true,
-                },
-              });
-
-            await tx.lead.update({
-              where: {
-                id:
-                  lead.id,
-              },
-
-              data: {
-                status:
-                  LeadStatus.BOOKED,
-              },
-            });
-
-            return booking;
-          },
-        );
-
-      /* ===================================================
-         GOOGLE MEET CHECK
-
-         Meet is intentionally not exposed in the initial
-         customer email.
-
-         We still create/store it now so the reminder
-         worker can safely send it 30 minutes before.
-      =================================================== */
-
-      if (
-        !finalized.meetingUrl
-      ) {
-        logSecurityFailure("Booking confirmed but Google Calendar did not return a Meet URL.");
-      }
-
-      /* ===================================================
-         PHASE 4 — BRANDED CONFIRMATION EMAIL
-
-         Email failure MUST NOT destroy a valid booking.
-
-         At this point:
-         ✓ slot reserved
-         ✓ DB confirmed
-         ✓ Google Calendar event exists
-
-         Resend is customer communication only.
-      =================================================== */
-
-      let confirmationEmailSent =
-        false;
-
-      try {
-        const manageUrl =
-          buildBookingManageUrl({
-            origin:
-              request.nextUrl.origin,
-
-            bookingId:
-              finalized.id,
-
-            token:
-              manageToken,
-          });
-
-        await sendBookingConfirmationEmail({
-          bookingId:
-            finalized.id,
-
-          clientName:
-            lead.name,
-
-          clientEmail:
-            lead.email,
-
-          startsAt:
-            finalized.startsAt,
-
-          endsAt:
-            finalized.endsAt,
-
-          timezone:
-            finalized.timezone,
-
-          manageUrl,
-
-          mode:
-            "confirmed",
-        });
-
-        confirmationEmailSent =
-          true;
-        await db.bookingAttempt.update({ where: { id: attemptId }, data: { confirmationEmailSent: true } });
-      } catch (
-        emailError
-      ) {
-        logSecurityFailure("Booking confirmation email failed:", emailError);
-      }
-
-      /* ===================================================
-         SUCCESS
-
-         Security boundary:
-
-         - booking details may be returned
-         - email delivery status may be returned
-         - raw management token MUST stay server-side
-
-         Management access is delivered through the secure
-         email link instead of the booking API response.
-      =================================================== */
-      return noStoreJson(
-        {
-          ok: true,
-
-          booking: {
-            id:
-              finalized.id,
-
-            startsAt:
-              finalized.startsAt.toISOString(),
-
-            endsAt:
-              finalized.endsAt.toISOString(),
-
-            timezone:
-              finalized.timezone,
-
-            status:
-              finalized.status,
-
-            /*
-             * Meeting URL is intentionally NOT
-             * returned to the booking UI.
-             *
-             * The visitor receives it later via
-             * the 30-minute reminder.
-             */
-          },
-          confirmationEmailSent,
-        },
-        201,
-      );
-    } catch (error) {
-      /* ===================================================
-         GOOGLE EXISTS BUT DB FINALIZATION FAILED
-
-         Compensating rollback:
-
-         1. delete Google Calendar event
-         2. cancel DB reservation
-         3. release activeSlotKey
-         4. restore lead state
-      =================================================== */
-
-      try {
-        await calendarProvider.cancelEvent(
-          calendarEvent
-            .externalEventId,
-        );
-      } catch (
-        calendarCleanupError
-      ) {
-        logSecurityFailure("CRITICAL: Could not remove orphaned Google Calendar event:", calendarCleanupError);
-      }
-
-      try {
-        await db.$transaction(
-          async (tx) => {
-            if (
-              reservedBookingId
-            ) {
-              await tx.booking.update({
-                where: {
-                  id:
-                    reservedBookingId,
-                },
-
-                data: {
-                  status:
-                    BookingStatus.CANCELLED,
-
-                  activeSlotKey:
-                    null,
-                },
-              });
-            }
-
-            if (
-              reservedLeadId
-            ) {
-              await tx.lead.update({
-                where: {
-                  id:
-                    reservedLeadId,
-                },
-
-                data: {
-                  status:
-                    LeadStatus.BOOKING_STARTED,
-                },
-              });
-            }
-          },
-        );
-      } catch (
-        cleanupError
-      ) {
-        logSecurityFailure("CRITICAL: Could not release failed booking reservation:", cleanupError);
-      }
-
-      throw error;
-    }
+    const finalized = await db.booking.findUniqueOrThrow({ where: { id: reservedBookingId! } });
+    const confirmationEmailSent = await deliverBookingNotification(finalized.id, request.nextUrl.origin);
+    return noStoreJson({ ok: true, booking: {
+      id: finalized.id, startsAt: finalized.startsAt.toISOString(), endsAt: finalized.endsAt.toISOString(),
+      timezone: finalized.timezone, status: finalized.status,
+    }, confirmationEmailSent }, 201);
   } catch (error) {
     if (error instanceof SecurityError) return securityResponse(error, "booking_confirm");
     logSecurityFailure("Booking confirmation API error:", error);
-
-    /* =====================================================
-       FINAL SAFETY CLEANUP
-
-       An unexpected failure may happen after the slot
-       was reserved but before normal rollback ran.
-
-       Only PENDING bookings are released here.
-
-       CONFIRMED bookings are never silently destroyed.
-    ===================================================== */
-
-    if (
-      reservedBookingId && db
-    ) {
-      try {
-        await db.booking.updateMany({
-          where: {
-            id:
-              reservedBookingId,
-
-            status:
-              BookingStatus.PENDING,
-          },
-
-          data: {
-            status:
-              BookingStatus.CANCELLED,
-
-            activeSlotKey:
-              null,
-          },
-        });
-      } catch (
-        cleanupError
-      ) {
-        logSecurityFailure("Booking reservation cleanup failed:", cleanupError);
-      }
-    }
-
-    return noStoreJson(
-      {
-        ok: false,
-
-        message:
-          "Booking is temporarily unavailable. Please try again.",
-      },
-      500,
-    );
+    // Ambiguous provider/DB outcomes retain PENDING ownership and its reserved slot for recovery.
+    return noStoreJson({ ok: false, message: "Booking is temporarily unavailable. Please retry shortly." }, 503);
   }
 }

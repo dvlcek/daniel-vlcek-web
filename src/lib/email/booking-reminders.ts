@@ -12,6 +12,7 @@ import {
 
 type BaseBookingReminderInput = {
   bookingId: string;
+  occurrenceKey?: string;
 
   clientName: string;
   clientEmail: string;
@@ -627,7 +628,7 @@ export async function sendBooking24hReminderEmail(
 
       {
         idempotencyKey:
-          `booking-reminder-24h/${input.bookingId}/${input.startsAt.getTime()}`,
+          `booking-reminder-24h/${input.bookingId}/${input.startsAt.getTime()}/${input.occurrenceKey ?? "legacy"}`,
       },
     );
 
@@ -839,7 +840,7 @@ export async function sendBooking30mReminderEmail(
 
       {
         idempotencyKey:
-          `booking-reminder-30m/${input.bookingId}/${input.startsAt.getTime()}`,
+          `booking-reminder-30m/${input.bookingId}/${input.startsAt.getTime()}/${input.occurrenceKey ?? "legacy"}`,
       },
     );
 

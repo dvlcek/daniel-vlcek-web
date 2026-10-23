@@ -1,3 +1,4 @@
+import { getCalendarProvider } from "./calendar";
 import { logSecurityFailure, safeErrorCode } from "@/lib/security/log";
 import {
   DateTime,
@@ -165,6 +166,7 @@ export async function processBookingReminders(
 
         meetingUrl:
           true,
+        externalCalendarEventId: true,
 
         cancelTokenHash:
           true,
@@ -217,6 +219,7 @@ export async function processBookingReminders(
       errors: [],
     };
 
+  let meetingRepairs = 0;
   for (
     const booking of
     bookings
@@ -232,6 +235,21 @@ export async function processBookingReminders(
 
     if (!start.isValid) {
       continue;
+    }
+
+    if (!booking.meetingUrl && booking.externalCalendarEventId && meetingRepairs++ < 5) {
+      try {
+        const event = await getCalendarProvider()?.getEvent(booking.externalCalendarEventId, true);
+        if (event?.meetingUrl) {
+          const repaired = await db.booking.updateMany({ where: { id: booking.id, status: BookingStatus.CONFIRMED,
+            startsAt: booking.startsAt, scheduleChangedAt: booking.scheduleChangedAt, externalCalendarEventId: booking.externalCalendarEventId,
+          }, data: { meetingUrl: event.meetingUrl } });
+          if (repaired.count) booking.meetingUrl = event.meetingUrl;
+        }
+      } catch (error) {
+        logSecurityFailure("booking_meeting_recovery", error);
+        result.errors.push({ bookingId: booking.id, type: "30m", message: getErrorMessage(error) });
+      }
     }
 
     /* =====================================================
@@ -361,6 +379,7 @@ export async function processBookingReminders(
                 {
                   bookingId:
                     booking.id,
+                  occurrenceKey: String(booking.scheduleChangedAt.getTime()),
 
                   clientName:
                     booking.lead.name,
@@ -487,6 +506,7 @@ export async function processBookingReminders(
                 {
                   bookingId:
                     booking.id,
+                  occurrenceKey: String(booking.scheduleChangedAt.getTime()),
 
                   clientName:
                     booking.lead.name,

@@ -343,9 +343,9 @@ function periodsOverlap(
   busy: BusyPeriod,
 ): boolean {
   return (
-    candidateStart <
+    candidateStart.minus({ minutes: bookingConfig.bufferBeforeMinutes }) <
       busy.endsAt &&
-    candidateEnd >
+    candidateEnd.plus({ minutes: bookingConfig.bufferAfterMinutes }) >
       busy.startsAt
   );
 }

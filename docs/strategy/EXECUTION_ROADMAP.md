@@ -137,3 +137,14 @@ Final checks: full ESLint PASS; standalone TypeScript PASS; production build PAS
 **B1 source integration: READY. Next roadmap phase / unrestricted release: NOT READY.** Remaining booking and operational gates below are not waived.
 
 Next required batch remains booking state/concurrency/reconciliation/email/Meet work (REL-01?06), followed by operational/legal/provider acceptance. No speculative booking fixes, new pages, styling, host setup, Docker, infrastructure or production operations were performed in B1. Keep the existing roadmap ordering; B1 completion alone is not unrestricted-release approval. Project/service page development and release readiness should not be conflated.
+
+
+## RC2 / B2 completion update - 23 October 2026
+
+`release/danielvlko-rc2` was created from verified RC1 `66fde05...` and fast-forwarded through B1 `2d272df...`; all prior worktrees/backup branches and dirty work remain preserved. B1 security behavior and its migration/tests remain integrated.
+
+B2 implements the confirmed recovery/admin-transition gaps REL-03-06 and the requested concurrent-operation/reservation safeguards for REL-01/02: atomic buffered reservations, revision-guarded state transitions, durable calendar intent and stable provider identity, ETag fencing, recoverable lifecycle email with bounded idempotent retries, and actual Google Meet retrieval/repair. Existing reminder endpoint runs bounded recovery; no new scheduler/platform/UI was added. See the [B2 audit update](../audits/MASTER_SECURITY_ARCHITECTURE_AUDIT.md#rc2--b2-targeted-booking-completion---23-october-2026) for files, commands and limitations.
+
+Local focused tests: **78/78 PASS**, including B1/A2 regression. Full ESLint, TypeScript, production build and Prisma validation: **PASS**; real Neon locking/migration/rollback and provider acceptance remain **NOT VERIFIED**. One additive B2 migration adds nine nullable Booking fields after unchanged A2/B1 migrations; no migrations were run. Deployment must be schema-first with older writers drained. Keep recovery intent during rollback and reconcile pending work before resuming older code.
+
+The earlier B1 statement that booking implementation is the next coding batch is superseded by this completion record. **Project subpage development may begin locally on RC2.** Production readiness remains a separate unfinished gate: SEC-01 deployed-source gap, OPS-01 scheduling, operational/legal acceptance, and safe reconciliation of any legacy stranded records or provider conflicts. No release, VPS or production approval is inferred from local test success. Phase 2 operational work and any real DB/provider actions require their own scoped execution; do not turn them into another general audit or redesign.

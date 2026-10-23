@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { afterEach, beforeEach, mock, test } from "node:test";
 import type { PrismaClient } from "@/generated/prisma/client";
+import { GoogleCalendarProvider } from "@/lib/booking/calendar/google";
 import { processBookingReminders } from "@/lib/booking/reminders";
 
 // In-memory persistence and intercepted HTTP only. Never loads local credentials.
@@ -16,6 +17,7 @@ function booking(minutes = 30) {
     id: "synthetic-reminder", status: "CONFIRMED", startsAt: new Date(+now + minutes * 60000),
     endsAt: new Date(+now + (minutes + 30) * 60000), timezone: "Europe/Vienna",
     scheduleChangedAt: new Date(+now - 72 * 3600000),
+    externalCalendarEventId: null as string | null,
     meetingUrl: "https://example.test/meet", cancelTokenHash: "synthetic-hash",
     reminder24hEmailId: null as string | null, reminder30mEmailId: null as string | null,
     lead: { name: "Synthetic visitor", email: "visitor@example.test" },
@@ -107,4 +109,19 @@ test("reminder delivery errors never expose provider payloads in logs or schedul
   const output = JSON.stringify({ logs, result });
   assert(!output.includes("synthetic-secret"));
   assert(!output.includes("customer@example.test"));
+});
+
+
+test("missing Meet is retrieved automatically, persisted and included in the 30m reminder", async () => {
+  Object.assign(process.env, { GOOGLE_CALENDAR_CLIENT_ID: "fixture", GOOGLE_CALENDAR_CLIENT_SECRET: "fixture", GOOGLE_CALENDAR_REFRESH_TOKEN: "fixture" });
+  rows[0].externalCalendarEventId = "fixture-event"; rows[0].meetingUrl = "";
+  let available = false;
+  mock.method(GoogleCalendarProvider.prototype, "getEvent", async (id: string, repair?: boolean) => {
+    assert.equal(id, "fixture-event"); assert.equal(repair, true);
+    return { externalEventId: id, ...(available ? { meetingUrl: "https://meet.google.com/fixture-only" } : {}) };
+  });
+  assert.equal((await processBookingReminders(now)).reminder30m.missingMeetingUrl, 1); assert.equal(sent.length, 0);
+  available = true;
+  assert.equal((await processBookingReminders(now)).reminder30m.sent, 1);
+  assert.equal(rows[0].meetingUrl, "https://meet.google.com/fixture-only"); assert(JSON.stringify(sent).includes(rows[0].meetingUrl));
 });

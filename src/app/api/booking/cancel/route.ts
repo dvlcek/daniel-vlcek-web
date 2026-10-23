@@ -1,3 +1,4 @@
+import { beginCalendarOperation, deliverBookingNotification, recoverCalendarOperation } from "@/lib/booking/recovery";
 import { logSecurityFailure } from "@/lib/security/log";
 import { SecurityError, readJson, requireSameOrigin, securityResponse } from "@/lib/security/http";
 import { limitRequest } from "@/lib/security/rate-limit";
@@ -12,20 +13,11 @@ import {
 
 import {
   BookingStatus,
-  LeadStatus,
 } from "@/generated/prisma/enums";
-
-import {
-  getCalendarProvider,
-} from "@/lib/booking/calendar";
 
 import {
   verifyBookingAccessToken,
 } from "@/lib/booking/tokens";
-
-import {
-  sendBookingCancellationEmail,
-} from "@/lib/email/booking-cancellation";
 
 import {
   getDb,
@@ -90,34 +82,6 @@ function noStoreJson(
 
 /* =========================================================
    CRM
-========================================================= */
-
-function getLeadStatusAfterCancellation(
-  currentStatus:
-    LeadStatus,
-): LeadStatus {
-  /*
-   * Never downgrade a lead that has already moved deeper
-   * into the sales pipeline.
-   */
-  if (
-    currentStatus ===
-      LeadStatus.QUALIFIED ||
-    currentStatus ===
-      LeadStatus.WON ||
-    currentStatus ===
-      LeadStatus.LOST ||
-    currentStatus ===
-      LeadStatus.ARCHIVED
-  ) {
-    return currentStatus;
-  }
-
-  return LeadStatus.BOOKING_STARTED;
-}
-
-/* =========================================================
-   POST /api/booking/cancel
 ========================================================= */
 
 export async function POST(
@@ -257,250 +221,18 @@ export async function POST(
        IDEMPOTENT CANCEL
     ===================================================== */
 
-    if (
-      booking.status ===
-      BookingStatus.CANCELLED
-    ) {
-      return noStoreJson({
-        ok:
-          true,
-
-        alreadyCancelled:
-          true,
-
-        cancellationEmailSent:
-          false,
-
-        booking: {
-          id:
-            booking.id,
-
-          status:
-            BookingStatus.CANCELLED,
-        },
-      });
+    if (booking.status === BookingStatus.CANCELLED) {
+      const cancellationEmailSent = await deliverBookingNotification(booking.id, request.nextUrl.origin);
+      return noStoreJson({ ok: true, alreadyCancelled: true, cancellationEmailSent, booking: { id: booking.id, status: booking.status } });
     }
-
-    /* =====================================================
-       VALID STATE
-    ===================================================== */
-
-    if (
-      booking.status !==
-        BookingStatus.CONFIRMED &&
-      booking.status !==
-        BookingStatus.PENDING
-    ) {
-      return noStoreJson(
-        {
-          ok:
-            false,
-
-          message:
-            "This booking can no longer be cancelled.",
-        },
-        409,
-      );
-    }
-
-    const shouldSendCancellationEmail =
-      booking.status ===
-      BookingStatus.CONFIRMED;
-
-    /* =====================================================
-       GOOGLE CALENDAR
-
-       If an external event exists, cancellation must also
-       succeed in Google before the booking is released.
-
-       We fail closed instead of silently leaving an active
-       calendar event behind.
-    ===================================================== */
-
-    if (
-      booking.externalCalendarEventId
-    ) {
-      const calendarProvider =
-        getCalendarProvider();
-
-      if (
-        !calendarProvider
-      ) {
-        logSecurityFailure("Cannot cancel Google Calendar event because calendar provider is unavailable.");
-
-        return noStoreJson(
-          {
-            ok:
-              false,
-
-            message:
-              "The booking could not be cancelled right now. Please try again.",
-          },
-          503,
-        );
-      }
-
-      try {
-        await calendarProvider.cancelEvent(
-          booking.externalCalendarEventId,
-        );
-      } catch (error) {
-        logSecurityFailure("Google Calendar cancellation failed:", error);
-
-        return noStoreJson(
-          {
-            ok:
-              false,
-
-            message:
-              "The booking could not be cancelled right now. Please try again.",
-          },
-          503,
-        );
-      }
-    }
-
-    /* =====================================================
-       DATABASE
-    ===================================================== */
-
-    const nextLeadStatus =
-      getLeadStatusAfterCancellation(
-        booking.lead.status,
-      );
-
-    await db.$transaction(
-      async (
-        tx,
-      ) => {
-        await tx.booking.update({
-          where: {
-            id:
-              booking.id,
-          },
-
-          data: {
-            status:
-              BookingStatus.CANCELLED,
-
-            /*
-             * Release the booking slot.
-             */
-            activeSlotKey:
-              null,
-
-            /*
-             * Reminder IDs are intentionally preserved.
-             *
-             * They describe historical email delivery and
-             * are useful for the admin audit trail.
-             *
-             * The worker itself only processes CONFIRMED
-             * bookings, so a cancelled booking can never
-             * receive another reminder.
-             */
-          },
-        });
-
-        if (
-          booking.lead.status !==
-          nextLeadStatus
-        ) {
-          await tx.lead.update({
-            where: {
-              id:
-                booking.lead.id,
-            },
-
-            data: {
-              status:
-                nextLeadStatus,
-            },
-          });
-        }
-      },
-    );
-
-    /* =====================================================
-       CANCELLATION EMAIL
-
-       A valid cancellation must remain cancelled even if
-       Resend is temporarily unavailable.
-
-       Email delivery is communication, not transaction
-       authority.
-    ===================================================== */
-
-    let cancellationEmailSent =
-      false;
-
-    if (
-      shouldSendCancellationEmail
-    ) {
-      try {
-        await sendBookingCancellationEmail({
-          bookingId:
-            booking.id,
-
-          clientName:
-            booking.lead.name,
-
-          clientEmail:
-            booking.lead.email,
-
-          startsAt:
-            booking.startsAt,
-
-          endsAt:
-            booking.endsAt,
-
-          timezone:
-            booking.timezone,
-        });
-
-        cancellationEmailSent =
-          true;
-      } catch (
-        emailError
-      ) {
-        logSecurityFailure("Booking cancellation email failed:", emailError);
-      }
-    }
-
-    /* =====================================================
-       SUCCESS
-    ===================================================== */
-
-    return noStoreJson({
-      ok:
-        true,
-
-      alreadyCancelled:
-        false,
-
-      cancellationEmailSent,
-
-      booking: {
-        id:
-          booking.id,
-
-        status:
-          BookingStatus.CANCELLED,
-      },
-    });
+    if (booking.calendarOperation && booking.calendarOperation !== "CANCEL") throw new SecurityError(409, "A booking operation is processing. Retry shortly.");
+    if (!booking.calendarOperation) await beginCalendarOperation(booking, "CANCEL");
+    if (!await recoverCalendarOperation(booking.id)) throw new SecurityError(503, "Cancellation is being reconciled. Retry shortly.");
+    const cancellationEmailSent = await deliverBookingNotification(booking.id, request.nextUrl.origin);
+    return noStoreJson({ ok: true, alreadyCancelled: false, cancellationEmailSent, booking: { id: booking.id, status: BookingStatus.CANCELLED } });
   } catch (error) {
     if (error instanceof SecurityError) return securityResponse(error, "booking_request");
     logSecurityFailure("Booking cancellation API error:", error);
-
-    return noStoreJson(
-      {
-        ok:
-          false,
-
-        message:
-          "Could not cancel the booking. Please try again.",
-      },
-      500,
-    );
+    return noStoreJson({ ok: false, message: "Could not cancel the booking. Please try again." }, 503);
   }
 }

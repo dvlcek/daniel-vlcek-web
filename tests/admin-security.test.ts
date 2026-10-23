@@ -46,9 +46,10 @@ beforeEach(async () => {
       },
     },
     lead: { update: mutation("lead") },
-    booking: { findUnique: async () => ({ id: "booking-fixture", leadId: "lead-fixture", lead: { status: "BOOKED" } }), update: mutation("booking") },
+    booking: { findUnique: async () => ({ id: "booking-fixture", leadId: "lead-fixture", status: "CONFIRMED", calendarOperation: null, activeSlotKey: "slot", externalCalendarEventId: "event", scheduleChangedAt: new Date(), startsAt: new Date(), endsAt: new Date(), lead: { status: "BOOKED" } }), updateMany: mutation("booking") },
     availabilityRule: { create: mutation("rule"), update: mutation("rule"), deleteMany: mutation("rule-delete") },
     availabilityOverride: { create: mutation("override"), deleteMany: mutation("override-delete") },
+    $executeRaw: async () => 1,
     $queryRaw: async () => [{ hits: 1, retryAfter: 60 }],
     $transaction: async (fn: (tx: PrismaClient) => Promise<unknown>) => fn(db),
   } as unknown as PrismaClient;
@@ -174,7 +175,8 @@ test("provider/database errors retain safe codes without secrets in logs or cron
 
 
 test("admin quotas stop mutations before writes", async () => {
-  Object.assign(db, { $queryRaw: async () => [{ hits: 601, retryAfter: 60 }] });
+  Object.assign(db, { $executeRaw: async () => 1,
+    $queryRaw: async () => [{ hits: 601, retryAfter: 60 }] });
   const response = await leads(request("leads/status", "leadId=lead-fixture&status=WON"));
   assert.equal(response.status, 429); assert.equal(response.headers.get("retry-after"), "60");
   assert.equal(writes.length, 0);

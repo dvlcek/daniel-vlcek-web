@@ -1,3 +1,4 @@
+import { processBookingRecovery } from "@/lib/booking/recovery";
 import { logSecurityFailure } from "@/lib/security/log";
 import {
   timingSafeEqual,
@@ -133,6 +134,7 @@ export async function GET(
     const startedAt =
       new Date();
 
+    const recovery = await processBookingRecovery(request.nextUrl.origin);
     const result =
       await processBookingReminders(
         startedAt,
@@ -140,12 +142,13 @@ export async function GET(
       );
 
     return noStoreJson({
-      ok: true,
+      ok: recovery.calendarPending === 0 && recovery.emailPending === 0 && result.errors.length === 0 && result.reminder30m.missingMeetingUrl === 0,
 
       ranAt:
         startedAt.toISOString(),
 
       result,
+      recovery,
     });
   } catch (error) {
     logSecurityFailure("Booking reminder worker failed:", error);

@@ -23,6 +23,8 @@ export type CalendarAttendee = {
 };
 
 export type CreateCalendarEventInput = {
+  externalEventId?: string;
+  bookingId?: string;
   title: string;
 
   description?: string;
@@ -36,6 +38,7 @@ export type CreateCalendarEventInput = {
 };
 
 export type UpdateCalendarEventInput = {
+  etag?: string;
   externalEventId: string;
 
   title?: string;
@@ -50,6 +53,10 @@ export type UpdateCalendarEventInput = {
 };
 
 export type CalendarEventResult = {
+  etag?: string;
+  startsAt?: Date;
+  endsAt?: Date;
+  bookingId?: string;
   externalEventId: string;
 
   htmlUrl?: string;
@@ -93,7 +100,10 @@ export interface CalendarProvider {
     input: UpdateCalendarEventInput,
   ): Promise<CalendarEventResult>;
 
+  getEvent(externalEventId: string, repairMeeting?: boolean): Promise<CalendarEventResult | null>;
+
   cancelEvent(
     externalEventId: string,
+    etag?: string,
   ): Promise<void>;
 }

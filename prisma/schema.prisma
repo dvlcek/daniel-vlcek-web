@@ -104,6 +104,18 @@ model Booking {
 
   cancelTokenHash String? @unique
 
+  // Durable forward-only provider work; PENDING keeps the intended slot reserved.
+  calendarOperation String?
+  calendarOperationKey String?
+  calendarOperationEtag String?
+  calendarLeaseUntil DateTime? @db.Timestamptz(3)
+  calendarError String?
+  // One current lifecycle notification, superseded by the next completed operation.
+  notification Json?
+  notificationSentAt DateTime? @db.Timestamptz(3)
+  notificationFirstAttemptAt DateTime? @db.Timestamptz(3)
+  notificationLeaseUntil DateTime? @db.Timestamptz(3)
+
   reminder24hEmailId String?
   reminder30mEmailId String?
 

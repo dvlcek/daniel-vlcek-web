@@ -14,6 +14,8 @@ import {
 
 export type SendBookingCancellationInput = {
   bookingId: string;
+  idempotencyKey?: string;
+  createdAt?: Date;
 
   clientName: string;
   clientEmail: string;
@@ -549,7 +551,7 @@ export async function sendBookingCancellationEmail(
 
       {
         idempotencyKey:
-          `booking-cancellation/${input.bookingId}/${input.startsAt.getTime()}`,
+          input.idempotencyKey ?? `booking-cancellation/${input.bookingId}/${input.startsAt.getTime()}`,
       },
     );
 
