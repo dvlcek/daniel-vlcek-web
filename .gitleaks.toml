@@ -8,3 +8,19 @@ targetRules = ["generic-api-key"]
 regexTarget = "secret"
 paths = ['(^|/)src/lib/privacy\.ts$']
 regexes = ['^dv_privacy_choice_v1$']
+
+[[allowlists]]
+description = "Reviewed synthetic limiter secret in isolated test fixtures; never a provider credential"
+condition = "AND"
+targetRules = ["generic-api-key"]
+regexTarget = "secret"
+paths = ['(^|/)tests/(admin-security|booking-reliability)\.test\.ts$']
+regexes = ['^fixture-rate-secret-at-least-32-characters$']
+
+[[allowlists]]
+description = "Reviewed SEC-02 prose phrase expiry/revocation; not a token or credential"
+condition = "AND"
+targetRules = ["generic-api-key"]
+regexTarget = "secret"
+paths = ['(^|/)docs/audits/MASTER_SECURITY_ARCHITECTURE_AUDIT\.md$']
+regexes = ['^expiry/revocation$']
