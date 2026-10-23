@@ -2,8 +2,7 @@ import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { Geist } from "next/font/google";
 
-import { Analytics } from "@vercel/analytics/next";
-import { SpeedInsights } from "@vercel/speed-insights/next";
+import { PrivacyProvider } from "@/components/site/PrivacyProvider";
 
 import { ConsoleEasterEgg } from "@/components/site/ConsoleEasterEgg";
 import { siteConfig } from "@/lib/site";
@@ -128,10 +127,7 @@ export default function RootLayout({
       <body>
         <ConsoleEasterEgg />
 
-        {children}
-
-        <Analytics />
-        <SpeedInsights />
+        <PrivacyProvider>{children}</PrivacyProvider>
       </body>
     </html>
   );

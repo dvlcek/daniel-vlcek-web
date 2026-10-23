@@ -35,10 +35,10 @@
   align-items: center;
   gap: 10px;
   color: #52616d;
-  font-size: 11px;
+  font-size: 0.75rem;
   font-weight: 500;
   line-height: 1.5;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   white-space: nowrap;
 }
@@ -61,7 +61,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 18px 12px;
+  padding: 24px 16px;
   border: 1px solid rgb(20 35 46 / 12%);
   border-radius: 16px;
   background: #fffdfa;
@@ -73,8 +73,8 @@
 .hub { border-color: var(--accent); background: #fff1e7; box-shadow: 0 14px 38px rgb(255 90 31 / 9%); }
 .icon { flex-shrink: 0; color: #071017; }
 .hub .icon { color: #c2410c; }
-.title { margin-top: 12px; color: #071017; font-size: 15px; font-weight: 600; line-height: 1.3; letter-spacing: -0.025em; text-wrap: balance; }
-.description { margin-top: 7px; color: #52616d; font-size: 13px; line-height: 1.55; }
+.title { margin-top: 12px; color: #071017; font-size: 1rem; font-weight: 500; line-height: 1.3; letter-spacing: -0.025em; text-wrap: balance; }
+.description { margin-top: 8px; color: #52616d; font-size: 0.875rem; line-height: 1.65; }
 
 .glow { position: absolute; inset: -1px; border: 1px solid var(--accent); border-radius: inherit; box-shadow: 0 0 22px rgb(255 90 31 / 12%); opacity: 0; pointer-events: none; }
 .connection { position: absolute; z-index: 2; display: block; pointer-events: none; }
@@ -99,7 +99,7 @@
 .network[data-animated="true"] .operations .packet { animation: flow-left 3.2s ease-in-out 1; }
 .network[data-animated="true"] .insights .packet { animation: flow-right 3.2s ease-in-out 1; }
 
-.caption { margin-top: 25px; display: flex; align-items: center; justify-content: center; gap: 9px; color: #52616d; text-align: center; font-size: 12px; line-height: 1.6; }
+.caption { margin-top: 24px; display: flex; align-items: center; justify-content: center; gap: 8px; color: #52616d; text-align: center; font-size: 0.875rem; line-height: 1.65; }
 .statusDot { flex-shrink: 0; width: 5px; height: 5px; border-radius: 50%; background: #c2410c; }
 
 @keyframes signal { 0%, 26%, 100% { opacity: 0; } 10%, 16% { opacity: 0.8; } }
@@ -123,11 +123,11 @@
   .automation { grid-area: 2 / 1 / 3 / 3; }
   .operations { grid-area: 3 / 1; }
   .insights { grid-area: 3 / 2; }
-  .node { min-height: 164px; padding: 16px 8px; justify-content: flex-start; }
+  .node { min-height: 164px; padding: 16px 12px; justify-content: flex-start; }
   .hub { min-height: 142px; justify-content: center; }
-  .title { font-size: 14px; min-height: 36px; display: flex; align-items: center; justify-content: center; margin-top: 10px; }
+  .title { font-size: 1rem; min-height: 42px; display: flex; align-items: center; justify-content: center; margin-top: 12px; }
   .hub .title { min-height: 0; }
-  .description { font-size: 12px; line-height: 1.6; }
+  .description { font-size: 0.875rem; line-height: 1.65; }
   .website .connection { top: 100%; bottom: auto; }
   .operations .connection, .insights .connection { top: auto; bottom: 100%; left: 50%; right: auto; width: 1px; height: var(--row-gap); }
   .website .port { top: -3px; bottom: auto; }

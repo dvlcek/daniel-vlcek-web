@@ -1,0 +1,29 @@
+.number {
+  transition: color 200ms ease;
+}
+
+.lineAccent {
+  position: absolute;
+  inset: 0;
+  background: rgb(255 90 31 / 55%);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 240ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .step:hover .number {
+    color: #ff5a1f;
+  }
+
+  .step:hover .lineAccent {
+    transform: scaleX(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .number,
+  .lineAccent {
+    transition: none;
+  }
+}

@@ -120,7 +120,7 @@ export async function GET(
   } catch (error) {
     console.error(
       "Booking availability API error:",
-      error,
+      error instanceof Error ? error.message : "Unknown error",
     );
 
     return noStoreJson(

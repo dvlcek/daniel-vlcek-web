@@ -14,7 +14,7 @@ import {
  *   env missing / true
  *   -> public website is redirected to /coming-soon.
  *
- * Admin, APIs and booking management always remain accessible.
+ * Contact, legal pages, admin, APIs and booking management remain accessible.
  */
 export function proxy(
   request: NextRequest,
@@ -31,6 +31,11 @@ export function proxy(
    * expose the complete application.
    */
   if (!comingSoonEnabled) {
+    return NextResponse.next();
+  }
+
+  // Contact CTAs must reach the booking page in either launch mode.
+  if (["/contact", "/legal", "/privacy", "/cookies"].includes(pathname)) {
     return NextResponse.next();
   }
 

@@ -369,7 +369,7 @@ export function ContactForm() {
         style={{
           color: "#FFFFFF",
         }}
-        className="
+        className="button-primary
           group
 
           inline-flex
@@ -391,11 +391,9 @@ export function ContactForm() {
 
           shadow-[0_8px_26px_rgba(255,90,31,0.15)]
 
-          transition-all
-          duration-300
 
-          hover:-translate-y-0.5
           hover:bg-[#FF6932]
+          hover:shadow-[0_12px_35px_rgba(255,90,31,0.20)]
 
           disabled:pointer-events-none
           disabled:opacity-60
@@ -418,12 +416,7 @@ export function ContactForm() {
             <ArrowRight
               size={14}
               strokeWidth={1.7}
-              className="
-                transition-transform
-                duration-300
-
-                group-hover:translate-x-1
-              "
+              className="button-arrow"
             />
           </>
         )}
@@ -433,13 +426,13 @@ export function ContactForm() {
         className="
           text-center
 
-          text-[9px]
-          leading-4
-          text-white/25
+          text-[12px]
+          leading-6
+          text-white/60
         "
       >
-        Your details are only used
-        to reply to your enquiry.
+        Your details are used to handle your enquiry. Read the{" "}
+        <a href="/privacy" className="rounded-sm underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#FF8054]">privacy notice</a>.
       </p>
     </form>
   );

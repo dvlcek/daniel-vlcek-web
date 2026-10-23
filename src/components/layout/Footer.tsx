@@ -1,525 +1,86 @@
-"use client";
-
-import type { ReactNode } from "react";
-
-import {
-  ArrowRight,
-  Code2,
-  Mail,
-} from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
+import Link from "next/link";
 
 import { Container } from "@/components/ui/Container";
+import { PrivacySettingsButton } from "@/components/site/PrivacyProvider";
+import { legalContactEmail, legalDetails } from "@/lib/legal-details";
+import { siteConfig } from "@/lib/site";
 
 const navLinks = [
-  {
-    label: "Work",
-    href: "/#work",
-  },
-  {
-    label: "Services",
-    href: "/#services",
-  },
-  {
-    label: "Process",
-    href: "/#process",
-  },
-  {
-    label: "About",
-    href: "/#about",
-  },
+  { label: "Work", href: "/#work" },
+  { label: "Services", href: "/#services" },
+  { label: "Process", href: "/#process" },
+  { label: "About", href: "/#about" },
 ];
 
-export function Footer() {
+const legalLinks = [
+  { label: "Legal notice / Impressum", href: "/legal" },
+  { label: "Privacy", href: "/privacy" },
+  { label: "Cookies", href: "/cookies" },
+];
+
+const linkStyle = "inline-flex min-h-11 w-fit items-center rounded-sm nav-text text-white/70 transition-colors duration-200 hover:text-white motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#FF8054]";
+const labelStyle = "eyebrow text-white/50";
+
+export function Footer({ bookingHref = "/contact" }: { bookingHref?: string }) {
+  const formattedCompanyId = legalDetails.businessId?.replace(/^(\d{2})(\d{3})(\d{3})$/, "$1 $2 $3");
+
   return (
-    <footer
-      className="
-        relative
-        overflow-hidden
-
-        border-t
-        border-white/[0.10]
-
-        bg-[#02070B]
-        text-white
-      "
-    >
-      <Container
-        className="
-          relative
-
-          py-10
-          md:py-12
-          xl:py-14
-        "
-      >
-        {/* ======================================================
-            MAIN ROW
-        ====================================================== */}
-
-        <div
-          className="
-            grid
-            gap-10
-
-            md:grid-cols-[1fr_auto]
-            md:items-start
-
-            xl:grid-cols-[0.95fr_auto_1.05fr]
-            xl:items-start
-            xl:gap-14
-          "
-        >
-          {/* ====================================================
-              BRAND
-          ==================================================== */}
-
+    <footer className="relative border-t border-white/[0.08] bg-[#02070B] text-white">
+      <Container className="pb-6 pt-12 md:pt-14 xl:pt-16">
+        <div className="grid gap-x-12 gap-y-9 sm:grid-cols-2 lg:grid-cols-[1.1fr_0.65fr_1.1fr_1fr] lg:gap-x-9 xl:gap-x-14">
           <div>
-            <a
-              href="/"
-              style={{
-                color: "#FFFFFF",
-              }}
-              className="
-                inline-block
-
-                text-[11px]
-                font-semibold
-                uppercase
-                tracking-[0.28em]
-
-                transition-opacity
-                duration-200
-
-                hover:opacity-70
-              "
-            >
-              Daniel VLKO
-            </a>
-
-            <p
-              className="
-                mt-3
-                max-w-[340px]
-
-                text-[9px]
-                font-medium
-                uppercase
-                leading-[1.8]
-                tracking-[0.22em]
-
-                text-white/40
-              "
-            >
-              Software Developer &amp; Automation Architect
-              <br />
-              Building scalable digital systems.
+            <Link href="/" className="inline-flex min-h-11 items-center rounded-sm text-[20px] font-semibold uppercase leading-[1.25] tracking-[0.15em] transition-opacity duration-200 hover:opacity-75 motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#FF8054]">
+              {siteConfig.name}
+            </Link>
+            <p className="mt-4 max-w-[270px] small-copy text-white/60">
+              Software development, automation<br className="hidden xl:block" /> and digital platforms.
             </p>
           </div>
 
-          {/* ====================================================
-              NAVIGATION
-          ==================================================== */}
-
-          <nav
-            aria-label="Footer navigation"
-            className="
-              flex
-              flex-wrap
-
-              gap-x-8
-              gap-y-3
-
-              md:justify-end
-
-              xl:justify-center
-              xl:gap-x-10
-            "
-          >
-            {navLinks.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                style={{
-                  color: "rgba(255,255,255,0.62)",
-                }}
-                className="
-                  text-[12px]
-                  font-medium
-
-                  transition-colors
-                  duration-200
-
-                  hover:!text-white
-                "
-              >
-                {link.label}
-              </a>
-            ))}
+          <nav aria-label="Footer navigation">
+            <p className={labelStyle}>Explore</p>
+            <ul className="mt-3 grid list-none grid-cols-2 gap-x-6 p-0 sm:grid-cols-1">
+              {navLinks.map((link) => <li key={link.href}><Link href={link.href} className={linkStyle}>{link.label}</Link></li>)}
+            </ul>
           </nav>
 
-          {/* ====================================================
-              CONTACT / CTA
-          ==================================================== */}
+          <div>
+            <p className={labelStyle}>Company</p>
+            <p className="mt-3 text-[15px] font-medium leading-6 text-white/90">{legalDetails.legalName}</p>
+            <address className="mt-2 whitespace-pre-line text-[13px] not-italic leading-6 text-white/65">
+              {legalDetails.address}
+            </address>
+            <dl className="mt-3 space-y-1 caption text-white/60">
+              <div className="flex gap-2"><dt>IČO</dt><dd className="tabular-nums text-white/75">{formattedCompanyId}</dd></div>
+              {legalDetails.taxId && <div className="flex gap-2"><dt>DIČ</dt><dd className="tabular-nums text-white/75">{legalDetails.taxId}</dd></div>}
+              {legalDetails.vatId && <div className="flex gap-2"><dt>IČ DPH</dt><dd className="tabular-nums text-white/75">{legalDetails.vatId}</dd></div>}
+            </dl>
+          </div>
 
-          <div
-            className="
-              md:col-span-2
-              md:flex
-              md:items-end
-              md:justify-between
-              md:gap-8
-
-              xl:col-span-1
-              xl:block
-            "
-          >
-            {/* CTA */}
-
-            <div
-              className="
-                max-w-[360px]
-
-                xl:ml-auto
-                xl:max-w-[330px]
-              "
-            >
-              <p
-                className="
-                  text-[8px]
-                  font-semibold
-                  uppercase
-                  tracking-[0.30em]
-
-                  text-white/30
-                "
-              >
-                Start a conversation
-              </p>
-
-              <p
-                className="
-                  mt-3
-
-                  text-[16px]
-                  font-medium
-                  leading-[1.35]
-                  tracking-[-0.025em]
-
-                  text-white/88
-                "
-              >
-                Have a business problem worth solving?
-              </p>
-
-              <a
-                href="/contact"
-                style={{
-                  color: "#FFFFFF",
-                }}
-                className="
-                  group
-
-                  mt-5
-
-                  inline-flex
-                  h-[42px]
-
-                  items-center
-                  justify-center
-                  gap-5
-
-                  rounded-full
-
-                  bg-[#FF5A1F]
-
-                  px-5
-
-                  text-[11px]
-                  font-medium
-
-                  shadow-[0_10px_28px_rgba(255,90,31,0.13)]
-
-                  transition-all
-                  duration-300
-
-                  hover:-translate-y-0.5
-                  hover:bg-[#FF6932]
-                "
-              >
-                Book a discovery call
-
-                <ArrowRight
-                  size={14}
-                  strokeWidth={1.7}
-                  className="
-                    transition-transform
-                    duration-300
-
-                    group-hover:translate-x-1
-                  "
-                />
-              </a>
-
-              {/* GENERAL EMAIL */}
-
-              <div
-                className="
-                  mt-5
-
-                  flex
-                  items-center
-                  gap-3
-                "
-              >
-                <Mail
-                  size={14}
-                  strokeWidth={1.55}
-                  className="text-white/28"
-                />
-
-                <div>
-                  <p
-                    className="
-                      text-[8px]
-                      font-medium
-                      uppercase
-                      tracking-[0.20em]
-
-                      text-white/25
-                    "
-                  >
-                    General enquiries
-                  </p>
-
-                  <a
-                    href="mailto:hello@danielvlko.com"
-                    style={{
-                      color: "rgba(255,255,255,0.50)",
-                    }}
-                    className="
-                      mt-1
-                      inline-block
-
-                      text-[10px]
-
-                      transition-colors
-                      duration-200
-
-                      hover:!text-white
-                    "
-                  >
-                    hello@danielvlko.com
-                  </a>
-                </div>
-              </div>
-            </div>
+          <div className="flex flex-col items-start">
+            <p className={labelStyle}>Contact</p>
+            <a href={`mailto:${legalContactEmail}`} className={`${linkStyle} mt-3 break-all text-[14px]`}>
+              {legalContactEmail}
+            </a>
+            {legalDetails.phone && <a href={`tel:${legalDetails.phone.replace(/[^+\d]/g, "")}`} className={`${linkStyle} flex tabular-nums`}>{legalDetails.phone}</a>}
+            <Link href={bookingHref} data-contact-source={bookingHref === "/contact" ? "footer" : undefined} className={`${linkStyle} group mt-2 gap-2 text-white/85`}>
+              Discuss your project
+              <ArrowUpRight size={15} aria-hidden="true" className="shrink-0 transition-transform duration-200 [@media(hover:hover)_and_(pointer:fine)]:group-hover:translate-x-0.5 [@media(hover:hover)_and_(pointer:fine)]:group-hover:-translate-y-0.5 motion-reduce:transform-none motion-reduce:transition-none" />
+            </Link>
           </div>
         </div>
 
-        {/* ======================================================
-            BOTTOM AREA
-        ====================================================== */}
-
-        <div
-          className="
-            mt-11
-
-            border-t
-            border-white/[0.07]
-
-            pt-5
-          "
-        >
-          <div
-            className="
-              flex
-              flex-col
-              gap-5
-
-              sm:flex-row
-              sm:items-center
-              sm:justify-between
-            "
-          >
-            {/* SOCIALS */}
-
-            <div className="flex items-center gap-1">
-              {/* LINKEDIN */}
-
-              <SocialLink
-                href="#"
-                label="LinkedIn"
-              >
-                <span
-                  className="
-                    relative
-                    top-[-1px]
-
-                    text-[15px]
-                    font-bold
-                    leading-none
-                    tracking-[-0.07em]
-                  "
-                >
-                  in
-                </span>
-              </SocialLink>
-
-              {/* GITHUB */}
-
-              <SocialLink
-                href="#"
-                label="GitHub"
-              >
-                <Code2
-                  size={17}
-                  strokeWidth={1.65}
-                />
-              </SocialLink>
-
-              {/* EMAIL */}
-
-              <SocialLink
-                href="mailto:hello@danielvlko.com"
-                label="Email"
-              >
-                <Mail
-                  size={17}
-                  strokeWidth={1.6}
-                />
-              </SocialLink>
-            </div>
-
-            {/* MICRO COPY */}
-
-            <p
-              className="
-                text-[8px]
-                font-medium
-                uppercase
-                leading-[1.75]
-                tracking-[0.24em]
-
-                text-white/25
-
-                sm:text-center
-              "
-            >
-              Building calmer businesses
-              <br className="hidden sm:block" />
-              {" "}
-              through better systems.
-            </p>
-
-            {/* COPYRIGHT */}
-
-            <div
-              className="
-                flex
-                flex-col
-                gap-1
-
-                sm:items-end
-              "
-            >
-              <p
-                className="
-                  text-[9px]
-                  text-white/28
-                "
-              >
-                © {new Date().getFullYear()} Daniel VLKO.
-                All rights reserved.
-              </p>
-
-              <p
-                className="
-                  text-[8px]
-                  font-medium
-                  uppercase
-                  tracking-[0.22em]
-
-                  text-white/20
-                "
-              >
-                Built with purpose.
-              </p>
-            </div>
-          </div>
+        <div className="mt-10 flex flex-col gap-3 border-t border-white/[0.08] pt-5 lg:flex-row lg:items-center lg:justify-between lg:gap-6">
+          <p className="caption text-white/50">
+            © {new Date().getFullYear()} {legalDetails.legalName}. All rights reserved.
+          </p>
+          <nav aria-label="Legal and privacy information" className="flex flex-wrap gap-x-5 xl:gap-x-6">
+            {legalLinks.map((link) => <Link key={link.href} href={link.href} className={linkStyle}>{link.label}</Link>)}
+            <PrivacySettingsButton className={`${linkStyle} cursor-pointer`} />
+          </nav>
         </div>
       </Container>
     </footer>
-  );
-}
-
-/* ============================================================
-   SOCIAL LINK
-============================================================ */
-
-type SocialLinkProps = {
-  href: string;
-  label: string;
-  children: ReactNode;
-};
-
-function SocialLink({
-  href,
-  label,
-  children,
-}: SocialLinkProps) {
-  const external =
-    href.startsWith("http");
-
-  return (
-    <a
-      href={href}
-      aria-label={label}
-      target={
-        external
-          ? "_blank"
-          : undefined
-      }
-      rel={
-        external
-          ? "noreferrer"
-          : undefined
-      }
-      style={{
-        color: "rgba(255,255,255,0.58)",
-      }}
-      className="
-        group
-
-        inline-flex
-        h-9
-        w-9
-
-        items-center
-        justify-center
-
-        rounded-full
-
-        border
-        border-transparent
-
-        transition-all
-        duration-200
-
-        hover:border-white/[0.08]
-        hover:bg-white/[0.055]
-        hover:!text-white
-      "
-    >
-      <span
-        className="
-          transition-transform
-          duration-200
-
-          group-hover:scale-[1.06]
-        "
-      >
-        {children}
-      </span>
-    </a>
   );
 }

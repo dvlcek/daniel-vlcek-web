@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import Image, { type ImageProps } from "next/image";
 import { ArrowRight } from "lucide-react";
 import { motion, useInView, useReducedMotion } from "motion/react";
+import { Container } from "@/components/ui/Container";
 import styles from "./SelectedWork.module.css";
 
 import {
@@ -23,8 +24,8 @@ export function SelectedWork() {
     <section id="work" className="relative isolate overflow-hidden bg-[#03070b] text-white">
       <SelectedWorkBackground />
 
-      <div className="relative z-10 mx-auto w-full max-w-[1640px] px-5 py-20 sm:px-8 sm:py-24 lg:px-12 xl:py-28">
-        <div className="grid gap-12 min-[1280px]:grid-cols-[300px_minmax(0,1fr)] min-[1280px]:items-start min-[1280px]:gap-10 min-[1440px]:grid-cols-[340px_minmax(0,1fr)] min-[1600px]:gap-12">
+      <Container className="relative z-10 section-space max-w-[1640px] xl:px-12">
+        <div className="grid gap-12 min-[1536px]:grid-cols-[320px_minmax(0,1fr)] min-[1536px]:items-start">
           <SelectedWorkIntro reduceMotion={reduceMotion} />
 
           <motion.div
@@ -36,10 +37,10 @@ export function SelectedWork() {
               hidden: {},
               visible: { transition: { staggerChildren: reduceMotion ? 0 : 0.1 } },
             }}
-            className="grid min-w-0 scroll-mt-24 gap-5"
+            className="grid min-w-0 scroll-mt-24 gap-6"
           >
             <FeaturedCaseStudy />
-            <div className="grid items-stretch gap-5 min-[1280px]:grid-cols-2">
+            <div className="grid items-stretch gap-6 min-[1280px]:grid-cols-2">
               {secondaryCaseStudies.slice(0, 2).map((project, index) => (
                 <SecondaryCaseStudy
                   key={project.title}
@@ -50,7 +51,7 @@ export function SelectedWork() {
             </div>
           </motion.div>
         </div>
-      </div>
+      </Container>
     </section>
   );
 }
@@ -62,9 +63,9 @@ function SelectedWorkIntro({ reduceMotion }: { reduceMotion: boolean | null }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.25 }}
       transition={{ duration: 0.68, ease }}
-      className="min-w-0 min-[1280px]:sticky min-[1280px]:top-28"
+      className={`${styles.intro} min-w-0 min-[1536px]:sticky min-[1536px]:top-28`}
     >
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-4 lg:col-start-1">
         <motion.span
           initial={reduceMotion ? false : { scaleX: 0 }}
           whileInView={{ scaleX: 1 }}
@@ -73,17 +74,17 @@ function SelectedWorkIntro({ reduceMotion }: { reduceMotion: boolean | null }) {
           style={{ transformOrigin: "left" }}
           className="h-px w-10 shrink-0 bg-[var(--accent)]"
         />
-        <span className="text-[11px] font-medium uppercase tracking-[0.24em] text-white/65">
+        <span className="eyebrow text-white/65">
           Selected Work
         </span>
       </div>
 
-      <h2 className="mt-7 max-w-[580px] text-[44px] font-medium leading-[1.04] tracking-[-0.045em] sm:text-[60px] min-[1280px]:max-w-[340px] min-[1280px]:text-[52px] min-[1440px]:text-[58px]">
+      <h2 className={`${styles.introHeading} section-heading intro-gap lg:col-start-1`}>
         <span className="block">Less busywork.</span>
         <span className="block text-[var(--accent)]">More business.</span>
       </h2>
 
-      <p className="mt-6 max-w-[460px] text-[16px] leading-[1.75] text-white/70 min-[1280px]:max-w-[340px]">
+      <p className="section-copy intro-gap max-w-[560px] text-white/70 lg:col-start-1 min-[1536px]:max-w-[320px]">
         See how custom platforms, automation and better digital experiences
         turn everyday bottlenecks into room to grow.
       </p>
@@ -96,7 +97,7 @@ function SelectedWorkIntro({ reduceMotion }: { reduceMotion: boolean | null }) {
           hidden: {},
           visible: { transition: { staggerChildren: reduceMotion ? 0 : 0.07 } },
         }}
-        className="mt-10 grid max-w-[440px] grid-cols-3 min-[1280px]:max-w-none"
+        className={`${styles.introStats} mt-10 grid max-w-[440px] grid-cols-3 min-[1536px]:max-w-none`}
       >
         {selectedWorkIntroStats.map((metric, index) => (
           <motion.div
@@ -123,10 +124,10 @@ function SelectedWorkIntro({ reduceMotion }: { reduceMotion: boolean | null }) {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.48, delay: 0.27, ease }}
-        className="group mt-10 inline-flex min-h-[52px] items-center justify-center gap-5 rounded-full bg-[var(--accent)] px-7 text-sm font-medium text-white shadow-[0_8px_30px_rgba(255,90,31,0.14)] transition-[background-color,box-shadow] duration-200 hover:bg-[var(--accent-hover)] hover:shadow-[0_12px_35px_rgba(255,90,31,0.20)] motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--accent)]"
+        className={`button-primary ${styles.introAction} group action-gap inline-flex button-size w-fit items-center justify-center rounded-full bg-[var(--accent)] button-text text-white shadow-[0_8px_30px_rgba(255,90,31,0.14)] hover:bg-[var(--accent-hover)] hover:shadow-[0_12px_35px_rgba(255,90,31,0.20)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--accent)]`}
       >
         <span>Explore selected work</span>
-        <ArrowRight size={17} aria-hidden="true" strokeWidth={1.7} className="transition-transform duration-200 [@media(hover:hover)_and_(pointer:fine)]:group-hover:translate-x-1 motion-reduce:transform-none" />
+        <ArrowRight size={17} aria-hidden="true" strokeWidth={1.7} className="button-arrow" />
       </motion.a>
     </motion.div>
   );
@@ -144,27 +145,26 @@ function FeaturedCaseStudy() {
       }}
       className={`${styles.card} group relative min-w-0 overflow-hidden rounded-[20px]`}
     >
-      <div className="relative min-h-[460px]">
+      <div className="relative min-h-[460px] md:min-h-[520px]">
         <ProjectVisual
           src={featuredCaseStudy.image}
           alt={featuredCaseStudy.imageAlt}
           priority
           featured
-          objectPosition="left center"
         />
 
-        <div className="relative z-10 flex min-h-[460px] min-w-0 max-w-full flex-col p-6 [text-shadow:0_2px_16px_rgba(0,0,0,0.72)] sm:max-w-[65%] sm:p-8 md:max-w-[60%] min-[1600px]:max-w-[54%] min-[1600px]:p-10">
+        <div className="relative z-10 flex min-h-[460px] md:min-h-[520px] min-w-0 max-w-full flex-col p-6 [text-shadow:0_2px_16px_rgba(0,0,0,0.72)] sm:max-w-[65%] sm:p-8 md:max-w-[56%] min-[1600px]:p-10">
           <ProjectTag>{featuredCaseStudy.eyebrow}</ProjectTag>
-          <h3 className="mt-6 max-w-[400px] text-[30px] font-medium leading-[1.12] tracking-[-0.035em] text-white sm:text-[34px]">
+          <h3 className="card-title card-title--featured mt-6 max-w-[400px] text-white">
             {featuredCaseStudy.title}
           </h3>
-          <p className="mt-4 max-w-[400px] text-[15px] leading-[1.7] text-white/75">
+          <p className="mt-4 max-w-[400px] body-copy text-white/75">
             {featuredCaseStudy.subtitle}
           </p>
           {featuredCaseStudy.metrics?.length ? (
             <MetricsRow metrics={featuredCaseStudy.metrics} className="mt-7" />
           ) : null}
-          <p className="mt-6 max-w-[380px] text-[13px] leading-[1.65] text-white/65">
+          <p className="mt-6 max-w-[380px] small-copy text-white/65">
             One connected system for customers, operations and visibility —
             without the usual manual handoffs.
           </p>
@@ -200,12 +200,12 @@ function SecondaryCaseStudy({ project, id }: { project: WorkCaseStudy; id: strin
           objectPosition={id === "ai-operations" ? "53% center" : "70% center"}
         />
 
-        <div className="relative z-10 flex h-full min-h-[380px] min-w-0 max-w-full flex-col p-6 [text-shadow:0_2px_14px_rgba(0,0,0,0.72)] sm:max-w-[65%] sm:p-7 min-[1280px]:max-w-[90%] min-[1440px]:max-w-[84%] min-[1600px]:max-w-[78%] min-[1600px]:p-8">
-          <ProjectTag compact>{project.eyebrow}</ProjectTag>
-          <h3 className="mt-6 max-w-[320px] text-[26px] font-medium leading-[1.12] tracking-[-0.035em] text-white min-[1600px]:text-[28px]">
+        <div className="relative z-10 flex h-full min-h-[380px] min-w-0 max-w-full flex-col p-6 [text-shadow:0_2px_14px_rgba(0,0,0,0.72)] sm:max-w-[65%] sm:p-8 min-[1280px]:max-w-[70%]">
+          <ProjectTag>{project.eyebrow}</ProjectTag>
+          <h3 className="card-title mt-6 max-w-[320px] text-white">
             {project.title}
           </h3>
-          <p className="mt-4 max-w-[340px] text-[14px] leading-[1.7] text-white/75">
+          <p className="mt-4 max-w-[340px] body-copy text-white/75">
             {project.subtitle}
           </p>
           {project.metrics?.length ? (
@@ -221,9 +221,9 @@ function SecondaryCaseStudy({ project, id }: { project: WorkCaseStudy; id: strin
   );
 }
 
-function ProjectTag({ children, compact = false }: { children: React.ReactNode; compact?: boolean }) {
+function ProjectTag({ children }: { children: React.ReactNode }) {
   return (
-    <span className={`inline-flex min-h-8 w-fit max-w-full items-center rounded-full border border-white/[0.12] bg-[#03070b]/35 px-3.5 py-1.5 text-[10px] font-medium uppercase leading-[1.5] text-white/75 ${compact ? "tracking-[0.12em]" : "tracking-[0.16em]"}`}>
+    <span className="inline-flex min-h-8 w-fit max-w-full items-center rounded-full border border-white/[0.12] bg-[#03070b]/35 px-3.5 py-1.5 eyebrow text-white/75">
       {children}
     </span>
   );
@@ -250,15 +250,17 @@ function ProjectVisual({
 }) {
   return (
     <div className={featured || background ? "absolute inset-0 z-0 min-w-0 overflow-hidden bg-[#03070b]" : "relative aspect-[16/10] min-w-0 overflow-hidden bg-[#03070b] md:aspect-auto md:min-h-full"}>
-      <Image
-        src={src}
-        alt={alt}
-        fill
-        priority={priority}
-        sizes={featured ? "(max-width: 1279px) 100vw, 1156px" : "(max-width: 1279px) 100vw, 568px"}
-        style={{ objectPosition: featured ? "right center" : objectPosition }}
-        className={`${featured ? "origin-right scale-[1.5] object-cover md:object-contain md:object-right [@media(hover:hover)_and_(pointer:fine)]:group-hover:scale-[1.515] motion-reduce:group-hover:scale-[1.5]" : "object-cover [@media(hover:hover)_and_(pointer:fine)]:group-hover:scale-[1.015] motion-reduce:group-hover:scale-100"} transition-transform duration-500 ease-out motion-reduce:transition-none`}
-      />
+      <div className={featured ? styles.featuredImageFrame : "absolute inset-0"}>
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          priority={priority}
+          sizes={featured ? "(max-width: 639px) calc(100vw - 40px), (max-width: 1023px) calc(100vw - 64px), (max-width: 1535px) calc(100vw - 96px), 1176px" : "(max-width: 639px) calc(100vw - 40px), (max-width: 1023px) calc(100vw - 64px), (max-width: 1279px) calc(100vw - 96px), (max-width: 1535px) calc((100vw - 120px) / 2), 576px"}
+          style={{ objectPosition }}
+          className={`${featured ? styles.featuredImage : ""} object-cover [@media(hover:hover)_and_(pointer:fine)]:group-hover:scale-[1.015] motion-reduce:group-hover:scale-100 transition-transform duration-500 ease-out motion-reduce:transition-none`}
+        />
+      </div>
       <div
         aria-hidden="true"
         className="absolute inset-0"
@@ -345,10 +347,10 @@ function CaseStudyLink({ href, title, compact = false }: { href: string; title: 
     <a
       href={href}
       aria-label={`View case study: ${title}`}
-      className={`group/link inline-flex min-h-12 w-fit max-w-full items-center justify-center rounded-full border border-white/[0.16] bg-[#03070b]/40 text-sm font-medium text-white/90 backdrop-blur-sm transition-colors duration-200 hover:border-white/25 hover:bg-white/[0.06] hover:text-white motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--accent)] ${compact ? "gap-4 px-5" : "gap-5 px-7"}`}
+      className={`button-secondary group/link inline-flex min-h-12 w-fit max-w-full items-center justify-center rounded-full border border-white/[0.16] bg-[#03070b]/40 button-text text-white/90 backdrop-blur-sm hover:border-white/25 hover:bg-white/[0.06] hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--accent)] ${compact ?"gap-4 px-5" :"gap-6 px-7"}`}
     >
       <span>View case study</span>
-      <ArrowRight size={compact ? 14 : 16} aria-hidden="true" strokeWidth={1.7} className="transition-transform duration-200 [@media(hover:hover)_and_(pointer:fine)]:group-hover/link:translate-x-1 motion-reduce:transform-none" />
+      <ArrowRight size={compact ? 14 : 16} aria-hidden="true" strokeWidth={1.7} className="button-arrow" />
     </a>
   );
 }

@@ -14,13 +14,7 @@ import {
   useReducedMotion,
 } from "motion/react";
 
-import {
-  ComingSoonModals,
-} from "@/components/launch/ComingSoonModals";
 
-import {
-  CalWarmup,
-} from "@/components/contact/CalWarmup";
 
 /* =========================================================
    SERVICES
@@ -292,9 +286,9 @@ export function ComingSoon() {
             Daniel VLKO
           </motion.span>
 
-          <motion.button
-            type="button"
-            data-book-trigger
+          <motion.a
+            href="/contact"
+            data-contact-source="coming-soon-header"
             whileHover={
               reducedMotion
                 ? undefined
@@ -346,7 +340,7 @@ export function ComingSoon() {
                 group-hover:translate-x-1
               "
             />
-          </motion.button>
+          </motion.a>
         </header>
 
         {/* ===================================================
@@ -517,9 +511,9 @@ export function ComingSoon() {
                 lg:mt-[clamp(22px,2.8vh,32px)]
               "
             >
-              <motion.button
-                type="button"
-                data-book-trigger
+              <motion.a
+                href="/contact"
+                data-contact-source="coming-soon-booking"
                 whileHover={
                   reducedMotion
                     ? undefined
@@ -573,11 +567,11 @@ export function ComingSoon() {
                     group-hover:translate-x-1
                   "
                 />
-              </motion.button>
+              </motion.a>
 
-              <motion.button
-                type="button"
-                data-contact-trigger
+              <motion.a
+                href="/contact"
+                data-contact-source="coming-soon-contact"
                 whileHover={
                   reducedMotion
                     ? undefined
@@ -634,7 +628,7 @@ export function ComingSoon() {
                     group-hover:translate-x-1
                   "
                 />
-              </motion.button>
+              </motion.a>
             </div>
           </motion.div>
 
@@ -965,8 +959,6 @@ export function ComingSoon() {
         </section>
       </div>
 
-      <CalWarmup />
-      <ComingSoonModals />
     </main>
   );
 }

@@ -92,25 +92,12 @@ const labelClassName = `
    MODALS
 ========================================================= */
 
-export function ComingSoonModals() {
-  const [
-    mounted,
-    setMounted,
-  ] = useState(false);
-
+export function SiteModals() {
   const [
     modal,
     setModal,
   ] =
     useState<ModalType>(null);
-
-  /* =======================================================
-     MOUNT
-  ======================================================= */
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   /* =======================================================
      BOOKING PREFETCH
@@ -128,6 +115,9 @@ export function ComingSoonModals() {
     const handleTrigger = (
       event: MouseEvent,
     ) => {
+      if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+        return;
+      }
       const target =
         event.target instanceof Element
           ? event.target
@@ -162,12 +152,14 @@ export function ComingSoonModals() {
     document.addEventListener(
       "click",
       handleTrigger,
+      true,
     );
 
     return () => {
       document.removeEventListener(
         "click",
         handleTrigger,
+        true,
       );
     };
   }, []);
@@ -213,7 +205,7 @@ export function ComingSoonModals() {
     };
   }, [modal]);
 
-  if (!mounted) {
+  if (typeof document === "undefined") {
     return null;
   }
 
@@ -221,7 +213,7 @@ export function ComingSoonModals() {
     <AnimatePresence>
       {modal && (
         <motion.div
-          key="coming-soon-modal"
+          key="site-modal"
           initial={{
             opacity: 0,
           }}
@@ -305,8 +297,9 @@ export function ComingSoonModals() {
               relative
 
               w-full
-
-              overflow-hidden
+              max-h-[calc(100dvh-24px)]
+              overflow-y-auto
+              sm:max-h-[calc(100dvh-48px)]
 
               rounded-[18px]
 
@@ -957,13 +950,13 @@ function ContactForm({
         <p
           className="
             max-w-[290px]
-            text-[9px]
+            text-[12px]
             leading-[1.6]
-            text-white/24
+            text-white/60
           "
         >
-          Your details are used only
-          to respond to your inquiry.
+          Your details are used to handle your inquiry. Read the{" "}
+          <a href="/privacy" className="rounded-sm underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#FF8054]">privacy notice</a>.
         </p>
 
         <button

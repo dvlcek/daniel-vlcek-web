@@ -133,17 +133,7 @@ export function System() {
       />
 
       <Container
-        className="
-          relative
-          pb-20
-          pt-[145px]
-
-          md:pb-24
-          md:pt-[165px]
-
-          xl:pb-24
-          xl:pt-[160px]
-        "
+        className="relative section-space section-space--curve"
       >
         {/* ====================================================
             MAIN GRID
@@ -152,14 +142,14 @@ export function System() {
         <div
           className="
             grid
-            gap-16
+            gap-12
 
             xl:grid-cols-[minmax(400px,0.82fr)_minmax(0,1.18fr)]
             xl:items-center
-            xl:gap-14
+            xl:gap-16
 
             2xl:grid-cols-[minmax(450px,0.86fr)_minmax(0,1.14fr)]
-            2xl:gap-20
+            2xl:gap-16
           "
         >
           {/* ==================================================
@@ -184,20 +174,7 @@ export function System() {
           >
             {/* HEADLINE */}
             <h2
-              className="
-                text-[38px]
-                text-balance
-                font-normal
-                leading-[1.06]
-                tracking-[-0.04em]
-
-                sm:text-[50px]
-                md:text-[56px]
-
-                xl:text-[54px]
-
-                2xl:text-[62px]
-              "
+              className="section-heading section-heading--column"
             >
               One connected system.
               <br />
@@ -206,15 +183,7 @@ export function System() {
 
             {/* DESCRIPTION */}
             <p
-              className="
-                mt-7
-                max-w-[560px]
-                text-[16px]
-                leading-7
-                text-[#52616D]
-
-                md:text-[17px]
-              "
+              className="section-copy intro-gap text-[#52616D]"
             >
               I connect your website, CRM and everyday tools so enquiries reach
               the right person, routine tasks run automatically and you can see
@@ -241,7 +210,7 @@ export function System() {
                 },
               }}
               className="
-                mt-9
+                action-gap
                 grid
                 grid-cols-2
                 gap-x-4
@@ -300,29 +269,22 @@ export function System() {
                 CTA
             ================================================== */}
 
-            <div className="mt-9 flex flex-col gap-5 sm:flex-row sm:items-center">
+            <div className="action-gap flex flex-col gap-5 sm:flex-row sm:items-center">
               <Link
-                href="/contact"
-                className="
+                href="/contact" data-contact-source="system"
+                className="button-primary
     group
     inline-flex
-    h-[50px]
+    button-size
     items-center
     justify-center
-    gap-6
     rounded-full
     bg-[#071017]
-    px-7
-    text-[13px]
-    font-medium
+    button-text
     text-[#FFFFFF]
     shadow-[0_10px_30px_rgba(7,16,23,0.10)]
-    transition-[transform,background-color,box-shadow]
-    duration-200
-    [@media(hover:hover)_and_(pointer:fine)]:hover:-translate-y-0.5
+    hover:shadow-[0_14px_35px_rgba(7,16,23,0.16)]
     hover:bg-[#111D25]
-    active:scale-[0.98]
-    motion-reduce:transform-none
     focus-visible:outline-2
     focus-visible:outline-offset-4
     focus-visible:outline-[#C2410C]
@@ -333,13 +295,13 @@ export function System() {
                 <ArrowRight
                   size={17}
                   aria-hidden="true"
-                  className="text-[#FFFFFF] transition-transform duration-200 [@media(hover:hover)_and_(pointer:fine)]:group-hover:translate-x-1 motion-reduce:transform-none"
+                  className="button-arrow text-[#FFFFFF]"
                 />
               </Link>
 
               <a
                 href="#work"
-                className="
+                className="button-secondary
                   group
                   inline-flex
                   items-center
@@ -347,8 +309,7 @@ export function System() {
                   justify-center
                   sm:justify-start
                   gap-3
-                  text-[13px]
-                  font-medium
+                  button-text
                   text-[#17242E]
                   rounded-sm
                   focus-visible:outline-2
@@ -363,11 +324,11 @@ export function System() {
                 <ArrowRight
                   size={16}
                   aria-hidden="true"
-                  className="transition-transform duration-200 [@media(hover:hover)_and_(pointer:fine)]:group-hover:translate-x-1 motion-reduce:transform-none"
+                  className="button-arrow"
                 />
               </a>
             </div>
-            <p className="mt-4 max-w-[420px] text-[12px] leading-[1.6] text-[#52616D]">
+            <p className="mt-4 max-w-[420px] caption text-[#52616D]">
               We&apos;ll map the bottlenecks and the most useful next step for your business.
             </p>
           </motion.div>

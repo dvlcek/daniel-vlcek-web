@@ -1,5 +1,7 @@
 "use client";
 
+import styles from "@/app/admin/AdminDashboard.module.css";
+
 import {
   useMemo,
   useState,
@@ -208,7 +210,7 @@ function Toggle({
           border
           border-white/[0.13]
           bg-[#1B262C]
-          transition-all
+          transition-colors
 
           after:absolute
           after:left-[3px]
@@ -217,8 +219,9 @@ function Toggle({
           after:w-[12px]
           after:rounded-full
           after:bg-white/45
-          after:transition-all
+          after:transition-colors
 
+          peer-focus-visible:outline-2 peer-focus-visible:outline-offset-4 peer-focus-visible:outline-[#FF8054]
           peer-checked:border-[#FF6B36]/35
           peer-checked:bg-[#FF5A1F]/[0.16]
 
@@ -230,9 +233,9 @@ function Toggle({
 
       <span
         className="
-          text-[11px]
+          text-[13px]
           font-medium
-          text-white/50
+          text-white/70
         "
       >
         {label}
@@ -258,7 +261,7 @@ function WeeklyRuleCard({
         bg-[#152027]
         p-3.5
         shadow-[0_7px_20px_rgba(0,0,0,0.10)]
-        transition-all
+        transition-colors
 
         hover:border-white/[0.16]
         hover:bg-[#18242A]
@@ -277,19 +280,13 @@ function WeeklyRuleCard({
       />
 
       <div
-        className="
-          flex
-          flex-col
-          gap-3
-
-          lg:flex-row
-          lg:items-center
-        "
+        className={styles.weeklyRuleLayout}
       >
         <div
           className="
             flex
-            min-w-[120px]
+            w-[104px]
+            shrink-0
             items-center
             gap-2.5
           "
@@ -310,7 +307,7 @@ function WeeklyRuleCard({
 
           <span
             className="
-              text-[12px]
+              text-[14px]
               font-medium
               text-white/70
             "
@@ -343,8 +340,8 @@ function WeeklyRuleCard({
 
           <span
             className="
-              text-[10px]
-              text-white/30
+              text-[12px]
+              text-white/55
             "
           >
             to
@@ -360,14 +357,7 @@ function WeeklyRuleCard({
         </div>
 
         <div
-          className="
-            flex
-            items-center
-            justify-between
-            gap-3
-
-            lg:justify-end
-          "
+          className={styles.weeklyRuleActions}
         >
           <Toggle
             name="enabled"
@@ -382,16 +372,16 @@ function WeeklyRuleCard({
             name="action"
             value="save"
             className="
-              h-[36px]
+              h-[40px]
               rounded-[9px]
               border
               border-white/[0.11]
               bg-[#1A252B]
               px-3.5
-              text-[10px]
+              text-[12px]
               font-semibold
-              text-white/45
-              transition-all
+              text-white/70
+              transition-colors
 
               hover:border-[#FF6B36]/30
               hover:bg-[#202D34]
@@ -408,16 +398,16 @@ function WeeklyRuleCard({
             aria-label="Delete rule"
             className="
               flex
-              h-[36px]
-              w-[36px]
+              h-[40px]
+              w-[40px]
               items-center
               justify-center
               rounded-[9px]
               border
               border-white/[0.10]
               bg-[#1A252B]
-              text-white/30
-              transition-all
+              text-white/55
+              transition-colors
 
               hover:border-red-300/25
               hover:bg-red-300/[0.06]
@@ -474,7 +464,7 @@ function AddWeeklyWindow() {
             size={12}
             strokeWidth={1.8}
             className="
-              text-white/50
+              text-white/70
             "
           />
         </div>
@@ -482,7 +472,7 @@ function AddWeeklyWindow() {
         <div>
           <div
             className="
-              text-[11px]
+              text-[13px]
               font-semibold
               text-white/55
             "
@@ -493,8 +483,8 @@ function AddWeeklyWindow() {
           <div
             className="
               mt-0.5
-              text-[9px]
-              text-white/30
+              text-[12px]
+              text-white/55
             "
           >
             Add another day or a second window.
@@ -510,7 +500,7 @@ function AddWeeklyWindow() {
 
           sm:grid-cols-2
 
-          xl:grid-cols-[1fr_1fr_1fr_auto]
+          xl:grid-cols-3
         "
       >
         <AdminSelect
@@ -540,16 +530,17 @@ function AddWeeklyWindow() {
           name="action"
           value="save"
           className="
-            h-[42px]
+            h-[44px]
+            xl:col-start-3
             rounded-[11px]
             border
             border-white/[0.11]
             bg-[#1B272D]
             px-4
-            text-[11px]
+            text-[13px]
             font-semibold
             text-white/55
-            transition-all
+            transition-colors
 
             hover:border-[#FF6B36]/30
             hover:bg-[#202E35]
@@ -636,7 +627,7 @@ function AddOverride({
         <div>
           <div
             className="
-              text-[12px]
+              text-[14px]
               font-semibold
               text-white/65
             "
@@ -647,9 +638,9 @@ function AddOverride({
           <p
             className="
               mt-1
-              text-[10px]
+              text-[12px]
               leading-[1.5]
-              text-white/35
+              text-white/60
             "
           >
             Block unavailable time or open a special slot.
@@ -711,7 +702,7 @@ function AddOverride({
         <div>
           <div
             className="
-              text-[11px]
+              text-[13px]
               font-medium
               text-white/55
             "
@@ -722,8 +713,8 @@ function AddOverride({
           <div
             className="
               mt-0.5
-              text-[9px]
-              text-white/30
+              text-[12px]
+              text-white/55
             "
           >
             Apply this exception for the entire day.
@@ -745,29 +736,16 @@ function AddOverride({
       </div>
 
       {!wholeDay && (
-        <div
-          className="
-            mt-3
-            grid
-            grid-cols-[1fr_auto_1fr]
-            items-center
-            gap-2.5
-          "
-        >
+        <div className={styles.overrideTimes}>
+          <div>
+            <p className={styles.fieldLabel}>Start time</p>
           <AdminTimeSelect
             name="start"
             defaultValue="17:00"
           />
-
-          <span
-            className="
-              text-[10px]
-              text-white/30
-            "
-          >
-            to
-          </span>
-
+          </div>
+          <div>
+            <p className={styles.fieldLabel}>End time</p>
           <AdminTimeSelect
             name="end"
             defaultValue={
@@ -777,6 +755,7 @@ function AddOverride({
                 : "20:00"
             }
           />
+          </div>
         </div>
       )}
 
@@ -786,17 +765,17 @@ function AddOverride({
         placeholder="Optional note — travel, client meeting, holiday..."
         className="
           mt-3
-          h-[42px]
+          h-[44px]
           w-full
           rounded-[11px]
           border
           border-white/[0.12]
           bg-[#162026]
           px-4
-          text-[11px]
+          text-[13px]
           text-white/70
           outline-none
-          transition-all
+          transition-colors
           placeholder:text-white/30
 
           hover:border-white/[0.18]
@@ -822,11 +801,11 @@ function AddOverride({
             rounded-[11px]
             bg-[#FF5A1F]
             px-5
-            text-[11px]
+            text-[13px]
             font-semibold
             text-white
             shadow-[0_12px_30px_rgba(255,90,31,0.18)]
-            transition-all
+            transition-colors
 
             hover:-translate-y-px
             hover:bg-[#FF6B36]
@@ -891,9 +870,9 @@ function OverrideList({
         <div
           className="
             mt-3
-            text-[11px]
+            text-[13px]
             font-medium
-            text-white/50
+            text-white/70
           "
         >
           Schedule is clear.
@@ -902,8 +881,8 @@ function OverrideList({
         <div
           className="
             mt-1
-            text-[9px]
-            text-white/30
+            text-[12px]
+            text-white/55
           "
         >
           No upcoming exceptions.
@@ -947,8 +926,8 @@ function OverrideList({
               <div
                 className={`
                   flex
-                  h-[36px]
-                  w-[36px]
+                  h-[40px]
+                  w-[40px]
                   shrink-0
                   items-center
                   justify-center
@@ -997,7 +976,7 @@ function OverrideList({
                 >
                   <span
                     className="
-                      text-[11px]
+                      text-[13px]
                       font-medium
                       text-white/65
                     "
@@ -1013,7 +992,7 @@ function OverrideList({
                       border
                       px-2
                       py-0.5
-                      text-[9px]
+                      text-[12px]
                       font-semibold
 
                       ${
@@ -1036,8 +1015,8 @@ function OverrideList({
                     flex-wrap
                     items-center
                     gap-2
-                    text-[10px]
-                    text-white/40
+                    text-[12px]
+                    text-white/65
                   "
                 >
                   <span>
@@ -1100,8 +1079,8 @@ function OverrideList({
                     border
                     border-white/[0.09]
                     bg-[#182329]
-                    text-white/30
-                    transition-all
+                    text-white/55
+                    transition-colors
 
                     hover:border-red-300/25
                     hover:bg-red-300/[0.06]
@@ -1150,7 +1129,7 @@ export function AdminAvailabilityEditor({
       id="availability"
       className="
         mt-5
-        scroll-mt-6
+        scroll-mt-24
         overflow-visible
         rounded-[21px]
         border
@@ -1183,7 +1162,7 @@ export function AdminAvailabilityEditor({
           <div>
             <div
               className="
-                text-[10px]
+                text-[12px]
                 font-semibold
                 uppercase
                 tracking-[0.16em]
@@ -1209,9 +1188,9 @@ export function AdminAvailabilityEditor({
               className="
                 mt-1.5
                 max-w-[580px]
-                text-[11px]
+                text-[13px]
                 leading-[1.6]
-                text-white/45
+                text-white/70
               "
             >
               Define your regular booking schedule and block
@@ -1234,8 +1213,8 @@ export function AdminAvailabilityEditor({
                 bg-[#172127]
                 px-3
                 py-2
-                text-[10px]
-                text-white/45
+                text-[12px]
+                text-white/70
               "
             >
               {activeRules} active windows
@@ -1249,8 +1228,8 @@ export function AdminAvailabilityEditor({
                 bg-[#172127]
                 px-3
                 py-2
-                text-[10px]
-                text-white/45
+                text-[12px]
+                text-white/70
               "
             >
               {blockedUpcoming} upcoming blocks
@@ -1329,8 +1308,8 @@ export function AdminAvailabilityEditor({
                 <p
                   className="
                     mt-0.5
-                    text-[10px]
-                    text-white/35
+                    text-[12px]
+                    text-white/60
                   "
                 >
                   Repeats every week · {timezone}
@@ -1342,7 +1321,7 @@ export function AdminAvailabilityEditor({
               size={16}
               strokeWidth={1.5}
               className="
-                text-white/30
+                text-white/55
               "
             />
           </div>
@@ -1369,8 +1348,8 @@ export function AdminAvailabilityEditor({
               >
                 <div
                   className="
-                    text-[11px]
-                    text-white/50
+                    text-[13px]
+                    text-white/70
                   "
                 >
                   No recurring availability.
@@ -1379,8 +1358,8 @@ export function AdminAvailabilityEditor({
                 <div
                   className="
                     mt-1
-                    text-[9px]
-                    text-white/28
+                    text-[12px]
+                    text-white/55
                   "
                 >
                   Add your first booking window below.
@@ -1442,7 +1421,7 @@ export function AdminAvailabilityEditor({
                   size={15}
                   strokeWidth={1.5}
                   className="
-                    text-white/50
+                    text-white/70
                   "
                 />
               </div>
@@ -1461,8 +1440,8 @@ export function AdminAvailabilityEditor({
                 <p
                   className="
                     mt-0.5
-                    text-[10px]
-                    text-white/35
+                    text-[12px]
+                    text-white/60
                   "
                 >
                   Travel, meetings, holidays or extra availability.
@@ -1485,9 +1464,9 @@ export function AdminAvailabilityEditor({
           >
             <div
               className="
-                text-[10px]
+                text-[12px]
                 font-semibold
-                text-white/40
+                text-white/65
               "
             >
               Upcoming exceptions
@@ -1495,8 +1474,8 @@ export function AdminAvailabilityEditor({
 
             <div
               className="
-                text-[10px]
-                text-white/30
+                text-[12px]
+                text-white/55
               "
             >
               {overrides.length} total

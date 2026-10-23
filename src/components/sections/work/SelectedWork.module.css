@@ -30,3 +30,53 @@
     transform: none;
   }
 }
+
+/* Keep the introduction above the cards until both columns have room. */
+@media (1024px <= width < 1536px) {
+  .intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    column-gap: 48px;
+  }
+
+  .introStats {
+    grid-area: 2 / 2;
+    align-self: end;
+    margin-top: 0;
+  }
+
+  .introAction {
+    grid-area: 3 / 2;
+    align-self: start;
+    margin-top: 24px;
+  }
+}
+
+@media (min-width: 1536px) {
+  .introHeading {
+    max-width: 320px;
+    font-size: 44px;
+  }
+}
+
+/* The photo can shift independently; the fades cover the whole card. */
+.featuredImageFrame {
+  position: absolute;
+  inset-block: 0;
+  right: 0;
+  width: 100%;
+}
+
+.featuredImage {
+  object-position: right center;
+}
+
+@media (min-width: 768px) {
+  .featuredImageFrame {
+    width: 86%;
+  }
+
+  .featuredImage {
+    object-position: right 38%;
+  }
+}

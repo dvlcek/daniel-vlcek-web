@@ -1,7 +1,10 @@
 "use client";
 
+import styles from "@/app/admin/AdminDashboard.module.css";
+
 import {
   useEffect,
+  useId,
   useMemo,
   useRef,
   useState,
@@ -19,6 +22,8 @@ export type AdminSelectOption = {
 };
 
 type AdminSelectProps = {
+  id?: string;
+  ariaLabel?: string;
   name?: string;
   options: AdminSelectOption[];
   defaultValue?: string;
@@ -33,6 +38,8 @@ type AdminSelectProps = {
 };
 
 export function AdminSelect({
+  id,
+  ariaLabel,
   name,
   options,
   defaultValue = "",
@@ -43,6 +50,8 @@ export function AdminSelect({
   compact = false,
   className = "",
 }: AdminSelectProps) {
+  const generatedId = useId();
+  const controlId = id ?? generatedId;
   const controlled =
     value !== undefined;
 
@@ -159,6 +168,7 @@ export function AdminSelect({
     setOpen(
       false,
     );
+    rootRef.current?.querySelector<HTMLButtonElement>("button")?.focus();
   }
 
   return (
@@ -166,6 +176,7 @@ export function AdminSelect({
       ref={rootRef}
       className={`
         relative
+        min-w-0
         ${className}
       `}
     >
@@ -178,7 +189,11 @@ export function AdminSelect({
       )}
 
       <button
+        id={controlId}
         type="button"
+        aria-label={ariaLabel}
+        aria-haspopup="listbox"
+        aria-controls={open ? `${controlId}-options` : undefined}
         disabled={disabled}
         aria-expanded={open}
         onClick={() =>
@@ -189,6 +204,16 @@ export function AdminSelect({
               !previous,
           )
         }
+        onKeyDown={(event) => {
+          if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+            event.preventDefault();
+            setOpen(true);
+            requestAnimationFrame(() => {
+              const options = rootRef.current?.querySelectorAll<HTMLButtonElement>('[role="option"]');
+              if (options?.length) options[event.key === "ArrowUp" ? options.length - 1 : 0].focus();
+            });
+          }
+        }}
         className={`
           flex
           w-full
@@ -204,7 +229,7 @@ export function AdminSelect({
           text-white/80
           shadow-[0_4px_16px_rgba(0,0,0,0.10)]
           outline-none
-          transition-all
+          transition-colors
 
           hover:border-white/[0.19]
           hover:bg-[#1A252B]
@@ -217,8 +242,8 @@ export function AdminSelect({
 
           ${
             compact
-              ? "h-[36px] px-3 text-[11px]"
-              : "h-[42px] px-4 text-[12px]"
+              ? "h-[40px] px-3 text-[13px]"
+              : "h-[44px] px-4 text-[14px]"
           }
 
           ${
@@ -247,7 +272,7 @@ export function AdminSelect({
           strokeWidth={1.7}
           className={`
             shrink-0
-            text-white/35
+            text-white/60
             transition-transform
             duration-200
 
@@ -262,7 +287,27 @@ export function AdminSelect({
 
       {open && (
         <div
-          className="
+          id={`${controlId}-options`}
+          role="listbox"
+          aria-label={ariaLabel ?? "Options"}
+          onKeyDown={(event) => {
+            const buttons = Array.from(event.currentTarget.querySelectorAll<HTMLButtonElement>('[role="option"]'));
+            const index = buttons.indexOf(document.activeElement as HTMLButtonElement);
+            if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+              event.preventDefault();
+              buttons[(index + (event.key === "ArrowDown" ? 1 : -1) + buttons.length) % buttons.length]?.focus();
+            } else if (event.key === "Home" || event.key === "End") {
+              event.preventDefault();
+              buttons[event.key === "Home" ? 0 : buttons.length - 1]?.focus();
+            } else if (event.key === "Escape") {
+              event.preventDefault();
+              setOpen(false);
+              rootRef.current?.querySelector<HTMLButtonElement>(`[id="${controlId}"]`)?.focus();
+            } else if (event.key === "Tab") {
+              setOpen(false);
+            }
+          }}
+          className={`${styles.selectPopover}
             absolute
             left-0
             top-[calc(100%+7px)]
@@ -281,7 +326,7 @@ export function AdminSelect({
 
             [scrollbar-color:rgba(255,255,255,0.13)_transparent]
             [scrollbar-width:thin]
-          "
+          `}
         >
           {options.map(
             (
@@ -292,9 +337,11 @@ export function AdminSelect({
                 currentValue;
 
               return (
-                <button
-                  key={option.value}
-                  type="button"
+                  <button
+                    key={option.value}
+                    type="button"
+                    role="option"
+                    aria-selected={active}
                   onClick={() =>
                     choose(
                       option.value,
@@ -309,7 +356,7 @@ export function AdminSelect({
                     px-3
                     py-2.5
                     text-left
-                    transition-all
+                    transition-colors
 
                     ${
                       active
@@ -326,7 +373,7 @@ export function AdminSelect({
                   >
                     <div
                       className={`
-                        text-[12px]
+                        text-[14px]
                         font-medium
 
                         ${
@@ -343,9 +390,9 @@ export function AdminSelect({
                       <div
                         className="
                           mt-1
-                          text-[10px]
+                          text-[12px]
                           leading-[1.45]
-                          text-white/38
+                          text-white/60
                         "
                       >
                         {

@@ -1,5 +1,7 @@
 "use client";
 
+import styles from "@/app/admin/AdminDashboard.module.css";
+
 import {
   useEffect,
   useRef,
@@ -175,7 +177,7 @@ export function AdminDatePicker({
         }
         className={`
           flex
-          h-[42px]
+          h-[44px]
           w-full
           items-center
           justify-between
@@ -185,11 +187,11 @@ export function AdminDatePicker({
           bg-[#162026]
           px-4
           text-left
-          text-[12px]
+          text-[14px]
           font-medium
           shadow-[0_4px_16px_rgba(0,0,0,0.10)]
           outline-none
-          transition-all
+          transition-colors
 
           hover:border-white/[0.19]
           hover:bg-[#1A252B]
@@ -203,7 +205,7 @@ export function AdminDatePicker({
           ${
             selected
               ? "text-white/80"
-              : "text-white/40"
+              : "text-white/65"
           }
         `}
       >
@@ -240,7 +242,7 @@ export function AdminDatePicker({
           strokeWidth={1.7}
           className={`
             shrink-0
-            text-white/35
+            text-white/60
             transition-transform
 
             ${
@@ -254,7 +256,7 @@ export function AdminDatePicker({
 
       {open && (
         <div
-          className="
+          className={`${styles.datePopover}
             absolute
             left-0
             top-[calc(100%+8px)]
@@ -268,7 +270,7 @@ export function AdminDatePicker({
             p-3
             shadow-[0_30px_90px_rgba(0,0,0,0.58)]
             backdrop-blur-xl
-          "
+          `}
         >
           <DayPicker
             mode="single"
@@ -317,10 +319,10 @@ export function AdminDatePicker({
                 "absolute left-3 right-3 top-3 z-10 flex items-center justify-between pointer-events-none",
 
               button_previous:
-                "pointer-events-auto flex h-8 w-8 items-center justify-center rounded-full border border-white/[0.10] text-white/45 transition-all hover:bg-white/[0.06] hover:text-white/80",
+                "pointer-events-auto flex h-8 w-8 items-center justify-center rounded-full border border-white/[0.10] text-white/70 transition-colors hover:bg-white/[0.06] hover:text-white/80",
 
               button_next:
-                "pointer-events-auto flex h-8 w-8 items-center justify-center rounded-full border border-white/[0.10] text-white/45 transition-all hover:bg-white/[0.06] hover:text-white/80",
+                "pointer-events-auto flex h-8 w-8 items-center justify-center rounded-full border border-white/[0.10] text-white/70 transition-colors hover:bg-white/[0.06] hover:text-white/80",
 
               month_grid:
                 "w-full border-collapse",
@@ -329,7 +331,7 @@ export function AdminDatePicker({
                 "grid grid-cols-7 mb-1",
 
               weekday:
-                "flex h-8 items-center justify-center text-[9px] font-semibold uppercase tracking-[0.09em] text-white/30",
+                "flex h-8 items-center justify-center text-[12px] font-semibold uppercase tracking-[0.09em] text-white/55",
 
               week:
                 "grid grid-cols-7",
@@ -338,7 +340,7 @@ export function AdminDatePicker({
                 "relative flex aspect-square items-center justify-center p-[2px]",
 
               day_button:
-                "flex h-full w-full items-center justify-center rounded-[9px] text-[11px] text-white/62 outline-none transition-all hover:bg-white/[0.07] hover:text-white focus-visible:ring-1 focus-visible:ring-[#FF5A1F]/50",
+                "flex h-full w-full items-center justify-center rounded-[9px] text-[13px] text-white/62 outline-none transition-colors hover:bg-white/[0.07] hover:text-white focus-visible:ring-1 focus-visible:ring-[#FF5A1F]/50",
 
               selected:
                 "[&>button]:bg-[#FF5A1F] [&>button]:text-white [&>button]:shadow-[0_7px_24px_rgba(255,90,31,0.24)] hover:[&>button]:bg-[#FF5A1F]",
@@ -361,9 +363,9 @@ export function AdminDatePicker({
               border-white/[0.08]
               px-1
               pt-3
-              text-[9px]
+              text-[12px]
               leading-[1.5]
-              text-white/30
+              text-white/55
             "
           >
             Schedule timezone: Europe/Vienna

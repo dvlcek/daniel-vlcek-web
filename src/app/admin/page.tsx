@@ -1,3 +1,8 @@
+import Link from "next/link";
+import { AdminNavigation } from "@/components/admin/AdminNavigation";
+import { AdminDetailDrawer } from "@/components/admin/AdminDetailDrawer";
+import styles from "./AdminDashboard.module.css";
+
 import type {
   LucideIcon,
 } from "lucide-react";
@@ -14,7 +19,6 @@ import {
   Mail,
   Users,
   Workflow,
-  X,
 } from "lucide-react";
 
 import {
@@ -899,1792 +903,299 @@ export default async function AdminDashboardPage({
       );
 
   return (
-    <main
-      className="
-        min-h-screen
-        bg-[#0B1115]
-        text-[#F4F6F7]
-      "
-      style={{
-        backgroundColor:
-          "#0B1115",
-      }}
-    >
-      <div
-        className="
-          pointer-events-none
-          fixed
-          left-[6%]
-          top-[-230px]
-          h-[620px]
-          w-[620px]
-          rounded-full
-          bg-[#FF5A1F]/[0.065]
-          blur-[180px]
-        "
-      />
-
-      <div
-        className="
-          pointer-events-none
-          fixed
-          right-[-100px]
-          top-[15%]
-          h-[520px]
-          w-[520px]
-          rounded-full
-          bg-slate-300/[0.025]
-          blur-[160px]
-        "
-      />
-
-      <div
-        className="
-          pointer-events-none
-          fixed
-          bottom-[-270px]
-          left-[38%]
-          h-[520px]
-          w-[520px]
-          rounded-full
-          bg-white/[0.025]
-          blur-[180px]
-        "
-      />
-
-      <div
-        className="
-          relative
-          mx-auto
-          w-full
-          max-w-[1540px]
-          px-4
-          pb-20
-          pt-6
-
-          sm:px-6
-
-          lg:px-8
-        "
-      >
-        <header
-          className="
-            flex
-            flex-col
-            gap-6
-            border-b
-            border-white/[0.10]
-            pb-7
-
-            sm:flex-row
-            sm:items-end
-            sm:justify-between
-          "
-        >
-          <div>
-            <div
-              className="
-                text-[10px]
-                font-semibold
-                uppercase
-                tracking-[0.22em]
-                text-[#FF8054]
-              "
-            >
-              Daniel VLKO
+    <main className={styles.workspace}>
+      <div className={styles.shell}>
+        <AdminNavigation timezone={bookingConfig.timezone} />
+        <div className={styles.content}>
+          <header className={styles.header}>
+            <div>
+              <p className={styles.eyebrow}>Private workspace</p>
+              <h1>Control center.</h1>
+              <p>Manage your calls, leads and booking availability.</p>
             </div>
-
-            <h1
-              className="
-                mt-2.5
-                text-[32px]
-                font-medium
-                tracking-[-0.05em]
-                text-white
-
-                sm:text-[38px]
-              "
-            >
-              Control center.
-            </h1>
-
-            <p
-              className="
-                mt-3
-                max-w-[640px]
-                text-[13px]
-                leading-[1.65]
-                text-white/50
-              "
-            >
-              Sales pipeline, calls, availability and booking
-              infrastructure in one private workspace.
-            </p>
-          </div>
-
-          <div
-            className="
-              flex
-              items-center
-              gap-3
-            "
-          >
-            <div
-              className="
-                hidden
-                items-center
-                gap-2
-                rounded-full
-                border
-                border-emerald-300/[0.14]
-                bg-emerald-300/[0.055]
-                px-4
-                py-2.5
-
-                sm:flex
-              "
-            >
-              <span
-                className="
-                  h-[6px]
-                  w-[6px]
-                  rounded-full
-                  bg-emerald-400
-                  shadow-[0_0_12px_rgba(52,211,153,0.7)]
-                "
-              />
-
-              <span
-                className="
-                  text-[10px]
-                  font-semibold
-                  text-emerald-200/70
-                "
-              >
-                System live
-              </span>
+            <div className={styles.headerActions}>
+              <Link href="/" target="_blank" className={styles.button}>
+                View website <ArrowUpRight size={16} aria-hidden="true" />
+              </Link>
+              <form method="POST" action="/api/admin/logout">
+                <button type="submit" className={styles.button}>
+                  <LogOut size={16} aria-hidden="true" /> Logout
+                </button>
+              </form>
             </div>
+          </header>
 
-            <form
-              method="POST"
-              action="/api/admin/logout"
-            >
-              <button
-                type="submit"
-                className="
-                  flex
-                  h-[40px]
-                  items-center
-                  gap-2
-                  rounded-full
-                  border
-                  border-white/[0.12]
-                  bg-[#152027]
-                  px-4
-                  text-[11px]
-                  font-semibold
-                  text-white/55
-                  transition-all
-
-                  hover:border-white/[0.20]
-                  hover:bg-[#1A252B]
-                  hover:text-white
-                "
-              >
-                <LogOut
-                  size={13}
-                  strokeWidth={1.7}
-                />
-
-                Logout
-              </button>
-            </form>
-          </div>
-        </header>
-
-        <AdminFilters
-          query={query}
-          leadStatus={
-            leadStatusFilter ??
-            ""
-          }
-          bookingStatus={
-            bookingStatusFilter ??
-            ""
-          }
-          bookingView={
-            bookingView
-          }
-        />
-
-        <section
-          className="
-            mt-5
-            grid
-            gap-3
-
-            sm:grid-cols-2
-
-            xl:grid-cols-4
-          "
-        >
-          <MetricCard
-            label="Upcoming calls"
-            value={String(
-              upcomingCalls,
-            )}
-            description="Confirmed future calls"
-            icon={CalendarDays}
-          />
-
-          <MetricCard
-            label="New leads"
-            value={String(
-              newLeads7d,
-            )}
-            description="Created in the last 7 days"
-            icon={Users}
-          />
-
-          <MetricCard
-            label="Booking conversion"
-            value={`${conversionRate}%`}
-            description="Website booking leads · 30d"
-            icon={Workflow}
-          />
-
-          <MetricCard
-            label="Calls this month"
-            value={String(
-              callsThisMonth,
-            )}
-            description="Scheduled this calendar month"
-            icon={Clock3}
-          />
-        </section>
-
-        <div
-          className="
-            mt-5
-            grid
-            gap-5
-
-            xl:grid-cols-[1.42fr_0.58fr]
-          "
-        >
-          <section
-            className="
-              overflow-visible
-              rounded-[20px]
-              border
-              border-white/[0.11]
-              bg-[#11191E]
-              shadow-[0_18px_50px_rgba(0,0,0,0.15)]
-            "
-          >
-            <SectionHeader
-              eyebrow="Calendar"
-              title={
-                bookingView ===
-                "upcoming"
-                  ? "Upcoming calls"
-                  : "Bookings"
-              }
-              description={`${bookings.length} booking${
-                bookings.length ===
-                1
-                  ? ""
-                  : "s"
-              } in the current view.`}
-            />
-
-            {bookings.length ===
-            0 ? (
-              <EmptyState
-                title="No matching bookings."
-                text="Try changing the filters or wait for the next booking."
-              />
-            ) : (
-              <div>
-                {bookings.map(
-                  (
-                    booking,
-                    index,
-                  ) => (
-                    <div
-                      key={booking.id}
-                      className={`
-                        px-5
-                        py-5
-
-                        sm:px-6
-
-                        ${
-                          index >
-                          0
-                            ? "border-t border-white/[0.08]"
-                            : ""
-                        }
-                      `}
-                    >
-                      <div
-                        className="
-                          flex
-                          flex-col
-                          gap-4
-
-                          lg:flex-row
-                          lg:items-center
-                          lg:justify-between
-                        "
-                      >
-                        <div
-                          className="
-                            min-w-0
-                            flex-1
-                          "
-                        >
-                          <div
-                            className="
-                              flex
-                              flex-wrap
-                              items-center
-                              gap-2.5
-                            "
-                          >
-                            <a
-                              href={`/admin?booking=${encodeURIComponent(
-                                booking.id,
-                              )}`}
-                              className="
-                                truncate
-                                text-[14px]
-                                font-medium
-                                text-white/90
-                                transition-colors
-
-                                hover:text-[#FF8A61]
-                              "
-                            >
-                              {
-                                booking
-                                  .lead
-                                  .name
-                              }
-                            </a>
-
-                            <span
-                              className={`
-                                rounded-full
-                                border
-                                px-2.5
-                                py-1
-                                text-[9px]
-                                font-semibold
-
-                                ${bookingStatusClass(
-                                  booking.status,
-                                )}
-                              `}
-                            >
-                              {statusLabel(
-                                booking.status,
-                              )}
-                            </span>
-                          </div>
-
-                          <p
-                            className="
-                              mt-1.5
-                              truncate
-                              text-[11px]
-                              text-white/45
-                            "
-                          >
-                            {
-                              booking
-                                .lead
-                                .email
-                            }
-                          </p>
-
-                          <div
-                            className="
-                              mt-3
-                              flex
-                              flex-wrap
-                              gap-x-5
-                              gap-y-2
-                              text-[11px]
-                              text-white/50
-                            "
-                          >
-                            <span
-                              className="
-                                font-medium
-                                text-white/65
-                              "
-                            >
-                              {formatDateTime(
-                                booking.startsAt,
-                              )}
-                            </span>
-
-                            {booking
-                              .lead
-                              .company && (
-                              <span>
-                                {
-                                  booking
-                                    .lead
-                                    .company
-                                }
-                              </span>
-                            )}
-
-                            {booking
-                              .lead
-                              .website && (
-                              <span>
-                                {
-                                  booking
-                                    .lead
-                                    .website
-                                }
-                              </span>
-                            )}
-                          </div>
-
-                          {booking
-                            .lead
-                            .message && (
-                            <p
-                              className="
-                                mt-3
-                                max-w-[680px]
-                                text-[11px]
-                                leading-[1.6]
-                                text-white/42
-                              "
-                            >
-                              {
-                                booking
-                                  .lead
-                                  .message
-                              }
-                            </p>
-                          )}
-                        </div>
-
-                        <div
-                          className="
-                            flex
-                            shrink-0
-                            flex-wrap
-                            items-center
-                            gap-2
-                          "
-                        >
-                          {booking.meetingUrl && (
-                            <a
-                              href={
-                                booking.meetingUrl
-                              }
-                              target="_blank"
-                              rel="noreferrer"
-                              className="
-                                inline-flex
-                                h-[38px]
-                                items-center
-                                gap-2
-                                rounded-[10px]
-                                bg-[#FF5A1F]
-                                px-4
-                                text-[10px]
-                                font-semibold
-                                text-white
-                                transition-all
-
-                                hover:bg-[#ff682e]
-                              "
-                            >
-                              Join Meet
-
-                              <ArrowUpRight
-                                size={12}
-                                strokeWidth={1.8}
-                              />
-                            </a>
-                          )}
-
-                          {booking.status ===
-                            BookingStatus.CONFIRMED && (
-                            <>
-                              <BookingAction
-                                bookingId={
-                                  booking.id
-                                }
-                                status={
-                                  BookingStatus.COMPLETED
-                                }
-                                label="Complete"
-                              />
-
-                              <BookingAction
-                                bookingId={
-                                  booking.id
-                                }
-                                status={
-                                  BookingStatus.NO_SHOW
-                                }
-                                label="No-show"
-                              />
-                            </>
-                          )}
-
-                          {(booking.status ===
-                            BookingStatus.COMPLETED ||
-                            booking.status ===
-                              BookingStatus.NO_SHOW) && (
-                            <BookingAction
-                              bookingId={
-                                booking.id
-                              }
-                              status={
-                                BookingStatus.CONFIRMED
-                              }
-                              label="Restore"
-                            />
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  ),
-                )}
-              </div>
-            )}
+          <section id="overview" aria-label="Business overview" className={styles.metrics}>
+            <MetricCard label="Upcoming calls" value={String(upcomingCalls)}
+              description="Confirmed future calls" icon={CalendarDays} />
+            <MetricCard label="New leads" value={String(newLeads7d)}
+              description="Created in the last 7 days" icon={Users} />
+            <MetricCard label="Booking conversion" value={`${conversionRate}%`}
+              description="Website booking leads · 30d" icon={Workflow} />
+            <MetricCard label="Calls this month" value={String(callsThisMonth)}
+              description="Scheduled this calendar month" icon={Clock3} />
           </section>
 
-          <section
-            className="
-              overflow-hidden
-              rounded-[20px]
-              border
-              border-white/[0.11]
-              bg-[#11191E]
-              shadow-[0_18px_50px_rgba(0,0,0,0.15)]
-            "
-          >
-            <SectionHeader
-              eyebrow="Infrastructure"
-              title="System health"
-              description="Production dependencies required by the booking system."
-            />
+          <AdminFilters key={JSON.stringify([query, leadStatusFilter, bookingStatusFilter, bookingView])} query={query} leadStatus={leadStatusFilter ?? ""}
+            bookingStatus={bookingStatusFilter ?? ""} bookingView={bookingView} />
 
-            <div
-              className="
-                px-5
-                pb-5
-
-                sm:px-6
-              "
-            >
-              {systemChecks.map(
-                (
-                  item,
-                  index,
-                ) => {
-                  const Icon =
-                    item.icon;
-
-                  return (
-                    <div
-                      key={item.label}
-                      className={`
-                        flex
-                        items-center
-                        justify-between
-                        gap-4
-                        py-4
-
-                        ${
-                          index >
-                          0
-                            ? "border-t border-white/[0.08]"
-                            : ""
-                        }
-                      `}
-                    >
-                      <div
-                        className="
-                          flex
-                          items-center
-                          gap-3
-                        "
-                      >
-                        <div
-                          className="
-                            flex
-                            h-[34px]
-                            w-[34px]
-                            items-center
-                            justify-center
-                            rounded-[9px]
-                            border
-                            border-white/[0.10]
-                            bg-[#182329]
-                          "
-                        >
-                          <Icon
-                            size={14}
-                            strokeWidth={1.6}
-                            className="
-                              text-white/50
-                            "
-                          />
+          <div className={styles.overviewGrid}>
+            <section id="bookings" aria-labelledby="bookings-heading" className={styles.panel}>
+              <SectionHeader id="bookings-heading" eyebrow="Calendar"
+                title={bookingView === "upcoming" ? "Upcoming calls" : "Bookings"}
+                description={`${bookings.length} booking${bookings.length === 1 ? "" : "s"} in the current view.`}>
+                <Link href={`${detailHref(params, null)}#availability`} className={styles.button}>
+                  <Clock3 size={15} aria-hidden="true" /> Edit availability
+                </Link>
+              </SectionHeader>
+              {bookings.length === 0 ? (
+                <EmptyState title="No matching bookings." text="Try changing the filters or wait for the next booking." />
+              ) : (
+                <div>
+                  {bookings.map((booking) => (
+                    <article key={booking.id} className={styles.bookingRow}>
+                      <div className={styles.bookingTop}>
+                        <div className={styles.bookingName}>
+                          <Link href={detailHref(params, "booking", booking.id)} scroll={false} className={styles.textLink}>
+                            {booking.lead.name}
+                          </Link>
+                          <span className={`${styles.badge} ${bookingStatusClass(booking.status)}`}>
+                            {statusLabel(booking.status)}
+                          </span>
                         </div>
-
-                        <span
-                          className="
-                            text-[12px]
-                            font-medium
-                            text-white/65
-                          "
-                        >
-                          {
-                            item.label
-                          }
+                        <span className={styles.bookingDate}>
+                          <CalendarDays size={15} aria-hidden="true" />
+                          {formatDateTime(booking.startsAt)}
                         </span>
                       </div>
-
-                      <div
-                        className="
-                          flex
-                          items-center
-                          gap-2
-                        "
-                      >
-                        <CheckCircle2
-                          size={13}
-                          strokeWidth={1.8}
-                          className={
-                            item.ready
-                              ? "text-emerald-300/75"
-                              : "text-red-300/65"
-                          }
-                        />
-
-                        <span
-                          className={`
-                            text-[10px]
-                            font-semibold
-
-                            ${
-                              item.ready
-                                ? "text-emerald-200/65"
-                                : "text-red-200/65"
-                            }
-                          `}
-                        >
-                          {item.ready
-                            ? "Ready"
-                            : "Missing"}
-                        </span>
+                      <p className={styles.contactLine}>{booking.lead.email}</p>
+                      <div className={styles.bookingMeta}>
+                        {booking.lead.company && <span>{booking.lead.company}</span>}
+                        {booking.lead.website && <span>{booking.lead.website}</span>}
                       </div>
+                      {booking.lead.message && <p className={styles.context}>{booking.lead.message}</p>}
+                      <div className={styles.actions}>
+                        <Link href={detailHref(params, "booking", booking.id)} scroll={false} className={styles.button}>View details</Link>
+                        {booking.meetingUrl && (
+                          <a href={booking.meetingUrl} target="_blank" rel="noreferrer" className={styles.primaryButton}>
+                            Join Meet <ArrowUpRight size={15} aria-hidden="true" />
+                          </a>
+                        )}
+                        {booking.status === BookingStatus.CONFIRMED && (
+                          <>
+                            <BookingAction bookingId={booking.id} status={BookingStatus.COMPLETED} label="Complete" />
+                            <BookingAction bookingId={booking.id} status={BookingStatus.NO_SHOW} label="No-show" />
+                          </>
+                        )}
+                        {(booking.status === BookingStatus.COMPLETED || booking.status === BookingStatus.NO_SHOW) && (
+                          <BookingAction bookingId={booking.id} status={BookingStatus.CONFIRMED} label="Restore" />
+                        )}
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              )}
+            </section>
+
+            <section id="system" aria-labelledby="system-heading" className={styles.panel}>
+              <SectionHeader id="system-heading" eyebrow="Infrastructure" title="System health"
+                description="Production dependencies required by the booking system." />
+              <div className={styles.systemList}>
+                {systemChecks.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <div key={item.label} className={styles.systemRow}>
+                      <span className={styles.systemName}><Icon size={16} aria-hidden="true" />{item.label}</span>
+                      <span className={`${styles.systemState} ${item.ready ? styles.ready : styles.missing}`}>
+                        <CheckCircle2 size={15} aria-hidden="true" />{item.ready ? "Ready" : "Missing"}
+                      </span>
                     </div>
                   );
-                },
-              )}
-            </div>
-          </section>
-        </div>
+                })}
+              </div>
+            </section>
+          </div>
 
-        <div
-          className="
-            mt-5
-            grid
-            gap-5
-
-            xl:grid-cols-[1.42fr_0.58fr]
-          "
-        >
-          <section
-            className="
-              overflow-visible
-              rounded-[20px]
-              border
-              border-white/[0.11]
-              bg-[#11191E]
-              shadow-[0_18px_50px_rgba(0,0,0,0.15)]
-            "
-          >
-            <SectionHeader
-              eyebrow="CRM"
-              title="Leads"
-              description={`${leads.length} lead${
-                leads.length ===
-                1
-                  ? ""
-                  : "s"
-              } in the current view.`}
-            />
-
-            {leads.length ===
-            0 ? (
-              <EmptyState
-                title="No matching leads."
-                text="Change the search or lead status filter."
-              />
+          <section id="leads" aria-labelledby="leads-heading" className={`${styles.panel} ${styles.section}`}>
+            <SectionHeader id="leads-heading" eyebrow="CRM" title="Leads"
+              description={`${leads.length} lead${leads.length === 1 ? "" : "s"} in the current view.`} />
+            {leads.length === 0 ? (
+              <EmptyState title="No matching leads." text="Change the search or lead status filter." />
             ) : (
-              <div
-                className="
-                  overflow-x-auto
-                  overflow-y-visible
-                "
-              >
-                <table
-                  className="
-                    w-full
-                    min-w-[850px]
-                    border-collapse
-                  "
-                >
+              <div className={styles.tableWrap}>
+                <table className={styles.leadsTable} aria-label="CRM leads">
                   <thead>
-                    <tr
-                      className="
-                        border-b
-                        border-white/[0.09]
-                        bg-white/[0.025]
-                        text-left
-                      "
-                    >
-                      {[
-                        "Lead",
-                        "Company",
-                        "Source",
-                        "Last booking",
-                        "Status",
-                      ].map(
-                        (
-                          label,
-                        ) => (
-                          <th
-                            key={label}
-                            className="
-                              px-6
-                              py-3.5
-                              text-[9px]
-                              font-semibold
-                              uppercase
-                              tracking-[0.11em]
-                              text-white/38
-                            "
-                          >
-                            {label}
-                          </th>
-                        ),
-                      )}
-                    </tr>
+                    <tr>{["Lead", "Company", "Source", "Last booking", "Status"].map((label) => (
+                      <th key={label} scope="col">{label}</th>
+                    ))}</tr>
                   </thead>
-
                   <tbody>
-                    {leads.map(
-                      (
-                        lead,
-                      ) => {
-                        const latestBooking =
-                          lead
-                            .bookings[0];
-
-                        return (
-                          <tr
-                            key={lead.id}
-                            className="
-                              border-b
-                              border-white/[0.075]
-                              transition-colors
-
-                              hover:bg-white/[0.025]
-
-                              last:border-b-0
-                            "
-                          >
-                            <td
-                              className="
-                                px-6
-                                py-4
-                              "
-                            >
-                              <a
-                                href={`/admin?lead=${encodeURIComponent(
-                                  lead.id,
-                                )}`}
-                                className="
-                                  text-[12px]
-                                  font-medium
-                                  text-white/80
-                                  transition-colors
-
-                                  hover:text-[#FF8A61]
-                                "
-                              >
-                                {
-                                  lead.name
-                                }
-                              </a>
-
-                              <p
-                                className="
-                                  mt-1
-                                  text-[10px]
-                                  text-white/40
-                                "
-                              >
-                                {
-                                  lead.email
-                                }
-                              </p>
-                            </td>
-
-                            <td
-                              className="
-                                px-6
-                                py-4
-                                text-[11px]
-                                text-white/50
-                              "
-                            >
-                              {lead.company ??
-                                "—"}
-                            </td>
-
-                            <td
-                              className="
-                                px-6
-                                py-4
-                                text-[10px]
-                                text-white/42
-                              "
-                            >
-                              {statusLabel(
-                                lead.source,
-                              )}
-                            </td>
-
-                            <td
-                              className="
-                                px-6
-                                py-4
-                                text-[11px]
-                                text-white/48
-                              "
-                            >
-                              {latestBooking
-                                ? formatDateTime(
-                                    latestBooking.startsAt,
-                                  )
-                                : "—"}
-                            </td>
-
-                            <td
-                              className="
-                                px-6
-                                py-4
-                              "
-                            >
-                              <LeadStatusEditor
-                                leadId={
-                                  lead.id
-                                }
-                                status={
-                                  lead.status
-                                }
-                              />
-                            </td>
-                          </tr>
-                        );
-                      },
-                    )}
+                    {leads.map((lead) => {
+                      const latestBooking = lead.bookings[0];
+                      return (
+                        <tr key={lead.id}>
+                          <td data-label="Lead">
+                            <Link href={detailHref(params, "lead", lead.id)} scroll={false} className={styles.textLink}>{lead.name}</Link>
+                            <p>{lead.email}</p>
+                          </td>
+                          <td data-label="Company">{lead.company ?? "—"}</td>
+                          <td data-label="Source">{statusLabel(lead.source)}</td>
+                          <td data-label="Last booking">{latestBooking ? formatDateTime(latestBooking.startsAt) : "—"}</td>
+                          <td data-label="Status"><LeadStatusEditor leadId={lead.id} status={lead.status} /></td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>
             )}
           </section>
 
-          <section
-            className="
-              overflow-hidden
-              rounded-[20px]
-              border
-              border-white/[0.11]
-              bg-[#11191E]
-              shadow-[0_18px_50px_rgba(0,0,0,0.15)]
-            "
-          >
-            <SectionHeader
-              eyebrow="Operations"
-              title="Recent activity"
-              description="Latest CRM and booking lifecycle changes."
-            />
+          <AdminAvailabilityPanel />
 
-            <div
-              className="
-                px-5
-                pb-5
-
-                sm:px-6
-              "
-            >
-              {recentActivity.length ===
-              0 ? (
-                <div
-                  className="
-                    py-8
-                    text-[11px]
-                    text-white/40
-                  "
-                >
-                  No activity yet.
-                </div>
-              ) : (
-                recentActivity.map(
-                  (
-                    item,
-                    index,
-                  ) => (
-                    <div
-                      key={item.id}
-                      className={`
-                        flex
-                        gap-3
-                        py-3.5
-
-                        ${
-                          index >
-                          0
-                            ? "border-t border-white/[0.075]"
-                            : ""
-                        }
-                      `}
-                    >
-                      <div
-                        className="
-                          pt-[5px]
-                        "
-                      >
-                        <span
-                          className={`
-                            block
-                            h-[6px]
-                            w-[6px]
-                            rounded-full
-
-                            ${activityToneClass(
-                              item.tone,
-                            )}
-                          `}
-                        />
-                      </div>
-
-                      <div
-                        className="
-                          min-w-0
-                          flex-1
-                        "
-                      >
-                        <p
-                          className="
-                            text-[11px]
-                            font-medium
-                            text-white/65
-                          "
-                        >
-                          {
-                            item.title
-                          }
-                        </p>
-
-                        <p
-                          className="
-                            mt-1
-                            truncate
-                            text-[10px]
-                            text-white/38
-                          "
-                        >
-                          {
-                            item.detail
-                          }
-                        </p>
-                      </div>
-
-                      <span
-                        className="
-                          shrink-0
-                          text-[9px]
-                          text-white/30
-                        "
-                      >
-                        {formatDate(
-                          item.timestamp,
-                        )}
-                      </span>
-                    </div>
-                  ),
-                )
-              )}
-            </div>
+          <section id="activity" aria-labelledby="activity-heading" className={`${styles.panel} ${styles.section}`}>
+            <SectionHeader id="activity-heading" eyebrow="Operations" title="Recent activity"
+              description="Latest CRM and booking lifecycle changes." />
+            {recentActivity.length === 0 ? (
+              <EmptyState title="No activity yet." text="CRM and booking updates will appear here." />
+            ) : (
+              <div className={styles.activityList}>
+                {recentActivity.map((item) => (
+                  <div key={item.id} className={styles.activityItem}>
+                    <span className={`${styles.activityDot} ${activityToneClass(item.tone)}`} aria-hidden="true" />
+                    <div className={styles.activityText}><p>{item.title}</p><span>{item.detail}</span></div>
+                    <time dateTime={item.timestamp.toISOString()}>{formatDate(item.timestamp)}</time>
+                  </div>
+                ))}
+              </div>
+            )}
           </section>
         </div>
-
-        <AdminAvailabilityPanel />
       </div>
 
       {selectedLead && (
-        <DetailOverlay>
-          <DetailHeader
-            eyebrow="CRM lead"
-            title={selectedLead.name}
-          />
-
-          <DetailRow
-            label="Email"
-            value={selectedLead.email}
-          />
-
-          <DetailRow
-            label="Company"
-            value={
-              selectedLead.company ??
-              "—"
-            }
-          />
-
-          <DetailRow
-            label="Website"
-            value={
-              selectedLead.website ??
-              "—"
-            }
-          />
-
-          <DetailRow
-            label="Phone"
-            value={
-              selectedLead.phone ??
-              "—"
-            }
-          />
-
-          <DetailRow
-            label="Source"
-            value={statusLabel(
-              selectedLead.source,
-            )}
-          />
-
-          <DetailRow
-            label="Status"
-            value={statusLabel(
-              selectedLead.status,
-            )}
-          />
-
-          <DetailRow
-            label="Created"
-            value={formatDateTime(
-              selectedLead.createdAt,
-            )}
-          />
-
+        <DetailOverlay title={`Lead: ${selectedLead.name}`}>
+          <DetailHeader eyebrow="CRM lead" title={selectedLead.name} />
+          <dl>
+            <DetailRow label="Email" value={selectedLead.email} />
+            <DetailRow label="Company" value={selectedLead.company ?? "—"} />
+            <DetailRow label="Website" value={selectedLead.website ?? "—"} />
+            <DetailRow label="Phone" value={selectedLead.phone ?? "—"} />
+            <DetailRow label="Source" value={statusLabel(selectedLead.source)} />
+            <DetailRow label="Status" value={statusLabel(selectedLead.status)} />
+            <DetailRow label="Created" value={formatDateTime(selectedLead.createdAt)} />
+          </dl>
           {selectedLead.message && (
-            <div
-              className="
-                mt-6
-                rounded-[13px]
-                border
-                border-white/[0.10]
-                bg-[#172127]
-                p-4
-              "
-            >
-              <div
-                className="
-                  text-[10px]
-                  font-semibold
-                  text-white/40
-                "
-              >
-                Bottleneck / context
-              </div>
-
-              <p
-                className="
-                  mt-3
-                  text-[12px]
-                  leading-[1.7]
-                  text-white/60
-                "
-              >
-                {
-                  selectedLead.message
-                }
-              </p>
+            <div className={styles.detailSection}>
+              <h3>Bottleneck / context</h3><p className={styles.context}>{selectedLead.message}</p>
             </div>
           )}
-
-          <div
-            className="
-              mt-7
-            "
-          >
-            <div
-              className="
-                text-[10px]
-                font-semibold
-                text-white/40
-              "
-            >
-              Booking history
-            </div>
-
-            <div
-              className="
-                mt-3
-                space-y-2
-              "
-            >
-              {selectedLead.bookings.length ===
-              0 ? (
-                <div
-                  className="
-                    text-[11px]
-                    text-white/35
-                  "
-                >
-                  No bookings.
-                </div>
-              ) : (
-                selectedLead.bookings.map(
-                  (
-                    booking,
-                  ) => (
-                    <div
-                      key={booking.id}
-                      className="
-                        rounded-[11px]
-                        border
-                        border-white/[0.10]
-                        bg-[#172127]
-                        p-3
-                      "
-                    >
-                      <div
-                        className="
-                          flex
-                          items-center
-                          justify-between
-                          gap-3
-                        "
-                      >
-                        <span
-                          className="
-                            text-[11px]
-                            text-white/60
-                          "
-                        >
-                          {formatDateTime(
-                            booking.startsAt,
-                          )}
-                        </span>
-
-                        <span
-                          className="
-                            text-[9px]
-                            font-medium
-                            text-white/40
-                          "
-                        >
-                          {statusLabel(
-                            booking.status,
-                          )}
-                        </span>
-                      </div>
-                    </div>
-                  ),
-                )
-              )}
-            </div>
+          <div className={styles.detailSection}>
+            <h3>Booking history</h3>
+            {selectedLead.bookings.length === 0 ? <p className={styles.contactLine}>No bookings.</p> :
+              selectedLead.bookings.map((booking) => (
+                <Link key={booking.id} href={detailHref(params, "booking", booking.id)} scroll={false} className={styles.historyItem}>
+                  <span>{formatDateTime(booking.startsAt)}</span><span>{statusLabel(booking.status)}</span>
+                </Link>
+              ))}
           </div>
         </DetailOverlay>
       )}
-
       {selectedBooking && (
-        <DetailOverlay>
-          <DetailHeader
-            eyebrow="Booking"
-            title={
-              selectedBooking
-                .lead
-                .name
-            }
-          />
-
-          <DetailRow
-            label="Status"
-            value={statusLabel(
-              selectedBooking.status,
-            )}
-          />
-
-          <DetailRow
-            label="Date"
-            value={formatDateTime(
-              selectedBooking.startsAt,
-            )}
-          />
-
-          <DetailRow
-            label="Timezone"
-            value={
-              selectedBooking.timezone
-            }
-          />
-
-          <DetailRow
-            label="Email"
-            value={
-              selectedBooking
-                .lead
-                .email
-            }
-          />
-
-          <DetailRow
-            label="Company"
-            value={
-              selectedBooking
-                .lead
-                .company ??
-              "—"
-            }
-          />
-
-          <DetailRow
-            label="Website"
-            value={
-              selectedBooking
-                .lead
-                .website ??
-              "—"
-            }
-          />
-
-          <DetailRow
-            label="24h reminder"
-            value={
-              selectedBooking
-                .reminder24hEmailId
-                ? "Sent"
-                : "Not sent"
-            }
-          />
-
-          <DetailRow
-            label="30m reminder"
-            value={
-              selectedBooking
-                .reminder30mEmailId
-                ? "Sent"
-                : "Not sent"
-            }
-          />
-
-          {selectedBooking.meetingUrl && (
-            <a
-              href={
-                selectedBooking.meetingUrl
-              }
-              target="_blank"
-              rel="noreferrer"
-              className="
-                mt-7
-                flex
-                h-[44px]
-                items-center
-                justify-center
-                gap-2
-                rounded-[11px]
-                bg-[#FF5A1F]
-                text-[11px]
-                font-semibold
-                text-white
-              "
-            >
-              Open Google Meet
-
-              <ExternalLink
-                size={12}
-              />
-            </a>
+        <DetailOverlay title={`Booking: ${selectedBooking.lead.name}`}>
+          <DetailHeader eyebrow="Booking" title={selectedBooking.lead.name} />
+          <dl>
+            <DetailRow label="Status" value={statusLabel(selectedBooking.status)} />
+            <DetailRow label="Date" value={formatDateTime(selectedBooking.startsAt)} />
+            <DetailRow label="Ends" value={formatDateTime(selectedBooking.endsAt)} />
+            <DetailRow label="Timezone" value={selectedBooking.timezone} />
+            <DetailRow label="Email" value={selectedBooking.lead.email} />
+            <DetailRow label="Company" value={selectedBooking.lead.company ?? "—"} />
+            <DetailRow label="Website" value={selectedBooking.lead.website ?? "—"} />
+            <DetailRow label="Phone" value={selectedBooking.lead.phone ?? "—"} />
+            <DetailRow label="24h reminder" value={selectedBooking.reminder24hEmailId ? "Sent" : "Not sent"} />
+            <DetailRow label="30m reminder" value={selectedBooking.reminder30mEmailId ? "Sent" : "Not sent"} />
+          </dl>
+          {selectedBooking.lead.message && (
+            <div className={styles.detailSection}>
+              <h3>Bottleneck / context</h3><p className={styles.context}>{selectedBooking.lead.message}</p>
+            </div>
           )}
-
-          {selectedBooking.externalCalendarUrl && (
-            <a
-              href={
-                selectedBooking.externalCalendarUrl
-              }
-              target="_blank"
-              rel="noreferrer"
-              className="
-                mt-2
-                flex
-                h-[44px]
-                items-center
-                justify-center
-                gap-2
-                rounded-[11px]
-                border
-                border-white/[0.12]
-                bg-[#172127]
-                text-[11px]
-                font-semibold
-                text-white/55
-                transition-all
-
-                hover:bg-[#1B272D]
-                hover:text-white
-              "
-            >
-              Open calendar event
-
-              <ExternalLink
-                size={12}
-              />
-            </a>
-          )}
+          <div className={styles.actions}>
+            {selectedBooking.meetingUrl && (
+              <a href={selectedBooking.meetingUrl} target="_blank" rel="noreferrer" className={styles.primaryButton}>
+                Open Google Meet <ExternalLink size={15} aria-hidden="true" />
+              </a>
+            )}
+            {selectedBooking.externalCalendarUrl && (
+              <a href={selectedBooking.externalCalendarUrl} target="_blank" rel="noreferrer" className={styles.button}>
+                Open calendar event <ExternalLink size={15} aria-hidden="true" />
+              </a>
+            )}
+          </div>
         </DetailOverlay>
       )}
     </main>
   );
 }
 
-function BookingAction({
-  bookingId,
-  status,
-  label,
-}: {
-  bookingId: string;
-  status:
-    BookingStatus;
-  label: string;
-}) {
+function detailHref(
+  params: Awaited<PageProps["searchParams"]>,
+  kind: "lead" | "booking" | null,
+  id?: string,
+) {
+  const search = new URLSearchParams();
+  for (const key of ["q", "leadStatus", "bookingStatus", "bookingView"] as const) {
+    if (params[key]) search.set(key, params[key]);
+  }
+  if (kind && id) search.set(kind, id);
+  return search.size ? `/admin?${search}` : "/admin";
+}
+
+function BookingAction({ bookingId, status, label }: { bookingId: string; status: BookingStatus; label: string }) {
   return (
-    <form
-      method="POST"
-      action="/api/admin/bookings/status"
-    >
-      <input
-        type="hidden"
-        name="bookingId"
-        value={bookingId}
-      />
-
-      <input
-        type="hidden"
-        name="status"
-        value={status}
-      />
-
-      <button
-        type="submit"
-        className="
-          h-[38px]
-          rounded-[10px]
-          border
-          border-white/[0.12]
-          bg-[#172127]
-          px-4
-          text-[10px]
-          font-semibold
-          text-white/50
-          transition-all
-
-          hover:border-white/[0.20]
-          hover:bg-[#1B272D]
-          hover:text-white
-        "
-      >
-        {label}
-      </button>
+    <form method="POST" action="/api/admin/bookings/status">
+      <input type="hidden" name="bookingId" value={bookingId} />
+      <input type="hidden" name="status" value={status} />
+      <button type="submit" className={styles.button}>{label}</button>
     </form>
   );
 }
 
-function MetricCard({
-  label,
-  value,
-  description,
-  icon:
-    Icon,
-}: {
-  label: string;
-  value: string;
-  description: string;
-  icon:
-    LucideIcon;
+function MetricCard({ label, value, description, icon: Icon }: {
+  label: string; value: string; description: string; icon: LucideIcon;
 }) {
   return (
-    <div
-      className="
-        rounded-[19px]
-        border
-        border-white/[0.11]
-        bg-[#11191E]
-        p-5
-        shadow-[0_14px_40px_rgba(0,0,0,0.14)]
-        transition-all
-
-        hover:border-white/[0.15]
-        hover:bg-[#131C21]
-      "
-    >
-      <div
-        className="
-          flex
-          items-center
-          justify-between
-        "
-      >
-        <span
-          className="
-            text-[10px]
-            font-semibold
-            text-white/40
-          "
-        >
-          {label}
-        </span>
-
-        <div
-          className="
-            flex
-            h-[31px]
-            w-[31px]
-            items-center
-            justify-center
-            rounded-[9px]
-            border
-            border-white/[0.09]
-            bg-[#172127]
-          "
-        >
-          <Icon
-            size={14}
-            strokeWidth={1.6}
-            className="
-              text-white/45
-            "
-          />
-        </div>
-      </div>
-
-      <div
-        className="
-          mt-5
-          text-[34px]
-          font-medium
-          tracking-[-0.05em]
-          text-white
-        "
-      >
-        {value}
-      </div>
-
-      <div
-        className="
-          mt-2
-          text-[10px]
-          leading-[1.5]
-          text-white/38
-        "
-      >
-        {description}
-      </div>
+    <div className={styles.metric}>
+      <div className={styles.metricTop}><span>{label}</span><Icon size={19} strokeWidth={1.7} aria-hidden="true" /></div>
+      <div className={styles.metricValue}>{value}</div><p>{description}</p>
     </div>
   );
 }
 
-function SectionHeader({
-  eyebrow,
-  title,
-  description,
-}: {
-  eyebrow: string;
-  title: string;
-  description: string;
+function SectionHeader({ id, eyebrow, title, description, children }: {
+  id: string; eyebrow: string; title: string; description: string; children?: React.ReactNode;
 }) {
   return (
-    <div
-      className="
-        border-b
-        border-white/[0.09]
-        px-5
-        py-5
-
-        sm:px-6
-      "
-    >
-      <div
-        className="
-          text-[9px]
-          font-semibold
-          uppercase
-          tracking-[0.16em]
-          text-[#FF8054]
-        "
-      >
-        {eyebrow}
-      </div>
-
-      <h2
-        className="
-          mt-2
-          text-[18px]
-          font-medium
-          tracking-[-0.03em]
-          text-white/95
-        "
-      >
-        {title}
-      </h2>
-
-      <p
-        className="
-          mt-1.5
-          text-[11px]
-          leading-[1.6]
-          text-white/43
-        "
-      >
-        {description}
-      </p>
+    <div className={styles.sectionHeader}>
+      <div><span className={styles.eyebrow}>{eyebrow}</span><h2 id={id}>{title}</h2><p>{description}</p></div>
+      {children}
     </div>
   );
 }
 
-function EmptyState({
-  title,
-  text,
-}: {
-  title: string;
-  text: string;
-}) {
-  return (
-    <div
-      className="
-        px-6
-        py-14
-        text-center
-      "
-    >
-      <Activity
-        size={22}
-        strokeWidth={1.4}
-        className="
-          mx-auto
-          text-white/30
-        "
-      />
-
-      <p
-        className="
-          mt-4
-          text-[13px]
-          font-medium
-          text-white/62
-        "
-      >
-        {title}
-      </p>
-
-      <p
-        className="
-          mx-auto
-          mt-2
-          max-w-[320px]
-          text-[11px]
-          leading-[1.6]
-          text-white/38
-        "
-      >
-        {text}
-      </p>
-    </div>
-  );
+function EmptyState({ title, text }: { title: string; text: string }) {
+  return <div className={styles.empty}><Activity size={25} strokeWidth={1.5} aria-hidden="true" /><p>{title}</p><span>{text}</span></div>;
 }
 
-function DetailOverlay({
-  children,
-}: {
-  children:
-    React.ReactNode;
-}) {
-  return (
-    <div
-      className="
-        fixed
-        inset-0
-        z-[250]
-        flex
-        justify-end
-        bg-black/55
-        backdrop-blur-[9px]
-      "
-    >
-      <a
-        href="/admin"
-        aria-label="Close details"
-        className="
-          absolute
-          inset-0
-        "
-      />
-
-      <aside
-        className="
-          relative
-          z-10
-          h-full
-          w-full
-          max-w-[430px]
-          overflow-y-auto
-          border-l
-          border-white/[0.12]
-          bg-[#11191E]
-          px-6
-          pb-10
-          pt-6
-          shadow-[-40px_0_100px_rgba(0,0,0,0.40)]
-        "
-      >
-        <a
-          href="/admin"
-          className="
-            ml-auto
-            flex
-            h-[36px]
-            w-[36px]
-            items-center
-            justify-center
-            rounded-full
-            border
-            border-white/[0.12]
-            bg-[#172127]
-            text-white/45
-            transition-all
-
-            hover:bg-[#1B272D]
-            hover:text-white
-          "
-          aria-label="Close details"
-        >
-          <X
-            size={14}
-            strokeWidth={1.7}
-          />
-        </a>
-
-        {children}
-      </aside>
-    </div>
-  );
+function DetailOverlay({ title, children }: { title: string; children: React.ReactNode }) {
+  return <AdminDetailDrawer title={title}>{children}</AdminDetailDrawer>;
 }
 
-function DetailHeader({
-  eyebrow,
-  title,
-}: {
-  eyebrow: string;
-  title: string;
-}) {
-  return (
-    <div
-      className="
-        mb-7
-        border-b
-        border-white/[0.09]
-        pb-6
-      "
-    >
-      <div
-        className="
-          text-[9px]
-          font-semibold
-          uppercase
-          tracking-[0.16em]
-          text-[#FF8054]
-        "
-      >
-        {eyebrow}
-      </div>
-
-      <h2
-        className="
-          mt-3
-          text-[26px]
-          font-medium
-          tracking-[-0.045em]
-          text-white
-        "
-      >
-        {title}
-      </h2>
-    </div>
-  );
+function DetailHeader({ eyebrow, title }: { eyebrow: string; title: string }) {
+  return <div className={styles.detailHeader}><span className={styles.eyebrow}>{eyebrow}</span><h2>{title}</h2></div>;
 }
 
-function DetailRow({
-  label,
-  value,
-}: {
-  label: string;
-  value: string;
-}) {
-  return (
-    <div
-      className="
-        flex
-        items-start
-        justify-between
-        gap-6
-        border-b
-        border-white/[0.075]
-        py-3.5
-      "
-    >
-      <span
-        className="
-          text-[10px]
-          font-medium
-          text-white/35
-        "
-      >
-        {label}
-      </span>
-
-      <span
-        className="
-          max-w-[250px]
-          break-words
-          text-right
-          text-[11px]
-          leading-[1.5]
-          text-white/65
-        "
-      >
-        {value}
-      </span>
-    </div>
-  );
+function DetailRow({ label, value }: { label: string; value: string }) {
+  return <div className={styles.detailRow}><dt>{label}</dt><dd>{value}</dd></div>;
 }

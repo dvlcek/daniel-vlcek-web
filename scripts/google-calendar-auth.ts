@@ -2,9 +2,12 @@ import { config } from "dotenv";
 import { google } from "googleapis";
 import { createServer } from "node:http";
 import { URL } from "node:url";
+import { randomBytes, timingSafeEqual } from "node:crypto";
+import { readFile, writeFile } from "node:fs/promises";
 
 config({
   path: ".env.local",
+  quiet: true,
 });
 
 const clientId =
@@ -41,12 +44,15 @@ const scopes = [
   "https://www.googleapis.com/auth/calendar.events.owned",
 ];
 
+const oauthState = randomBytes(32).toString("hex");
+
 const authorizationUrl =
   oauth2Client.generateAuthUrl({
     access_type: "offline",
     prompt: "consent",
     scope: scopes,
     include_granted_scopes: true,
+    state: oauthState,
   });
 
 const redirect =
@@ -78,12 +84,33 @@ const server =
             redirectUri,
           );
 
+        if (request.method !== "GET") {
+          response.writeHead(405);
+          response.end("Method not allowed.");
+          return;
+        }
+
+        if (requestUrl.pathname === "/connect") {
+          response.writeHead(302, { Location: authorizationUrl, "Cache-Control": "no-store" });
+          response.end();
+          return;
+        }
+
         if (
           requestUrl.pathname !==
           redirect.pathname
         ) {
           response.writeHead(404);
           response.end("Not found.");
+          return;
+        }
+
+        const receivedState = requestUrl.searchParams.get("state") ?? "";
+        const receivedStateBytes = Buffer.from(receivedState);
+        const expectedStateBytes = Buffer.from(oauthState);
+        if (receivedStateBytes.length !== expectedStateBytes.length || !timingSafeEqual(receivedStateBytes, expectedStateBytes)) {
+          response.writeHead(400);
+          response.end("Invalid authorization state. Open /connect to try again.");
           return;
         }
 
@@ -145,17 +172,15 @@ const server =
           "======================================\n",
         );
 
-        console.log(
-          "Add this to .env.local:\n",
-        );
-
-        console.log(
-          `GOOGLE_CALENDAR_REFRESH_TOKEN="${tokens.refresh_token}"`,
-        );
-
-        console.log(
-          "\nKeep this token private.\n",
-        );
+        const envPath = ".env.local";
+        const envContent = await readFile(envPath, "utf8");
+        const tokenLine = `GOOGLE_CALENDAR_REFRESH_TOKEN="${tokens.refresh_token}"`;
+        const tokenPattern = /^[ \t]*(?:export[ \t]+)?GOOGLE_CALENDAR_REFRESH_TOKEN[ \t]*=.*$/gm;
+        const updatedContent = tokenPattern.test(envContent)
+          ? envContent.replace(tokenPattern, () => tokenLine)
+          : `${envContent.trimEnd()}\n${tokenLine}\n`;
+        await writeFile(envPath, updatedContent, "utf8");
+        console.log("Refresh token saved to .env.local. No token was printed. Restart the app if it does not reload the environment automatically.");
 
         response.writeHead(
           200,
@@ -193,7 +218,7 @@ const server =
       } catch (error) {
         console.error(
           "\nGoogle OAuth callback failed:\n",
-          error,
+          error instanceof Error ? error.message : "Unknown error",
         );
 
         response.writeHead(500);
@@ -225,7 +250,7 @@ server.listen(
     );
 
     console.log(
-      authorizationUrl,
+      `http://localhost:${port}/connect`,
     );
 
     console.log(

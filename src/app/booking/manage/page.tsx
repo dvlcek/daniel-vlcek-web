@@ -5,6 +5,7 @@ import type {
 import {
   ManageBookingClient,
 } from "./ManageBookingClient";
+import { Footer } from "@/components/layout/Footer";
 
 export const metadata:
   Metadata = {
@@ -25,22 +26,25 @@ export const metadata:
 
 export default function ManageBookingPage() {
   return (
-    <main
-      className="
-        min-h-screen
+    <>
+      <main
+        className="
+          min-h-screen
 
-        bg-[#030708]
+          bg-[#030708]
 
-        px-5
-        py-12
+          px-5
+          py-12
 
-        text-white
+          text-white
 
-        sm:px-8
-        sm:py-16
-      "
-    >
-      <ManageBookingClient />
-    </main>
+          sm:px-8
+          sm:py-16
+        "
+      >
+        <ManageBookingClient />
+      </main>
+      <Footer />
+    </>
   );
 }
