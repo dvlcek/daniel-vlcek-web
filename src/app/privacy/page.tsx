@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { pageMetadata } from "@/lib/metadata";
 import { LegalPage } from "@/components/legal/LegalPage";
 import { legalContactEmail, legalDetails } from "@/lib/legal-details";
@@ -10,7 +11,7 @@ export default function PrivacyNotice() {
       <section>
         <h2>Controller and contact</h2>
         <p>{legalDetails.legalName ?? "Controller identity pending confirmation"}. {legalDetails.address ?? "Registered address pending confirmation"}.</p>
-        <p>For questions or requests about your personal data, contact <a href={`mailto:${legalContactEmail}`}>{legalContactEmail}</a>. Business identification details are in the <a href="/legal">legal notice</a>.</p>
+        <p>For questions or requests about your personal data, contact <a href={`mailto:${legalContactEmail}`}>{legalContactEmail}</a>. Business identification details are in the <Link href="/legal">legal notice</Link>.</p>
       </section>
       <section>
         <h2>Enquiries and correspondence</h2>
@@ -26,7 +27,7 @@ export default function PrivacyNotice() {
         <h2>Website operation and optional measurement</h2>
         <p>Hosting and infrastructure services handle connection and security information needed to deliver the website. The proposed basis is Article 6(1)(f) GDPR: reliable operation, security and preventing misuse.</p>
         <p>Optional Vercel Web Analytics and Speed Insights load only after you allow analytics. They measure visits and performance. The site strips URL query strings and fragments before sending measurement events, and excludes booking management and admin pages. This optional measurement uses your consent under Article 6(1)(a).</p>
-        <p>You can withdraw that choice through Privacy settings in the footer. Withdrawal stops future optional measurement without affecting processing that took place before withdrawal. See <a href="/cookies">cookies and privacy choices</a> for storage details.</p>
+        <p>You can withdraw that choice through Privacy settings in the footer. Withdrawal stops future optional measurement without affecting processing that took place before withdrawal. See <Link href="/cookies">cookies and privacy choices</Link> for storage details.</p>
       </section>
       <section>
         <h2>Service providers and transfers</h2>

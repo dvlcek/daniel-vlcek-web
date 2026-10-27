@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { ArrowLeft, ArrowUpRight, Clock3, Mail, Video } from "lucide-react";
+import { ArrowUpRight, Clock3, Mail, Video } from "lucide-react";
+import { Header } from "@/components/layout/Header";
 
 import { BookingWizard } from "@/components/booking/BookingWizard";
 import { Container } from "@/components/ui/Container";
@@ -10,21 +11,9 @@ const focusClass = "rounded-sm focus-visible:outline-2 focus-visible:outline-off
 export function ContactPage() {
   return (
     <>
-      <header className="border-b border-white/[0.08] bg-[#020609] text-white">
-        <Container>
-          <div className="flex min-h-[76px] items-center justify-between gap-4">
-            <Link href="/" className={`${focusClass} inline-flex min-h-11 items-center text-[12px] font-semibold uppercase tracking-[0.24em] transition-opacity duration-150 hover:opacity-75 motion-reduce:transition-none`}>
-              Daniel VLKO
-            </Link>
-            <Link href="/" className={`${focusClass} inline-flex min-h-11 items-center gap-2 text-[12px] text-white/65 transition-colors duration-150 hover:text-white motion-reduce:transition-none`}>
-              <ArrowLeft size={15} strokeWidth={1.7} aria-hidden="true" />
-              Back to website
-            </Link>
-          </div>
-        </Container>
-      </header>
+      <Header />
       <main id="main-content" tabIndex={-1} className="bg-[#020609] text-white">
-      <Container className="py-10 sm:py-14 lg:py-20">
+      <Container className="pb-[var(--section-space)] pt-[calc(82px+var(--content-space))]">
         <div className="mx-auto grid max-w-[1160px] items-start gap-9 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.35fr)] lg:gap-14 xl:gap-20">
           <section aria-labelledby="contact-heading" className="min-w-0 lg:pt-6">
             <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[#FF8054]">Contact</p>

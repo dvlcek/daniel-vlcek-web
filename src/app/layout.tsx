@@ -110,14 +110,8 @@ export default function RootLayout({
   children: ReactNode;
 }>) {
   return (
-    <html lang="en" className={geist.variable}>
+    <html lang="en" className={geist.variable} data-scroll-behavior="smooth">
       <head>
-        <link
-          rel="alternate"
-          type="text/markdown"
-          href="/index.md"
-        />
-
         <link
           rel="describedby"
           href="/llms.txt"

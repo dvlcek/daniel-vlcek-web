@@ -18,8 +18,8 @@ const services = [
     description:
       "When spreadsheets and off-the-shelf tools stop fitting, I build software around your workflow — so your team can manage customers, tasks and operations in one place.",
     examples: ["CRMs and dashboards", "Booking and inventory systems", "Internal business platforms"],
-    href: "#business-platform",
-    cta: "See a software project",
+    href: "/services/custom-software",
+    cta: "Explore custom software",
   },
   {
     number: "02",
@@ -30,8 +30,8 @@ const services = [
     description:
       "I connect your existing tools and automate data entry, follow-ups and document processing. AI handles the tasks it suits, with your team in control of the important decisions.",
     examples: ["Connected tools and workflows", "AI assistants", "Document processing"],
-    href: "#ai-operations",
-    cta: "See an automation project",
+    href: "/services/automation-ai",
+    cta: "Explore automation & AI",
   },
   {
     number: "03",
@@ -42,8 +42,8 @@ const services = [
     description:
       "I build fast, clear websites that make your offer easy to understand and act on — plus portals and web apps that let customers book, buy or manage their account.",
     examples: ["Business websites", "Client portals and web apps", "E-commerce experiences"],
-    href: "#client-platform",
-    cta: "See a web project",
+    href: "/services/web-development",
+    cta: "Explore web development",
   },
 ];
 
@@ -263,7 +263,7 @@ export function WhatIBuild() {
                   CTA
               ============================================== */}
               <div className="mt-auto pt-7">
-                <a
+                <Link
                   href={service.href}
                   className="button-secondary
                     inline-flex
@@ -298,7 +298,7 @@ export function WhatIBuild() {
                   >
                     →
                   </span>
-                </a>
+                </Link>
               </div>
             </motion.article>
           ))}

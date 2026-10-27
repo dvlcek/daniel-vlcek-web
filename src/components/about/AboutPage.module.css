@@ -1,0 +1,35 @@
+.page { background: var(--surface-light); color: var(--text-primary); overflow-wrap: anywhere; }
+.section { padding-block: var(--section-space); }
+.hero { padding-top: calc(82px + var(--content-space)); background: var(--surface-darker); color: var(--text-on-dark); }
+.dark { background: var(--surface-dark); color: var(--text-on-dark); }
+.continuation { padding-top: 0; }
+.breadcrumbs { display: flex; align-items: center; flex-wrap: wrap; gap: 1.5rem; margin: 0 0 2rem; padding: 0; list-style: none; color: var(--text-on-dark-muted); }
+.breadcrumbs a, .textLink { display: inline-flex; min-height: 44px; align-items: center; text-decoration: underline; text-underline-offset: 0.3em; }
+.split { display: grid; gap: var(--content-space); }
+.name { margin-top: 1.5rem; }
+.role { margin-top: 1.5rem; max-width: 25ch; }
+.heroIntro { max-width: 43rem; }
+.muted { color: #52616d; }
+.dark .muted, .hero .muted { color: var(--text-on-dark-muted); }
+.accent { color: #c2410c; }
+.dark .accent, .hero .accent { color: #ff8054; }
+.focus { display: grid; margin-top: 2rem; padding: 0; list-style: none; }
+.focus li { display: grid; gap: 0.5rem; padding-block: 1rem; border-top: 1px solid var(--border-dark); }
+.rows { margin-top: var(--content-space); border-top: 1px solid var(--border-light); }
+.row { display: grid; gap: 1rem; padding-block: 2rem; border-bottom: 1px solid var(--border-light); }
+.dark .rows, .dark .row { border-color: var(--border-dark); }
+.steps { display: grid; gap: 2rem; padding: 0; margin-top: var(--content-space); list-style: none; }
+.steps li { min-width: 0; padding-top: 1.5rem; border-top: 1px solid var(--border-dark); }
+.steps h3 { margin-block: 1rem; }
+.primary { display: inline-flex; max-width: 100%; align-items: center; justify-content: center; border-radius: 999px; background: var(--accent); color: var(--surface-dark); text-align: center; }
+.primary:hover { background: var(--accent-hover); }
+.page a:focus-visible { outline: 2px solid #c2410c; outline-offset: 4px; }
+.hero a:focus-visible, .dark a:focus-visible { outline-color: #ff8054; }
+@media (min-width: 768px) {
+  .row { grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: 3rem; }
+  .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .focus li { grid-template-columns: minmax(0, 0.5fr) minmax(0, 1fr); gap: 1rem; }
+}
+@media (min-width: 1024px) {
+  .split { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+}

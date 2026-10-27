@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import {
   FormEvent,
   useEffect,
@@ -956,7 +958,7 @@ function ContactForm({
           "
         >
           Your details are used to handle your inquiry. Read the{" "}
-          <a href="/privacy" className="rounded-sm underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#FF8054]">privacy notice</a>.
+          <Link href="/privacy" className="rounded-sm underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#FF8054]">privacy notice</Link>.
         </p>
 
         <button

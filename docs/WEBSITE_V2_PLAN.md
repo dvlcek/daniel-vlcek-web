@@ -2,6 +2,10 @@
 
 Development base: `develop/website-v2`, starting from RC2 `736dc09539919180c4c2ec6ab29978adf1795149`. Setup is documentation only; no pages or abstractions are implemented. This is the active content-development order. Production approval remains separate.
 
+> Earlier development progress, 24 October 2026: service pages and their QA are implemented in the current uncommitted worktree. FinanceOS is selected as the first internal-product case study; its typed content and portfolio UI are prepared **as a draft only**, with a separate ignored local preview. `/work` retains its redirect while no approved item exists, and `/work/financeos` returns 404 publicly in both presentation modes. See [portfolio handoff](FINANCEOS_PORTFOLIO_IMPLEMENTATION.md), [publication dossier](FIRST_PROJECT_PUBLICATION_DOSSIER.md) and [SEC-01 verification](SEC01_PRODUCTION_VERIFICATION.md). Historical setup text below is not a statement that these later development artifacts are absent.
+
+> Connected-site update, 24 October 2026: all nine requested routes are now browsable together through the isolated local review site on port 3105, including the new About page. Navigation, homepage links, shared contact header and portfolio presentation are implemented. Production FinanceOS gates remain effective. See [connected website handoff](CONNECTED_WEBSITE_IMPLEMENTATION.md) for code, preview commands, QA and approval boundaries.
+
 ## Priorities and acceptance
 
 | Order | Scope | Required content and completion gate |
@@ -19,7 +23,7 @@ Qualitative outcomes are acceptable when accurate and approved; lack of measured
 | Existing source | How new pages should use it |
 |---|---|
 | `src/app/layout.tsx` | Already owns Geist, root metadata/viewport, skip link and PrivacyProvider. Do not duplicate them or wrap admin/contact in a new global marketing shell. Public pages need `<main id="main-content" tabIndex={-1}>`. |
-| `src/components/layout/Header.tsx` | Existing client navigation/mobile dialog. Reuse on appropriate marketing pages; it is absolutely positioned with white text, so account for its height/background in the page's top section. Current links target homepage sections. Change destinations only when approved pages exist. |
+| `src/components/layout/Header.tsx` | Server wrapper supplying publication-safe navigation to the existing interactive HeaderNavigation/mobile dialog. Reuse on appropriate marketing pages; it is absolutely positioned with white text, so account for its height/background in the page's top section. Services and About target their completed routes; Process targets the homepage anchor. Work retains the safe homepage fallback until a project is approved. |
 | `src/components/layout/Footer.tsx` | Shared footer and consent settings; default CTA reaches `/contact`. Contact uses `bookingHref="#booking"`. Avoid copying legal/company details. |
 | `src/components/ui/Container.tsx`, `src/app/globals.css` | Container uses `.page-container`. Reuse palette, radii, responsive `--type-*`, `--section-space`/`--content-space` and existing type/rhythm classes. Default container is 1480px; existing sections have deliberate overrides. Do not globally normalize them. |
 | Existing sections and CSS modules | Follow composition in `src/app/page.tsx`; reuse established headings/cards/CTA treatments and `FinalCTA` when appropriate. Keep motion scoped and reduced-motion compatible. No generic Section/Button framework is required now. |
@@ -37,6 +41,6 @@ No CMS, MDX pipeline, database content schema, new UI framework or state library
 
 ## Exact next task
 
-**W1.1: prepare and approve the first real project dossier.** Obtain project identity/type, publication permission, Daniel's actual contribution, audience/problem/constraints, delivered solution/features/technologies, three to five sanitized screenshots with rights/alt/captions and verified outcomes. Record unknowns honestly and approve the public wording. Then implement only `/work` plus that first `/work/[slug]` using the reuse map; preserve the homepage and booking/admin behavior.
+**W1.1: approve the FinanceOS dossier and activate the prepared portfolio only after its gates pass.** FinanceOS internal-product classification is already confirmed. Obtain Daniel's actual role/attribution, approved claims/current status and at least three authorized sanitized screenshots with alt text/captions. Record unknowns honestly; no numerical outcomes may be invented. The typed draft, index/detail components and published-only routes already exist, with an isolated local review harness. Follow `FINANCEOS_PORTFOLIO_IMPLEMENTATION.md` to add approved assets/role and activate `/work` plus `/work/financeos` together, then verify homepage links without redesigning Selected Work. Preserve booking/admin behavior. The About page is now implemented for owner review; deployed security verification remains separate and urgent.
 
 The retained [historical expansion plan](strategy/WEBSITE_EXPANSION_PLAN.md) provides deeper content guidance; the [execution roadmap](strategy/EXECUTION_ROADMAP.md) records B1/B2 completion and unfinished operational gates. The [launch checklist](FINAL_LAUNCH_CHECKLIST.md) is deferred until release is explicitly authorized.

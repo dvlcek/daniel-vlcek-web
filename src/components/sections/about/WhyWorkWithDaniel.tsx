@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
@@ -6,6 +7,8 @@ import { motion, useReducedMotion } from "motion/react";
 
 import { Container } from "@/components/ui/Container";
 import styles from "./About.module.css";
+
+const MotionLink = motion.create(Link);
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -94,7 +97,7 @@ export function WhyWorkWithDaniel() {
               ))}
             </motion.div>
 
-            <motion.a
+            <MotionLink
               variants={reveal}
               href="/contact" data-contact-source="about"
               style={{ color: "#FFFFFF" }}
@@ -107,7 +110,10 @@ export function WhyWorkWithDaniel() {
                 aria-hidden="true"
                 className="button-arrow shrink-0"
               />
-            </motion.a>
+            </MotionLink>
+            <MotionLink variants={reveal} href="/about" className="mt-4 flex min-h-11 w-fit items-center gap-3 rounded-sm button-text text-[#071017] underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#C2410C]">
+              More about Daniel<ArrowRight size={16} aria-hidden="true" />
+            </MotionLink>
           </motion.div>
         </div>
       </Container>

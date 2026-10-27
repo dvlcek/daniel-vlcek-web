@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import { ArrowRight } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
 
@@ -194,7 +196,7 @@ export function Process() {
           }}
           className="action-gap"
         >
-          <a
+          <Link
             href="/contact" data-contact-source="process"
             style={{
               color: "#FFFFFF",
@@ -242,7 +244,7 @@ export function Process() {
               }}
               className="button-arrow"
             />
-          </a>
+          </Link>
         </motion.div>
       </Container>
     </section>

@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import { trackContactEvent } from "@/lib/contact-analytics";
 
 import {
@@ -3463,7 +3465,7 @@ export function BookingWizard() {
 
                 <p className="mb-5 text-[12px] leading-6 text-white/65">
                   Your details are used to arrange and manage this call. Read the{" "}
-                  <a href="/privacy" className="rounded-sm underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#FF8054]">privacy notice</a>.
+                  <Link href="/privacy" className="rounded-sm underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#FF8054]">privacy notice</Link>.
                 </p>
 
                 {/* NAME + EMAIL */}

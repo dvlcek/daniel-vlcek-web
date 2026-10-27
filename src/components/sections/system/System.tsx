@@ -290,7 +290,7 @@ export function System() {
     focus-visible:outline-[#C2410C]
   "
               >
-                <span className="text-[#FFFFFF]">Book a strategy call</span>
+                <span className="text-[#FFFFFF]">Book a discovery call</span>
 
                 <ArrowRight
                   size={17}
@@ -299,7 +299,7 @@ export function System() {
                 />
               </Link>
 
-              <a
+              <Link
                 href="#work"
                 className="button-secondary
                   group
@@ -326,7 +326,7 @@ export function System() {
                   aria-hidden="true"
                   className="button-arrow"
                 />
-              </a>
+              </Link>
             </div>
             <p className="mt-4 max-w-[420px] caption text-[#52616D]">
               We&apos;ll map the bottlenecks and the most useful next step for your business.

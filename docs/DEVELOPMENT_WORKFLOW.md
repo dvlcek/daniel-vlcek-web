@@ -77,3 +77,8 @@ Dedicated worktree, unchanged RC2 application, Node 24.18.0 / npm 11.16.0, copie
 | Application/manifest/schema/config delta from RC2 | NONE; documentation-only setup |
 
 Real Neon/concurrency/migration/rollback, live provider delivery and fresh browser acceptance are **NOT VERIFIED** by this setup. No migrations, external booking writes, infrastructure, production changes, push or deployment were performed. The older-production exposure flag is in FINAL_LAUNCH_CHECKLIST.md; development verification does not resolve it.
+
+
+## Portable design work - 27 October 2026
+
+For a new PC, follow [PC_HANDOFF.md](PC_HANDOFF.md). `npm ci` then `npm run preview:design` runs the actual site components at loopback port 3105, including draft portfolio pages with private supplemental synthetic media. The launcher needs no Python, database or .env and does not forward application credentials. Its API routes are disconnected; production publication/security behavior is separate. [Review results](PC_HANDOFF_REVIEW.md) cover the fresh transfer check and the targeted Zod security patch. The older test-results-only harness is historical and is not needed for this workflow.

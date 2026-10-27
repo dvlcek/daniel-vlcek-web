@@ -10,7 +10,8 @@
     "test:security": "tsx --test tests/security.test.ts",
     "test:booking": "tsx --test tests/booking-calendar.test.ts",
     "test:security:postgres": "node scripts/test-security-postgres.mjs",
-    "test:acceptance": "node scripts/test-security-postgres.mjs --browser"
+    "test:acceptance": "node scripts/test-security-postgres.mjs --browser",
+    "preview:design": "node scripts/preview-design.mjs"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.10.1",
@@ -30,7 +31,7 @@
     "react-dom": "^19.3.0",
     "resend": "^6.28.0",
     "simple-icons": "^16.30.0",
-    "zod": "^4.6.5"
+    "zod": "4.6.6"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.14.0",

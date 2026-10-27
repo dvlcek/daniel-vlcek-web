@@ -13,6 +13,8 @@ export type WorkCaseStudy = {
   imageAlt: string;
   metrics?: WorkMetric[];
   bullets?: string[];
+  href?: string;
+  cta?: string;
 };
 
 export const featuredCaseStudy: WorkCaseStudy = {
@@ -52,9 +54,11 @@ export const featuredCaseStudy: WorkCaseStudy = {
 
 export const secondaryCaseStudies: WorkCaseStudy[] = [
   {
-    eyebrow: "Automation & Applied AI",
+    eyebrow: "Illustrative capability / Automation",
 
-    title: "AI Operations System",
+    title: "Automation & Applied AI",
+    href: "/services/automation-ai",
+    cta: "Explore automation & AI",
 
     subtitle:
       "Turn repetitive processes and scattered information into workflows that move on their own.",
@@ -75,9 +79,11 @@ export const secondaryCaseStudies: WorkCaseStudy[] = [
   },
 
   {
-    eyebrow: "Web & Client Platform",
+    eyebrow: "Illustrative capability / Web",
 
-    title: "Client Platform",
+    title: "Web & Client Platforms",
+    href: "/services/web-development",
+    cta: "Explore web development",
 
     subtitle:
       "A digital experience that earns trust, communicates value and moves the customer forward.",

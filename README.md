@@ -1,97 +1,26 @@
-# Daniel Vlcek Website — Phase 1 Foundation
+# Daniel VLKO - Website V2
 
-This repository is intentionally only the **foundation** of the final website.
+Connected website for Daniel VLKO, Software Developer & Automation Architect. Next.js App Router, React, TypeScript, Tailwind/CSS modules and the existing native booking system.
 
-The goal is not to vibe-code the whole website in one pass. We will build it
-section by section so every important architectural and frontend decision is
-understood.
+## Local design work
 
-## Stack
-
-- Next.js 16
-- React 19
-- TypeScript
-- Tailwind CSS 4
-- Motion
-- App Router
-
-## What is already prepared
-
-- production-style folder structure
-- strict TypeScript configuration
-- ESLint
-- Tailwind CSS
-- global design tokens
-- reusable Container component
-- initial Header
-- temporary Hero shell
-- folders for future sections/assets
-- original visual reference in `reference/`
-
-## Run locally
-
-Open a terminal in this folder and run:
+Use **Node.js 24 LTS**. From the project root:
 
 ```powershell
-npm install
-npm run dev
+npm ci
+npm run preview:design
 ```
 
-Then open:
+Open **http://127.0.0.1:3105/**. All nine pages use actual source components, images, typography and animations. Booking/providers are disconnected in this isolated preview; no database or `.env` is needed.
 
-```text
-http://localhost:3000
-```
+FinanceOS review captures are private supplemental files, excluded from this public repository. Extract the private media ZIP first, or use the complete transfer snapshot. See **[PC setup and design editing guide](docs/PC_HANDOFF.md)** for exact steps and file locations.
 
-## Current architecture
+## Development and verification
 
-```text
-src/
-├── app/
-│   ├── globals.css
-│   ├── layout.tsx
-│   └── page.tsx
-├── components/
-│   ├── layout/
-│   │   └── Header.tsx
-│   ├── sections/
-│   │   └── HeroShell.tsx
-│   └── ui/
-│       └── Container.tsx
-├── content/
-├── lib/
-└── types/
-```
+- [Development workflow](docs/DEVELOPMENT_WORKFLOW.md)
+- [Website V2 plan](docs/WEBSITE_V2_PLAN.md)
+- [Connected website implementation](docs/CONNECTED_WEBSITE_IMPLEMENTATION.md)
+- [Navigation and SEO audit](docs/NAVIGATION_SEO_AUDIT.md)
+- [PC handoff review](docs/PC_HANDOFF_REVIEW.md)
 
-## Planned build order
-
-1. Foundation — DONE
-2. Hero structure
-3. Hero visual layers / Earth
-4. Hero typography and CTA
-5. Responsive Hero
-6. Problem section
-7. Connected System section
-8. Services
-9. Selected Work / case studies
-10. Process
-11. Why Daniel
-12. Final CTA
-13. Footer
-14. Motion pass
-15. Performance / accessibility / SEO
-16. Production deployment
-
-## Learning rule
-
-For each next phase we will cover:
-
-1. what we are building,
-2. why it belongs where it does,
-3. component architecture,
-4. layout / CSS reasoning,
-5. implementation,
-6. testing in browser,
-7. what would break if implemented differently.
-
-Do not jump ahead unless there is a clear reason.
+Use `develop/website-v2` as the V2 base. Preserve security/booking behavior; production release is separate. FinanceOS and legal-review gates remain active. [SEC-01 production verification remains unresolved](docs/SEC01_PRODUCTION_VERIFICATION.md).

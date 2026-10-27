@@ -5,12 +5,13 @@ import { Container } from "@/components/ui/Container";
 import { PrivacySettingsButton } from "@/components/site/PrivacyProvider";
 import { legalContactEmail, legalDetails } from "@/lib/legal-details";
 import { siteConfig } from "@/lib/site";
+import { getPortfolioNavigation } from "@/lib/portfolio-navigation";
 
 const navLinks = [
   { label: "Work", href: "/#work" },
-  { label: "Services", href: "/#services" },
+  { label: "Services", href: "/services" },
   { label: "Process", href: "/#process" },
-  { label: "About", href: "/#about" },
+  { label: "About", href: "/about" },
 ];
 
 const legalLinks = [
@@ -23,6 +24,7 @@ const linkStyle = "inline-flex min-h-11 w-fit items-center rounded-sm nav-text t
 const labelStyle = "eyebrow text-white/50";
 
 export function Footer({ bookingHref = "/contact" }: { bookingHref?: string }) {
+  const navigation = navLinks.map(link => link.label === "Work" ? { ...link, href: getPortfolioNavigation().workHref } : link);
   const formattedCompanyId = legalDetails.businessId?.replace(/^(\d{2})(\d{3})(\d{3})$/, "$1 $2 $3");
 
   return (
@@ -41,7 +43,7 @@ export function Footer({ bookingHref = "/contact" }: { bookingHref?: string }) {
           <nav aria-label="Footer navigation">
             <p className={labelStyle}>Explore</p>
             <ul className="mt-3 grid list-none grid-cols-2 gap-x-6 p-0 sm:grid-cols-1">
-              {navLinks.map((link) => <li key={link.href}><Link href={link.href} className={linkStyle}>{link.label}</Link></li>)}
+              {navigation.map((link) => <li key={link.href}><Link href={link.href} className={linkStyle}>{link.label}</Link></li>)}
             </ul>
           </nav>
 

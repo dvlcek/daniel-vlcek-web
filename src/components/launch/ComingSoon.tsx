@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import Image from "next/image";
 
 import {
@@ -15,6 +17,8 @@ import {
 } from "motion/react";
 
 
+
+const MotionLink = motion.create(Link);
 
 /* =========================================================
    SERVICES
@@ -286,7 +290,7 @@ export function ComingSoon() {
             Daniel VLKO
           </motion.span>
 
-          <motion.a
+          <MotionLink
             href="/contact"
             data-contact-source="coming-soon-header"
             whileHover={
@@ -340,7 +344,7 @@ export function ComingSoon() {
                 group-hover:translate-x-1
               "
             />
-          </motion.a>
+          </MotionLink>
         </header>
 
         {/* ===================================================
@@ -409,7 +413,7 @@ export function ComingSoon() {
                 font-medium
                 uppercase
                 tracking-[0.34em]
-                text-white/32
+                text-white/60
 
                 sm:text-[8px]
               "
@@ -484,7 +488,7 @@ export function ComingSoon() {
                 mt-2
                 text-[11px]
                 leading-relaxed
-                text-white/32
+                text-white/60
 
                 sm:text-[12px]
               "
@@ -511,7 +515,7 @@ export function ComingSoon() {
                 lg:mt-[clamp(22px,2.8vh,32px)]
               "
             >
-              <motion.a
+              <MotionLink
                 href="/contact"
                 data-contact-source="coming-soon-booking"
                 whileHover={
@@ -529,6 +533,7 @@ export function ComingSoon() {
                       }
                 }
                 className="
+                  button-accent
                   group
                   inline-flex
                   h-[48px]
@@ -567,9 +572,9 @@ export function ComingSoon() {
                     group-hover:translate-x-1
                   "
                 />
-              </motion.a>
+              </MotionLink>
 
-              <motion.a
+              <MotionLink
                 href="/contact"
                 data-contact-source="coming-soon-contact"
                 whileHover={
@@ -628,7 +633,7 @@ export function ComingSoon() {
                     group-hover:translate-x-1
                   "
                 />
-              </motion.a>
+              </MotionLink>
             </div>
           </motion.div>
 
@@ -703,7 +708,7 @@ export function ComingSoon() {
                   font-semibold
                   uppercase
                   tracking-[0.31em]
-                  text-white/34
+                  text-white/60
 
                   lg:text-[9px]
                 "
@@ -809,7 +814,7 @@ export function ComingSoon() {
                               max-w-[180px]
                               text-[9.5px]
                               leading-[1.6]
-                              text-white/32
+                              text-white/60
 
                               lg:text-[10.5px]
                             "
@@ -864,7 +869,7 @@ export function ComingSoon() {
                   font-semibold
                   uppercase
                   tracking-[0.31em]
-                  text-white/34
+                  text-white/60
 
                   lg:text-[9px]
                 "
@@ -910,7 +915,7 @@ export function ComingSoon() {
                       max-w-[360px]
                       text-[10.5px]
                       leading-[1.7]
-                      text-white/35
+                      text-white/60
 
                       sm:text-[11.5px]
                     "
@@ -946,7 +951,7 @@ export function ComingSoon() {
                         font-medium
                         uppercase
                         tracking-[0.22em]
-                        text-white/38
+                        text-white/60
                       "
                     >
                       Open for selected projects

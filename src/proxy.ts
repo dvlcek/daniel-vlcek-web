@@ -2,6 +2,7 @@ import {
   NextRequest,
   NextResponse,
 } from "next/server";
+import { getPublishedProject } from "@/content/projects";
 
 /**
  * Coming Soon gate
@@ -21,6 +22,12 @@ export function proxy(
 ) {
   const pathname =
     request.nextUrl.pathname;
+
+  // Let Next return a real 404 for unpublished project URLs in either launch
+  // mode. Published projects still pass through the existing coming-soon gate.
+  if (pathname.startsWith("/work/") && !getPublishedProject(pathname.slice("/work/".length))) {
+    return NextResponse.next();
+  }
 
   const comingSoonEnabled =
     process.env.COMING_SOON_ENABLED !==
@@ -109,7 +116,9 @@ export function proxy(
     pathname ===
       "/robots.txt" ||
     pathname ===
-      "/sitemap.xml"
+      "/sitemap.xml" ||
+    pathname === "/opengraph-image" ||
+    pathname === "/twitter-image"
   ) {
     return NextResponse.next();
   }

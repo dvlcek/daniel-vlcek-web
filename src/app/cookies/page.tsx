@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { pageMetadata } from "@/lib/metadata";
 import { LegalPage } from "@/components/legal/LegalPage";
 import { PrivacySettingsButton } from "@/components/site/PrivacyProvider";
@@ -14,8 +15,8 @@ export default function CookiesNotice() {
         <PrivacySettingsButton className="mt-4 inline-flex min-h-11 items-center rounded-full border border-[#071017]/25 px-5 text-[14px] font-medium text-[#071017] transition-colors hover:bg-white/60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#C2410C]" />
       </section>
       <section>
-        <h2>First-party browser storage</h2>
-        <div className="overflow-x-auto">
+        <h2 id="browser-storage-heading">First-party browser storage</h2>
+        <div tabIndex={0} role="region" aria-labelledby="browser-storage-heading" className="overflow-x-auto rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#C2410C]">
           <table className="w-full min-w-[580px] border-collapse text-left text-[14px]">
             <caption className="sr-only">Website storage, its purpose and lifetime</caption>
             <thead><tr className="border-b border-[#071017]/15 text-[#263640]"><th scope="col" className="py-3 pr-5">Storage</th><th scope="col" className="py-3 pr-5">Purpose</th><th scope="col" className="py-3">Lifetime</th></tr></thead>
@@ -38,12 +39,12 @@ export default function CookiesNotice() {
       <section>
         <h2>Booking portal</h2>
         <p>The booking portal uses this website&apos;s own availability and booking endpoints. It does not load an external Cal.com embed. Booking management uses the session storage described above.</p>
-        <p>You can contact me by email instead. Closing the portal does not cancel an appointment already submitted. See the <a href="/privacy">privacy notice</a> for how appointment details are processed.</p>
+        <p>You can contact me by email instead. Closing the portal does not cancel an appointment already submitted. See the <Link href="/privacy">privacy notice</Link> for how appointment details are processed.</p>
       </section>
       <section>
         <h2>Hosting and infrastructure</h2>
         <p>Additional infrastructure or security cookies depend on the deployed hosting configuration. That deployment must be checked before publication; this source-code review is not a complete inventory of cookies introduced by hosting services.</p>
-        <p>For controller information, purposes, recipients, retention and your rights, read the <a href="/privacy">privacy notice</a>.</p>
+        <p>For controller information, purposes, recipients, retention and your rights, read the <Link href="/privacy">privacy notice</Link>.</p>
       </section>
     </LegalPage>
   );

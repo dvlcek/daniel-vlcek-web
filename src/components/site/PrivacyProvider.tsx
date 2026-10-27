@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 import { Analytics, type BeforeSendEvent } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -103,7 +105,7 @@ export function PrivacyProvider({ children }: { children: ReactNode }) {
                 Optional Vercel analytics and performance measurement stay off unless you allow them.
                 Your choice is saved on this device. You can change it in the footer.
               </p>
-              <a href="/cookies" className="mt-1 inline-flex min-h-8 items-center text-[12px] text-white/80 underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#FF8054]">Cookies &amp; privacy choices</a>
+              <Link href="/cookies" className="mt-1 inline-flex min-h-8 items-center text-[12px] text-white/80 underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#FF8054]">Cookies &amp; privacy choices</Link>
             </div>
             <div className="flex shrink-0 flex-wrap gap-3">
               <button type="button" onClick={() => choose(false)} className="min-h-11 rounded-full border border-white/25 px-5 text-[13px] font-medium transition-colors hover:bg-white/[0.08] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#FF8054]">Reject optional</button>

@@ -36,7 +36,7 @@ const platforms = [
   },
 ] as const;
 
-export function Hero() {
+export function Hero({ workHref = "/#work" }: { workHref?: string }) {
   return (
     <section
       className="
@@ -122,7 +122,7 @@ export function Hero() {
                   hover:shadow-[0_12px_35px_rgba(255,90,31,0.20)]
                 "
               >
-                <span>Book a strategy call</span>
+                <span>Book a discovery call</span>
 
                 <span
                   aria-hidden="true"
@@ -133,7 +133,7 @@ export function Hero() {
               </Link>
 
               <Link
-                href="/#work"
+                href={workHref}
                 className="button-secondary
                   inline-flex
                   button-size

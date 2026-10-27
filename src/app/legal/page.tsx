@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { pageMetadata } from "@/lib/metadata";
 import { LegalPage } from "@/components/legal/LegalPage";
 import { legalContactEmail, legalDetails } from "@/lib/legal-details";
@@ -40,7 +41,7 @@ export default function LegalNotice() {
             <dd><a href={`mailto:${legalContactEmail}`}>{legalContactEmail}</a></dd>
           </div>
         </dl>
-        <p className="mt-4">You can also use the <a href="/contact">contact and booking page</a>.</p>
+        <p className="mt-4">You can also use the <Link href="/contact">contact and booking page</Link>.</p>
         {legalDetails.registrySource && (
           <p className="mt-4 text-[13px]">
             Company registration details verified against the{" "}
@@ -62,7 +63,7 @@ export default function LegalNotice() {
       </section>
       <section>
         <h2>Privacy and website storage</h2>
-        <p>Details about personal data processing are in the <a href="/privacy">privacy notice</a>. Optional measurement and browser storage are explained in <a href="/cookies">cookies and privacy choices</a>.</p>
+        <p>Details about personal data processing are in the <Link href="/privacy">privacy notice</Link>. Optional measurement and browser storage are explained in <Link href="/cookies">cookies and privacy choices</Link>.</p>
       </section>
     </LegalPage>
   );

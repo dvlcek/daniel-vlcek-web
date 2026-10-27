@@ -1,4 +1,6 @@
 @import "tailwindcss";
+/* Include shared components when this stylesheet is used by the local preview. */
+@source "../";
 
 /* =========================================================
    TAILWIND THEME

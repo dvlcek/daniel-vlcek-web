@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import Image, { type ImageProps } from "next/image";
 import { ArrowRight } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
@@ -12,9 +13,11 @@ import {
   type WorkMetric,
 } from "./selectedWork.data";
 
+const MotionLink = motion.create(Link);
+
 const ease = [0.22, 1, 0.36, 1] as const;
 
-export function SelectedWork() {
+export function SelectedWork({ workHref = "#case-studies", projectHref, featuredProject = featuredCaseStudy }: { workHref?: string; projectHref?: string; featuredProject?: WorkCaseStudy }) {
   const reduceMotion = useReducedMotion();
 
   return (
@@ -23,7 +26,7 @@ export function SelectedWork() {
 
       <Container className="relative z-10 section-space max-w-[1640px] xl:px-12">
         <div className="grid gap-12 min-[1536px]:grid-cols-[320px_minmax(0,1fr)] min-[1536px]:items-start">
-          <SelectedWorkIntro reduceMotion={reduceMotion} />
+          <SelectedWorkIntro reduceMotion={reduceMotion} workHref={workHref} />
 
           <motion.div
             id="case-studies"
@@ -36,7 +39,7 @@ export function SelectedWork() {
             }}
             className="grid min-w-0 scroll-mt-24 gap-6"
           >
-            <FeaturedCaseStudy />
+            <FeaturedCaseStudy project={featuredProject} href={projectHref} />
             <div className="grid items-stretch gap-6 min-[1280px]:grid-cols-2">
               {secondaryCaseStudies.slice(0, 2).map((project, index) => (
                 <SecondaryCaseStudy
@@ -53,7 +56,7 @@ export function SelectedWork() {
   );
 }
 
-function SelectedWorkIntro({ reduceMotion }: { reduceMotion: boolean | null }) {
+function SelectedWorkIntro({ reduceMotion, workHref }: { reduceMotion: boolean | null; workHref: string }) {
   return (
     <motion.div
       initial={reduceMotion ? false : { opacity: 0, y: 20 }}
@@ -86,8 +89,8 @@ function SelectedWorkIntro({ reduceMotion }: { reduceMotion: boolean | null }) {
         turn everyday bottlenecks into room to grow.
       </p>
 
-      <motion.a
-        href="#case-studies"
+      <MotionLink
+        href={workHref}
         initial={reduceMotion ? false : { opacity: 0, y: 8 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
@@ -96,12 +99,12 @@ function SelectedWorkIntro({ reduceMotion }: { reduceMotion: boolean | null }) {
       >
         <span>Explore selected work</span>
         <ArrowRight size={17} aria-hidden="true" strokeWidth={1.7} className="button-arrow" />
-      </motion.a>
+      </MotionLink>
     </motion.div>
   );
 }
 
-function FeaturedCaseStudy() {
+function FeaturedCaseStudy({ project, href }: { project: WorkCaseStudy; href?: string }) {
   const reduceMotion = useReducedMotion();
 
   return (
@@ -115,27 +118,27 @@ function FeaturedCaseStudy() {
     >
       <div className="relative min-h-[460px] md:min-h-[520px]">
         <ProjectVisual
-          src={featuredCaseStudy.image}
-          alt={featuredCaseStudy.imageAlt}
+          src={project.image}
+          alt={project.imageAlt}
           priority
           featured
         />
 
         <div className="relative z-10 flex min-h-[460px] md:min-h-[520px] min-w-0 max-w-full flex-col p-6 [text-shadow:0_2px_16px_rgba(0,0,0,0.72)] sm:max-w-[65%] sm:p-8 md:max-w-[56%] min-[1600px]:p-10">
-          <ProjectTag>{featuredCaseStudy.eyebrow}</ProjectTag>
+          <ProjectTag>{project.eyebrow}</ProjectTag>
           <h3 className="card-title card-title--featured mt-6 max-w-[400px] text-white">
-            {featuredCaseStudy.title}
+            {href ? <Link href={href} className="rounded-sm underline decoration-white/40 underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#FF8054]">{project.title}</Link> : project.title}
           </h3>
           <p className="mt-4 max-w-[400px] body-copy text-white/75">
-            {featuredCaseStudy.subtitle}
+            {project.subtitle}
           </p>
-          {featuredCaseStudy.metrics?.length ? (
-            <MetricsRow metrics={featuredCaseStudy.metrics} className="mt-7" />
+          {project.metrics?.length ? (
+            <MetricsRow metrics={project.metrics} className="mt-7" />
           ) : null}
           <p className="mt-6 max-w-[380px] small-copy text-white/65">
-            One connected system for customers, operations and visibility —
-            without the usual manual handoffs.
+            {project.description}
           </p>
+          {href && <Link href={href} className="button-secondary mt-5 inline-flex min-h-11 w-fit items-center gap-3 rounded-sm button-text text-white underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#FF8054]">Explore the project<ArrowRight size={16} aria-hidden="true" className="button-arrow" /></Link>}
         </div>
 
       </div>
@@ -173,6 +176,7 @@ function SecondaryCaseStudy({ project, id }: { project: WorkCaseStudy; id: strin
           <p className="mt-4 max-w-[340px] body-copy text-white/75">
             {project.subtitle}
           </p>
+          {project.href && <Link href={project.href} className="button-secondary mt-5 inline-flex min-h-11 w-fit items-center gap-3 rounded-sm button-text text-white underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#FF8054]">{project.cta}<ArrowRight size={16} aria-hidden="true" className="button-arrow" /></Link>}
         </div>
 
       </div>

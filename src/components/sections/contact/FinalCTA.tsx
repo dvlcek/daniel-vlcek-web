@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
@@ -200,11 +202,8 @@ export function FinalCTA() {
             >
               {/* PRIMARY */}
 
-              <a
+              <Link
                 href="/contact" data-contact-source="final-cta"
-                style={{
-                  color: "#FFFFFF",
-                }}
                 className="button-primary button-accent
                   group
 
@@ -231,7 +230,7 @@ export function FinalCTA() {
                   hover:shadow-[0_14px_34px_rgba(255,90,31,0.22)]
                 "
               >
-                <span style={{ color: "#FFFFFF" }}>
+                <span>
                   Discuss your project
                 </span>
 
@@ -239,12 +238,9 @@ export function FinalCTA() {
                   size={17}
                   aria-hidden="true"
                   strokeWidth={1.7}
-                  style={{
-                    color: "#FFFFFF",
-                  }}
                   className="button-arrow"
                 />
-              </a>
+              </Link>
 
               <a
                 href="mailto:hello@danielvlko.com"

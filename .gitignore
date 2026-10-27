@@ -32,3 +32,7 @@ yarn-error.log*
 
 .vercel
 .env*
+
+# Local-only design review assets and preview output
+/tools/design-preview/private-media/
+/tools/design-preview/node_modules/
