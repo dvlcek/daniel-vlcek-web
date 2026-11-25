@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/site/MarketingLink";
 import { ArrowLeft, ArrowUpRight, Clock3, Mail, Video } from "lucide-react";
 
 import { BookingWizard } from "@/components/booking/BookingWizard";

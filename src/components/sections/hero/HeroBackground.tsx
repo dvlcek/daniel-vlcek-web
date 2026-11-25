@@ -6,11 +6,13 @@ import {
   motion,
   useScroll,
   useTransform,
+  useReducedMotion,
 } from "motion/react";
 
 import { useRef } from "react";
 
 export function HeroBackground() {
+  const reduceMotion = useReducedMotion();
   const backgroundRef = useRef<HTMLDivElement>(null);
 
   const { scrollYProgress } = useScroll({
@@ -82,10 +84,10 @@ export function HeroBackground() {
           will-change-transform
         "
         style={{
-          scale,
-          y,
-          opacity,
-          filter: blur,
+          scale: reduceMotion ? 1 : scale,
+          y: reduceMotion ? -18 : y,
+          opacity: reduceMotion ? 1 : opacity,
+          filter: reduceMotion ? "blur(0px)" : blur,
           transformOrigin: "50% 66%",
         }}
       >

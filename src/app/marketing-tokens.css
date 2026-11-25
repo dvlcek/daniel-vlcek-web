@@ -1,0 +1,73 @@
+/* VLKO Website V3 — opt-in marketing design tokens.
+   These names do not replace legacy or Business OS tokens. */
+:root {
+  --marketing-bg-light: #f6f3ee;
+  --marketing-bg-dark: #03070b;
+  --marketing-fg-light: #071017;
+  --marketing-fg-dark: #f5f3ef;
+  --marketing-muted-light: #52616d;
+  --marketing-muted-dark: #b6bec5;
+  --marketing-line-light: #d9d3cb;
+  --marketing-line-dark: #2b333a;
+  --marketing-accent: #ff5a1f;
+  --marketing-accent-hover: #ff7747;
+  --marketing-accent-on-light: #c2410c;
+  --marketing-accent-on-dark: #ff8054;
+  --marketing-button-fg: #071017;
+
+  --marketing-container: 1280px;
+  --marketing-editorial: 1120px;
+  --marketing-wide: 1480px;
+  --marketing-gutter: 20px;
+  --marketing-section-space: clamp(48px, 6vw, 88px);
+  --marketing-section-space-large: clamp(64px, 7vw, 100px);
+  --marketing-column-gap: clamp(40px, 5vw, 76px);
+  --marketing-intro-gap: clamp(18px, 2vw, 24px);
+  --marketing-action-gap: clamp(24px, 3vw, 36px);
+
+  --marketing-type-display: clamp(2.5rem, 1.25rem + 4.8vw, 5.125rem);
+  --marketing-type-section: clamp(2rem, 1.5rem + 2.5vw, 3.75rem);
+  --marketing-type-editorial: clamp(2rem, 3.7vw, 3.3rem);
+  --marketing-type-closing: clamp(3rem, 5vw, 4.5rem);
+  --marketing-type-body: clamp(.9375rem, 1.2vw, 1.0625rem);
+  --marketing-type-intro: clamp(1rem, 1.3vw, 1.125rem);
+  --marketing-type-feature: clamp(1.25rem, 1.1rem + .6vw, 1.625rem);
+  --marketing-type-eyebrow: .75rem;
+  --marketing-type-caption: .8125rem;
+  --marketing-heading-leading: 1.08;
+  --marketing-heading-tracking: -.045em;
+  --marketing-body-leading: 1.65;
+  --marketing-eyebrow-tracking: .14em;
+
+  --marketing-radius-image: 12px;
+  --marketing-radius-acrylic: 20px;
+  --marketing-radius-pill: 999px;
+  --marketing-button-height: 52px;
+  --marketing-button-padding-inline: 24px;
+  --marketing-focus-offset: 4px;
+  --marketing-acrylic-fallback: rgba(10, 15, 19, .92);
+  --marketing-acrylic-tint: rgba(15, 20, 25, .58);
+  --marketing-acrylic-border: rgba(255, 255, 255, .08);
+  --marketing-acrylic-blur: 16px;
+
+  --marketing-ease: cubic-bezier(.22, 1, .36, 1);
+  --marketing-motion-fast: 200ms;
+  --marketing-motion-reveal: 420ms;
+  --marketing-motion-stagger: 60ms;
+}
+
+@media (min-width: 640px) {
+  :root { --marketing-gutter: 32px; }
+}
+@media (min-width: 1024px) {
+  :root { --marketing-gutter: 48px; }
+}
+@media (min-width: 1280px) {
+  :root { --marketing-gutter: 64px; }
+}
+@media (max-width: 767px) {
+  :root {
+    --marketing-type-editorial: clamp(2rem, 6.8vw, 3rem);
+    --marketing-type-closing: clamp(2.35rem, 7.4vw, 3.5rem);
+  }
+}

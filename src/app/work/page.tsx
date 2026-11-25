@@ -1,16 +1,12 @@
-import { Footer } from "@/components/layout/Footer";
+import { redirect } from "next/navigation";
+import { WorkIndex } from "@/components/work/WorkIndex";
+import { getPortfolioEntries, getPublishedProjects } from "@/content/projects";
+import { pageMetadata } from "@/lib/metadata";
+
+export const metadata = pageMetadata("Selected Work", "Explore software projects, their business context and implementation with Daniel VLKO.", "/work", { index: getPublishedProjects().length > 0 });
 
 export default function WorkPage() {
-  return (
-    <>
-      <main className="min-h-screen bg-[#03070b] text-white">
-        <section className="mx-auto max-w-[1520px] px-6 py-32">
-          <h1 className="text-4xl font-medium tracking-tight sm:text-5xl">
-            Selected Work
-          </h1>
-        </section>
-      </main>
-      <Footer />
-    </>
-  );
+  const projects = getPublishedProjects();
+  if (projects.length === 0) redirect("/#work");
+  return <WorkIndex entries={getPortfolioEntries()} />;
 }

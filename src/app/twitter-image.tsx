@@ -1,17 +1,17 @@
 import {
   createSocialImage,
-  socialImageSize,
+  twitterImageSize,
 } from "@/lib/social-image";
 
 export const alt =
   "Daniel VLKO — Software Developer & Automation Architect";
 
 export const size =
-  socialImageSize;
+  twitterImageSize;
 
 export const contentType =
   "image/png";
 
 export default function TwitterImage() {
-  return createSocialImage();
+  return createSocialImage("twitter");
 }

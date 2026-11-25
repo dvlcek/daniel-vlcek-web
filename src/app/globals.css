@@ -1,4 +1,7 @@
 @import "tailwindcss";
+@import "./marketing-tokens.css";
+/* Include shared components when this stylesheet is used by the local preview. */
+@source "../";
 
 /* =========================================================
    TAILWIND THEME
@@ -31,6 +34,9 @@
 
   --accent: #ff5a1f;
   --accent-hover: #ff6a33;
+  --acrylic-fallback: #12191f;
+  --acrylic-tint: rgba(7, 16, 23, 0.65);
+  --acrylic-edge: rgba(255, 255, 255, 0.24);
 
   --radius-sm: 8px;
   --radius-md: 14px;
@@ -46,6 +52,35 @@
   --type-card-small: clamp(1rem, 0.95rem + 0.2vw, 1.125rem);
   --section-space: clamp(4rem, 2.5rem + 4vw, 7rem);
   --content-space: clamp(2.5rem, 1.75rem + 2vw, 4rem);
+}
+
+/* Small controls over the Earth hero share one readable surface. */
+.marketing-acrylic {
+  border: 1px solid var(--acrylic-edge);
+  background-color: var(--acrylic-fallback);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07);
+  color: var(--text-on-dark);
+}
+
+@media (hover: hover) {
+  .marketing-acrylic:hover {
+    border-color: rgba(255, 255, 255, 0.46);
+    background-color: #1c252c;
+  }
+}
+
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  @media (min-width: 1024px) and (prefers-reduced-motion: no-preference) and (pointer: fine) {
+    .marketing-acrylic {
+      background-color: var(--acrylic-tint);
+      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(8px);
+    }
+
+    .marketing-acrylic:hover {
+      background-color: rgba(21, 31, 39, 0.8);
+    }
+  }
 }
 
 /* =========================================================
@@ -295,5 +330,34 @@ a {
   @media (min-width: 1280px) {
     .page-container { padding-inline: 4rem; }
     .section-heading--column { font-size: 3.25rem; }
+  }
+}
+
+/* A4: keyboard access and contrast on the existing palette. */
+:where(a, button, input, textarea, select):focus-visible {
+  outline: 2px solid #c2410c;
+  outline-offset: 4px;
+}
+.skip-link {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 1000;
+  min-height: 44px;
+  padding: 0.75rem 1rem;
+  transform: translateY(-200%);
+  border-radius: 4px;
+  background: #020608;
+  color: #fff;
+}
+.skip-link:focus { transform: translateY(0); }
+a.button-accent, button[data-booking-submit] { color: #071017; }
+.button-accent .button-arrow { color: inherit; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

@@ -13,5 +13,5 @@ export const contentType =
   "image/png";
 
 export default function OpenGraphImage() {
-  return createSocialImage();
+  return createSocialImage("og");
 }

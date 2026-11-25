@@ -1,145 +1,135 @@
-export type MetricDirection = "up" | "down";
-
-export type AnimatedMetric = {
-  value: number;
-  from?: number;
-  decimals?: number;
-  prefix?: string;
-  suffix?: string;
-  label: string;
-  direction: MetricDirection;
-};
-
-export type WorkMetric = {
-  value: string;
-  label: string;
-  detail?: string;
-};
+import { financeos, homepageProjects, isPublishedProject, vlkoMotion } from "@/content/projects";
 
 export type WorkCaseStudy = {
+  id?: string;
   eyebrow: string;
   title: string;
   subtitle: string;
-  description: string;
+  description?: string;
   image: string;
   imageAlt: string;
-  href: string;
-  metrics?: WorkMetric[];
-  bullets?: string[];
+  imageReady?: boolean;
+  href?: string;
+  cta?: string;
 };
 
-export const selectedWorkIntroStats: AnimatedMetric[] = [
-  {
-    value: 3,
-    label: "core disciplines",
-    direction: "up",
-  },
-  {
-    value: 1,
-    label: "connected delivery",
-    direction: "up",
-  },
-  {
-    value: 0,
-    from: 6,
-    label: "template-first builds",
-    direction: "down",
-  },
+function toWorkCaseStudy(
+  project: (typeof homepageProjects)[number] | typeof financeos | typeof vlkoMotion,
+  id = project.slug,
+  title = project.name,
+  preferredImage = "",
+): WorkCaseStudy {
+  const [media] = project.media;
+  const published = isPublishedProject(project);
+  return {
+    id,
+    eyebrow: project.classification,
+    title,
+    subtitle: project.summary,
+    description: project.description,
+    image: media?.src ?? preferredImage,
+    imageAlt: media?.alt ?? "",
+    imageReady: Boolean(media),
+    href: published ? `/work/${project.slug}` : undefined,
+    cta: published ? "View case study" : undefined,
+  };
+}
+
+const [featured, ...secondary] = homepageProjects;
+export const internalCaseStudy = toWorkCaseStudy(featured, "business-os", featured.name, "/images/work/business-os.webp");
+export const websiteCaseStudies = secondary.map(project => toWorkCaseStudy(project));
+export const productCaseStudies = [
+  toWorkCaseStudy(financeos, "vlko-finance", financeos.portfolioName, "/images/work/vlko-finance.webp"),
+  toWorkCaseStudy(vlkoMotion, vlkoMotion.slug, vlkoMotion.name, "/images/work/vlko-motion.webp"),
 ];
 
 export const featuredCaseStudy: WorkCaseStudy = {
-  eyebrow: "Featured Case Study",
+  id: "daniel-vlko",
 
-  title: "Business Platform",
+  eyebrow: "Web Development · Brand Experience",
+
+  title: "Daniel VLKO",
 
   subtitle:
-    "One operating system instead of fragmented tools, manual handoffs and disconnected information.",
+    "A technology studio website combining custom design, purposeful motion and an integrated discovery experience.",
 
   description:
-    "A custom platform bringing customers, operations, payments and day-to-day workflows into one structured system — designed around how the business actually runs.",
+    "A custom-developed website designed around clear service positioning, responsive experiences, performance and a distinctive visual identity.",
 
-  image: "/images/work/main.png",
+  image: "/images/work/daniel-vlko-website.webp",
 
   imageAlt:
-    "Custom business platform dashboard showing operations, customers and business data",
-
-  href: "#business-platform",
-
-  metrics: [
-    {
-      value: "Unified",
-      label: "business operations",
-      detail: "One system",
-    },
-    {
-      value: "Automated",
-      label: "repetitive workflows",
-      detail: "Less admin",
-    },
-    {
-      value: "Scalable",
-      label: "technical foundation",
-      detail: "Built for growth",
-    },
-  ],
+    "Daniel VLKO website with cinematic Earth hero",
 };
+
+/* =====================================================
+   LEGACY CONCEPTS
+
+   Preserved for existing consumers.
+   Excluded from the homepage gallery.
+===================================================== */
 
 export const secondaryCaseStudies: WorkCaseStudy[] = [
   {
-    eyebrow: "Automation & Applied AI",
+    id: "ai-operations",
 
-    title: "AI Operations System",
+    eyebrow: "Automation · Workflow Concept",
+
+    title: "Automation & Applied AI",
 
     subtitle:
-      "Turn repetitive processes and scattered information into workflows that move on their own.",
+      "An intelligent workflow concept connecting business systems, document processing and automated operations.",
 
-    description:
-      "Automation and applied AI connect existing tools, process information and keep critical systems synchronized.",
+    image: "/images/services/automation-applied-ai.png",
+
+    imageAlt:
+      "Conceptual intelligent automation workflow",
+
+    href: "/services/automation-ai",
+
+    cta: "Explore automation & AI",
+  },
+
+  {
+    id: "business-platform",
+
+    eyebrow: "Custom Software · Interface Concept",
+
+    title: "Business Platform",
+
+    subtitle:
+      "An interface concept for managing customer relationships and business information.",
 
     image: "/images/work/ai-operation.png",
 
     imageAlt:
-      "Automation and applied AI workflow connecting business systems",
+      "Conceptual business management dashboard",
 
-    href: "#ai-operations",
+    href: "/services/custom-software",
 
-    // TODO: Replace these presentation metrics with verified case-study results.
-    metrics: [
-      { value: "-50%", label: "manual work" },
-      { value: "2×", label: "process speed" },
-      { value: "+40%", label: "team capacity" },
-    ],
-
-    bullets: [
-      "Removes repetitive manual work",
-      "Extracts and structures information",
-      "Connects the tools already in use",
-    ],
+    cta: "Explore custom software",
   },
+];
 
-  {
-    eyebrow: "Web & Client Platform",
+/* =====================================================
+   HOMEPAGE — SELECTED WORK
 
-    title: "Client Platform",
+   One featured project is rendered separately.
+   Two secondary projects form the homepage grid.
+===================================================== */
 
-    subtitle:
-      "A digital experience that earns trust, communicates value and moves the customer forward.",
+export const selectedProjects: WorkCaseStudy[] = [
+  ...websiteCaseStudies,
+];
 
-    description:
-      "High-performance client-facing platforms with strong positioning, clean UX and a technical foundation designed to scale.",
+/* =====================================================
+   FULL PORTFOLIO
 
-    image: "/images/work/web.png",
+   Can be consumed by the /work page.
+===================================================== */
 
-    imageAlt:
-      "Modern client-facing website and digital platform",
-
-    href: "#client-platform",
-
-    // TODO: Replace these presentation metrics with verified case-study results.
-    metrics: [
-      { value: "+68%", label: "conversion" },
-      { value: "-35%", label: "support load" },
-      { value: "10h", label: "saved / week" },
-    ],
-  },
+export const allProjects: WorkCaseStudy[] = [
+  internalCaseStudy,
+  ...websiteCaseStudies,
+  ...productCaseStudies,
 ];

@@ -5,10 +5,10 @@ export const siteConfig = {
     "Daniel VLKO | Software Developer & Automation Architect",
 
   description:
-    "Custom software, automation, AI-powered workflows and digital platforms built to help businesses operate faster, reduce manual work and scale efficiently.",
+    "Work directly with Daniel VLKO on business websites, custom software and AI automation. Book a discovery call to discuss what your company needs.",
 
   shortDescription:
-    "Scalable software, automation and AI systems for modern businesses.",
+    "Websites, custom business software and AI automation by Daniel VLKO.",
 
   url: "https://danielvlko.com",
 
@@ -27,3 +27,8 @@ export const siteConfig = {
     "Operational efficiency systems",
   ],
 } as const;
+
+/** Presentation gate for public navigation on routes open during launch. */
+export function isComingSoonEnabled() {
+  return process.env.COMING_SOON_ENABLED !== "false";
+}

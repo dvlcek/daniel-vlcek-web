@@ -1,13 +1,14 @@
-import Link from "next/link";
+import Link from "@/components/site/MarketingLink";
+import Image from "next/image";
 
 import { HeroBackground } from "@/components/sections/hero/HeroBackground";
 import { Container } from "@/components/ui/Container";
 
 /* =========================================================
-   PLATFORM LOGOS
+   TECHNOLOGY LOGOS
 ========================================================= */
 
-const platforms = [
+const technologies = [
   {
     name: "Google",
     src: "/images/brands/google-wordmark.svg",
@@ -35,12 +36,26 @@ const platforms = [
   },
 ] as const;
 
-export function Hero() {
+type HeroProps = {
+  workHref?: string;
+};
+
+/* =========================================================
+   HERO
+========================================================= */
+
+export function Hero({
+  workHref = "/#work",
+}: HeroProps) {
   return (
     <section
+      aria-labelledby="hero-heading"
       className="
         relative
-        min-h-[100dvh]
+        isolate
+        flex
+        min-h-[100svh]
+        flex-col
         overflow-hidden
         bg-[#020609]
         text-white
@@ -48,145 +63,183 @@ export function Hero() {
     >
       <HeroBackground />
 
-      <Container className="relative z-10 min-h-[100dvh]">
-        {/* ====================================================
-            HERO CONTENT
-        ==================================================== */}
+      {/* ==================================================
+          MAIN CONTENT
+      ================================================== */}
+
+      <Container
+        className="
+          relative
+          z-10
+          flex
+          flex-1
+          flex-col
+          justify-center
+        "
+      >
         <div
           className="
-            flex
-            min-h-[100dvh]
-            justify-center
-            pb-[190px]
-            pt-[28vh]
-            sm:pb-[200px]
-            sm:pt-[26vh]
-            lg:pt-[23vh]
-            xl:pt-[22vh]
+            mx-auto
+            w-full
+            max-w-[960px]
+            pb-[clamp(3rem,8svh,6rem)]
+            pt-[clamp(8rem,20svh,13rem)]
+            text-center
           "
         >
-          <div className="mx-auto w-full max-w-[960px] text-center">
-            {/* Positioning */}
-            <p
-              className="eyebrow mb-6 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-white/50"
-            >
-              Web Development
-              <span className="mx-3 text-white/22">·</span>
-              Automation Systems
-            </p>
+          {/* Positioning */}
 
-            {/* Headline */}
-            <h1
-              className="display-heading"
-              style={{
-                textShadow:
-                  "0 4px 20px rgba(0,0,0,0.72), 0 16px 56px rgba(0,0,0,0.52)",
-              }}
+          <p
+            className="
+              eyebrow
+              mb-6
+              text-white/75
+              sm:mb-7
+            "
+          >
+            Software Developer &amp; Automation Architect
+          </p>
+
+          {/* Headline */}
+
+          <h1
+            id="hero-heading"
+            className="display-heading text-balance"
+            style={{
+              textShadow:
+                "0 4px 20px rgba(0,0,0,0.72), 0 16px 56px rgba(0,0,0,0.52)",
+            }}
+          >
+            Build the next version
+
+            <br className="hidden md:block" />
+
+            {" "}of{" "}
+
+            <span className="text-[var(--marketing-accent)]">
+              your business.
+            </span>
+          </h1>
+
+          {/* Supporting copy */}
+
+          <p
+            className="
+              section-copy
+              intro-gap
+              mx-auto
+              max-w-[650px]
+              text-pretty
+              text-white/70
+            "
+            style={{
+              textShadow:
+                "0 3px 16px rgba(0,0,0,0.82)",
+            }}
+          >
+             High-performance websites, custom software and
+intelligent automation. Built for businesses
+ready to scale.
+          </p>
+
+          {/* Primary actions */}
+
+          <div
+            className="
+              action-gap
+              flex
+              flex-col
+              items-center
+              justify-center
+              gap-3
+              sm:flex-row
+            "
+          >
+            <Link
+              href="/contact"
+              data-contact-source="hero"
+              className="
+                button-primary
+                button-accent
+                button-size
+                button-text
+                group
+                inline-flex
+                items-center
+                justify-center
+                rounded-full
+                bg-[var(--marketing-accent)]
+                shadow-[0_8px_30px_rgba(255,90,31,0.14)]
+                hover:shadow-[0_12px_35px_rgba(255,90,31,0.20)]
+              "
             >
-              Build the next version
-              <br />
-              of{" "}
-              <span className="text-[var(--accent)]">
-                your business.
+              <span>Book a strategy call</span>
+
+              <span
+                aria-hidden="true"
+                className="button-arrow"
+              >
+                →
               </span>
-            </h1>
+            </Link>
 
-            {/* Supporting copy */}
-            <p
-              className="section-copy intro-gap mx-auto max-w-[600px] text-white/64"
-              style={{
-                textShadow: "0 3px 16px rgba(0,0,0,0.82)",
-              }}
+            <Link
+              href={workHref}
+              className="
+                button-secondary
+                marketing-acrylic
+                button-size
+                button-text
+                inline-flex
+                items-center
+                justify-center
+                rounded-full
+                hover:text-white
+              "
             >
-              High-converting websites, custom software and automation for
-              companies that want to grow, operate faster and stop being held
-              back by outdated systems.
-            </p>
-
-            {/* CTA */}
-            <div className="action-gap flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <Link
-                href="/contact" data-contact-source="hero"
-                className="button-primary
-                  group
-                  inline-flex
-                  button-size
-                  items-center
-                  justify-center
-                  rounded-full
-                  bg-[var(--accent)]
-                  button-text
-                  text-white
-                  shadow-[0_8px_30px_rgba(255,90,31,0.14)]
-                  hover:shadow-[0_12px_35px_rgba(255,90,31,0.20)]
-                "
-              >
-                <span>Book a strategy call</span>
-
-                <span
-                  aria-hidden="true"
-                  className="button-arrow"
-                >
-                  →
-                </span>
-              </Link>
-
-              <Link
-                href="/work"
-                className="button-secondary
-                  inline-flex
-                  button-size
-                  items-center
-                  justify-center
-                  rounded-full
-                  border
-                  border-white/[0.16]
-                  bg-black/10
-                  button-text
-                  text-white/88
-                  backdrop-blur-sm
-                  hover:border-white/30
-                  hover:bg-white/[0.04]
-                  hover:text-white
-                "
-              >
-                View my work
-              </Link>
-            </div>
+              View my work
+            </Link>
           </div>
         </div>
       </Container>
 
-      {/* ====================================================
-          PLATFORM LOGOS
-      ==================================================== */}
+      {/* ==================================================
+          TECHNOLOGY STRIP
+      ================================================== */}
+
       <div
         className="
-          pointer-events-none
-          absolute
-          inset-x-0
-          bottom-[26px]
+          relative
           z-20
-          sm:bottom-[30px]
+          mt-auto
+          pb-7
+          pt-6
+          sm:pb-8
         "
       >
-        {/* Dark fade over lower Earth */}
+        {/* Background transition */}
+
         <div
+          aria-hidden="true"
           className="
+            pointer-events-none
             absolute
             inset-x-0
-            bottom-[-30px]
-            h-[190px]
+            bottom-0
+            h-[230px]
             bg-gradient-to-t
             from-[#020609]
-            via-[#020609]/66
+            via-[#020609]/70
             to-transparent
           "
         />
 
-        {/* Soft shadow behind entire logo strip */}
+        {/* Soft shadow */}
+
         <div
+          aria-hidden="true"
           className="
+            pointer-events-none
             absolute
             bottom-[-35px]
             left-1/2
@@ -202,26 +255,25 @@ export function Hero() {
 
         <Container className="relative">
           <div className="mx-auto w-full max-w-[1040px]">
+
             {/* Label */}
-            <div
+
+            <p
               className="
+                eyebrow
                 mb-5
-                flex
-                items-center
-                justify-center
-                gap-5
+                text-center
+                text-white/60
+                sm:mb-6
               "
             >
+              Technologies I build with
+            </p>
 
-              <p
-                className="eyebrow text-white/36"
-              >
-                Platforms I build with
-              </p>
-            </div>
+            {/* Technology logos */}
 
-            {/* Logos */}
-            <div
+            <ul
+              aria-label="Technologies I build with"
               className="
                 mx-auto
                 flex
@@ -236,21 +288,24 @@ export function Hero() {
                 lg:justify-between
               "
             >
-              {platforms.map((platform) => (
-                <div
-                  key={platform.name}
+              {technologies.map((technology) => (
+                <li
+                  key={technology.name}
                   className="
                     flex
-                    h-[36px]
+                    h-[52px]
                     min-w-[78px]
                     items-center
                     justify-center
                     sm:min-w-[90px]
                   "
                 >
-                  <img
-                    src={platform.src}
-                    alt={platform.name}
+                  <Image
+                    src={technology.src}
+                    alt={technology.name}
+                    width={118}
+                    height={50}
+                    unoptimized
                     draggable={false}
                     loading="eager"
                     decoding="async"
@@ -261,15 +316,15 @@ export function Hero() {
                       select-none
                       object-contain
                       opacity-[0.62]
-                      ${platform.imageClassName}
+                      ${technology.imageClassName}
                     `}
                     style={{
                       filter: "brightness(0) invert(1)",
                     }}
                   />
-                </div>
+                </li>
               ))}
-            </div>
+            </ul>
           </div>
         </Container>
       </div>

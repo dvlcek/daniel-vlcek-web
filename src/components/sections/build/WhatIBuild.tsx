@@ -1,361 +1,452 @@
 "use client";
 
+import { useRef, useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
-import { motion, useReducedMotion } from "motion/react";
+import Link from "@/components/site/MarketingLink";
+
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
 
 import { Container } from "@/components/ui/Container";
 
-const ease = [0.22, 1, 0.36, 1] as const;
+import styles from "./WhatIBuild.module.css";
+
+gsap.registerPlugin(ScrollTrigger, useGSAP);
+
+const DESKTOP_QUERY =
+  "(min-width: 900px) and (min-height: 540px) and (prefers-reduced-motion: no-preference)";
 
 const services = [
   {
-    number: "01",
-    image: "/images/services/custom-business-software.png",
-    imageAlt: "Custom business software operations dashboard",
+    id: "web-development",
+    title: "Websites & E-commerce",
+    benefit: "Built to attract. Designed to convert.",
+    description:
+      "High-performance websites and online stores built around your brand, your customers and your business goals.",
+    capabilities: [
+      "Custom websites",
+      "E-commerce",
+      "Website redesigns",
+    ],
+    image: "/images/services/web.webp",
+    imageAlt: "Custom website development showcase",
+    href: "/services/web-development",
+  },
+  {
+    id: "custom-software",
     title: "Custom Software",
-    tagline: "Software that fits how you work.",
+    benefit: "Built around your business.",
     description:
-      "When spreadsheets and off-the-shelf tools stop fitting, I build software around your workflow — so your team can manage customers, tasks and operations in one place.",
-    examples: ["CRMs and dashboards", "Booking and inventory systems", "Internal business platforms"],
-    href: "#business-platform",
-    cta: "See a software project",
+      "Purpose-built applications and internal systems that connect your people, data and operations.",
+    capabilities: [
+      "Business applications",
+      "CRM systems",
+      "Client portals",
+    ],
+    image: "/images/services/business-build.webp",
+    imageAlt: "Custom business software showcase",
+    href: "/services/custom-software",
   },
   {
-    number: "02",
-    image: "/images/services/automation-applied-ai.png",
-    imageAlt: "Automation and applied AI workflow system",
+    id: "automation-ai",
     title: "Automation & AI",
-    tagline: "Let the repetitive work run itself.",
+    benefit: "Less work. More impact.",
     description:
-      "I connect your existing tools and automate data entry, follow-ups and document processing. AI handles the tasks it suits, with your team in control of the important decisions.",
-    examples: ["Connected tools and workflows", "AI assistants", "Document processing"],
-    href: "#ai-operations",
-    cta: "See an automation project",
+      "Intelligent workflows that connect your tools, automate repetitive tasks and give your team more time to focus on growth.",
+    capabilities: [
+      "Workflow automation",
+      "AI integration",
+      "Connected systems",
+    ],
+    image: "/images/services/ai-build.webp",
+    imageAlt: "Business automation workflow",
+    href: "/services/automation-ai",
   },
-  {
-    number: "03",
-    image: "/images/services/web-client-platforms.png",
-    imageAlt: "Modern web and client platform interface",
-    title: "Websites & Web Apps",
-    tagline: "Give visitors a reason to get in touch.",
-    description:
-      "I build fast, clear websites that make your offer easy to understand and act on — plus portals and web apps that let customers book, buy or manage their account.",
-    examples: ["Business websites", "Client portals and web apps", "E-commerce experiences"],
-    href: "#client-platform",
-    cta: "See a web project",
-  },
-];
+] as const;
+
+/** Find the real vertical scroll container and intervening overflow wrappers. */
+function getScrollContext(element: HTMLElement) {
+  const blocking: HTMLElement[] = [];
+  let parent = element.parentElement;
+
+  while (parent && parent !== document.body && parent !== document.documentElement) {
+    const style = getComputedStyle(parent);
+    const scrollable = /^(auto|scroll|overlay)$/.test(style.overflowY);
+
+    if (scrollable && parent.scrollHeight > parent.clientHeight + 2) {
+      return { scroller: parent, blocking };
+    }
+
+    if (style.overflowY !== "visible" && style.overflowY !== "clip") {
+      blocking.push(parent);
+    }
+
+    parent = parent.parentElement;
+  }
+
+  return { scroller: window, blocking };
+}
+
+function Arrow() {
+  return (
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path
+        d="M5 12h14M12 5l7 7-7 7"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
 
 export function WhatIBuild() {
-  const reduceMotion = useReducedMotion();
+  const rootRef = useRef<HTMLElement>(null);
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
+  const viewportRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+
+  const triggerRef = useRef<ScrollTrigger | null>(null);
+  const clickTweenRef = useRef<gsap.core.Tween | null>(null);
+  const activeRef = useRef(0);
+  const scrollerRef = useRef<Window | HTMLElement | null>(null);
+
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  // Native sticky where possible; local transform lock for overflow wrappers.
+  useGSAP(() => {
+    const root = rootRef.current;
+    const area = scrollAreaRef.current;
+    const stage = stageRef.current;
+    const viewport = viewportRef.current;
+    const track = trackRef.current;
+
+    if (!root || !area || !stage || !viewport || !track) return;
+
+    const media = gsap.matchMedia();
+
+    media.add(DESKTOP_QUERY, () => {
+      root.dataset.horizontal = "true";
+
+      const { scroller, blocking } = getScrollContext(stage);
+      scrollerRef.current = scroller;
+      const transformLock = blocking.length > 0;
+      root.dataset.lockMode = transformLock ? "transform" : "sticky";
+
+      const updateViewportHeight = () => {
+        const height = scroller instanceof HTMLElement
+          ? scroller.clientHeight
+          : window.innerHeight;
+        const value = `${height}px`;
+        if (root.style.getPropertyValue("--services-viewport-height") !== value) {
+          root.style.setProperty("--services-viewport-height", value);
+        }
+      };
+
+      updateViewportHeight();
+
+      const distance = () => Math.max(0, area.offsetHeight - stage.offsetHeight);
+      const horizontalDistance = () => viewport.clientWidth * (services.length - 1);
+
+      const updateActive = (progress: number) => {
+        const index = gsap.utils.clamp(
+          0, services.length - 1,
+          Math.round(progress * (services.length - 1)),
+        );
+        if (activeRef.current !== index) {
+          activeRef.current = index;
+          setActiveIndex(index);
+        }
+      };
+
+      const timeline = gsap.timeline({
+        defaults: { ease: "none", duration: 1 },
+        scrollTrigger: {
+          id: "services-horizontal",
+          trigger: area,
+          ...(scroller instanceof HTMLElement ? { scroller } : {}),
+          start: "top top",
+          end: () => `+=${Math.max(1, distance())}`,
+          scrub: true,
+          invalidateOnRefresh: true,
+          onRefreshInit: updateViewportHeight,
+          onUpdate: (self) => updateActive(self.progress),
+          onRefresh: (self) => updateActive(self.progress),
+        },
+      });
+
+      timeline.fromTo(track, { x: 0 }, { x: () => -horizontalDistance() }, 0);
+
+      // If an overflow wrapper prevents native sticky, move the stage by
+      // exactly the distance scrolled. No pin spacers or scroll hijacking.
+      if (transformLock) {
+        timeline.fromTo(stage, { y: 0 }, { y: distance }, 0);
+      }
+
+      triggerRef.current = timeline.scrollTrigger ?? null;
+      triggerRef.current?.refresh();
+      updateActive(triggerRef.current?.progress ?? 0);
+
+      if (process.env.NODE_ENV === "development") {
+        console.info("[Services]", {
+          lockMode: root.dataset.lockMode,
+          scroller: scroller === window ? "window" : scroller,
+          blockingAncestors: blocking,
+        });
+      }
+
+      const cancelClickAnimation = () => {
+        clickTweenRef.current?.kill();
+        clickTweenRef.current = null;
+      };
+
+      const cancelOnKey = (event: KeyboardEvent) => {
+        if (["ArrowUp", "ArrowDown", "PageUp", "PageDown", "Home", "End", " "].includes(event.key)) {
+          cancelClickAnimation();
+        }
+      };
+
+      window.addEventListener("wheel", cancelClickAnimation, { passive: true });
+      window.addEventListener("touchstart", cancelClickAnimation, { passive: true });
+      window.addEventListener("pointerdown", cancelClickAnimation, { passive: true });
+      window.addEventListener("keydown", cancelOnKey);
+
+      let frame = 0;
+      const observer = new ResizeObserver(() => {
+        cancelAnimationFrame(frame);
+        frame = requestAnimationFrame(() => {
+          updateViewportHeight();
+          triggerRef.current?.refresh();
+        });
+      });
+      observer.observe(viewport);
+      observer.observe(area);
+      if (scroller instanceof HTMLElement) observer.observe(scroller);
+
+      return () => {
+        observer.disconnect();
+        cancelAnimationFrame(frame);
+        window.removeEventListener("wheel", cancelClickAnimation);
+        window.removeEventListener("touchstart", cancelClickAnimation);
+        window.removeEventListener("pointerdown", cancelClickAnimation);
+        window.removeEventListener("keydown", cancelOnKey);
+        cancelClickAnimation();
+        triggerRef.current = null;
+        scrollerRef.current = null;
+        delete root.dataset.horizontal;
+        delete root.dataset.lockMode;
+        root.style.removeProperty("--services-viewport-height");
+      };
+    });
+
+    return () => media.revert();
+  }, { scope: rootRef });
+
+  // Native scrolling is immediate; only intentional tab clicks are eased.
+  function goToService(index: number, animate = true) {
+    const trigger = triggerRef.current;
+    const scroller = scrollerRef.current;
+    if (!trigger || !scroller) return;
+
+    const safeIndex = gsap.utils.clamp(0, services.length - 1, index);
+    const progress = safeIndex / (services.length - 1);
+    const target = trigger.start + (trigger.end - trigger.start) * progress;
+
+    clickTweenRef.current?.kill();
+    clickTweenRef.current = null;
+
+    const scrollTo = (top: number) => {
+      scroller.scrollTo({ top, behavior: "instant" });
+      ScrollTrigger.update();
+    };
+
+    if (!animate) {
+      scrollTo(target);
+      return;
+    }
+
+    const position = { y: trigger.scroll() };
+    clickTweenRef.current = gsap.to(position, {
+      y: target,
+      duration: 0.5,
+      ease: "power2.inOut",
+      onUpdate: () => scrollTo(position.y),
+      onComplete: () => { clickTweenRef.current = null; },
+      onInterrupt: () => { clickTweenRef.current = null; },
+    });
+  }
 
   return (
     <section
+      ref={rootRef}
       id="services"
-      className="relative overflow-hidden bg-[#F6F3EE] text-[#071017]"
+      aria-labelledby="services-heading"
+      className={styles.section}
     >
-      <Container
-        className="relative section-space">
+      <Container className="section-space">
 
-        {/* ====================================================
-            HEADER
-        ==================================================== */}
-        <motion.div
-          initial={false}
-          whileInView={{
-            opacity: 1,
-            y: 0,
-          }}
-          viewport={{
-            once: true,
-            amount: 0.4,
-          }}
-          transition={{
-            duration: 0.65,
-            ease,
-          }}
-          className="section-intro mx-auto text-center"
-        >
+        {/* INTRO */}
+
+        <div className={styles.intro}>
+          <p className="eyebrow text-[#52616D]">
+            What I do
+          </p>
+
           <h2
-            className="section-heading section-heading--center"
+            id="services-heading"
+            className={styles.heading}
           >
-            Turn visitors into customers.
-            <br />
-            <span className="text-[#C2410C]">
-              Give your team time back.
-            </span>
+            Technology that moves
+            <br className="hidden md:block" />
+            {" "}your business forward.
           </h2>
 
-          <p
-            className="section-copy intro-gap mx-auto text-[#52616D]"
-          >
-            Websites that bring enquiries. Software that fits your workflow.
-            Automation that takes the repetitive work off your team&apos;s plate.
+          <p className={styles.introDescription}>
+            From your digital presence to the systems
+            behind your business.
           </p>
-        </motion.div>
+        </div>
 
-        {/* ====================================================
-            SERVICES
-        ==================================================== */}
-        <motion.div
-          initial={false}
-          whileInView="visible"
-          viewport={{
-            once: true,
-            amount: 0.12,
-          }}
-          variants={{
-            hidden: {},
-            visible: {
-              transition: {
-                staggerChildren: reduceMotion ? 0 : 0.09,
-              },
-            },
-          }}
-          className="
-            content-gap
-            grid
-            border-y
-            border-[#071017]/10
+        {/* STICKY SCROLL AREA */}
 
-            lg:grid-cols-3
-          "
+        <div
+          ref={scrollAreaRef}
+          className={styles.scrollArea}
+          data-services-scroll-area
         >
-          {services.map((service, index) => (
-            <motion.article
-              key={service.title}
-              variants={{
-                hidden: reduceMotion
-                  ? {}
-                  : {
-                      opacity: 0,
-                      y: 18,
-                    },
-                visible: {
-                  opacity: 1,
-                  y: 0,
-                  transition: {
-                    duration: 0.6,
-                    ease,
-                  },
-                },
-              }}
-              className={[
-                `
-                  group
-                  relative
-                  flex
-                  flex-col
-                  min-w-0
-                  py-9
-                  motion-reduce:!opacity-100
-                  motion-reduce:!transform-none
+          <div
+            ref={stageRef}
+            className={styles.stage}
+            data-services-stage
+          >
+            {/* MINIMAL NAVIGATION */}
 
-                  sm:px-5
-
-                  lg:px-6
-                  lg:py-10
-
-                  xl:px-8
-                `,
-                index > 0
-                  ? `
-                      border-t
-                      border-[#071017]/10
-
-                      lg:border-l
-                      lg:border-t-0
-                    `
-                  : "",
-              ].join(" ")}
+            <nav
+              className={styles.navigation}
+              aria-label="Explore services"
             >
-              {/* ==============================================
-                  IMAGE
-              ============================================== */}
-              <div
-                className="
-                  relative
-                  aspect-[3/2]
-                  overflow-hidden
-                  rounded-[16px]
-                  border
-                  border-[#071017]/10
-                  bg-white
-                  shadow-[0_16px_40px_rgba(7,16,23,0.045)]
-                "
-              >
-                <Image
-                  src={service.image}
-                  alt={service.imageAlt}
-                  fill
-                  sizes="(max-width: 639px) calc(100vw - 40px), (max-width: 1023px) calc(100vw - 104px), (max-width: 1279px) calc((100vw - 96px) / 3 - 56px), (max-width: 1479px) calc((100vw - 128px) / 3 - 72px), 378px"
-                  className="
-                    object-cover
-                    transition-transform
-                    duration-300
-                    ease-out
-
-                    [@media(hover:hover)_and_(pointer:fine)]:group-hover:scale-[1.015]
-                    motion-reduce:transform-none
-                  "
-                />
-
-                {/* subtle edge so image integrates with page */}
-                <div
-                  aria-hidden="true"
-                  className="
-                    pointer-events-none
-                    absolute
-                    inset-0
-                    rounded-[inherit]
-                    ring-1
-                    ring-inset
-                    ring-white/35
-                  "
-                />
-              </div>
-
-              {/* ==============================================
-                  TEXT
-              ============================================== */}
-              <div className="mt-7 flex-1">
-                <p className="caption font-medium tracking-[0.18em] text-[#52616D]">
-                  {service.number}
-                </p>
-
-                <h3
-                  className="card-title mt-4 text-[#071017]"
+              {services.map((service, index) => (
+                <button
+                  key={service.id}
+                  type="button"
+                  aria-current={
+                    activeIndex === index
+                      ? "true"
+                      : undefined
+                  }
+                  aria-controls={`service-${service.id}`}
+                  onClick={() => goToService(index)}
+                  className={styles.navButton}
                 >
                   {service.title}
-                </h3>
+                </button>
+              ))}
+            </nav>
 
-                <p className="body-copy mt-3 font-medium text-[#263640] lg:min-h-14 xl:min-h-7">
-                  {service.tagline}
-                </p>
+            {/* FIXED VISUAL FRAME */}
 
-                <p
-                  className="body-copy mt-4 max-w-[390px] text-[#52616D]"
-                >
-                  {service.description}
-                </p>
-              </div>
-
-              {/* ==============================================
-                  EXAMPLES
-              ============================================== */}
-              <div className="mt-7 border-t border-[#071017]/10 pt-5">
-                <p className="eyebrow text-[#52616D]">
-                  What I build
-                </p>
-
-                <ul className="mt-3 space-y-2 small-copy text-[#52616D]">
-                  {service.examples.map((example) => (
-                    <li key={example} className="flex items-start gap-2.5">
-                      <span aria-hidden="true" className="mt-[8px] h-1 w-1 shrink-0 rounded-full bg-[#C2410C]" />
-                      <span>{example}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* ==============================================
-                  CTA
-              ============================================== */}
-              <div className="mt-auto pt-7">
-                <a
-                  href={service.href}
-                  className="button-secondary
-                    inline-flex
-                    min-h-11
-                    items-center
-                    rounded-sm
-                    gap-4
-                    button-text
-                    text-[#071017]
-                    focus-visible:outline-2
-                    focus-visible:outline-offset-4
-                    focus-visible:outline-[#C2410C]
-                  "
-                >
-                  <span
-                    className="
-                      border-b
-                      border-[#071017]/35
-                      pb-[2px]
-                      transition-colors
-                      duration-200
-
-                      group-hover:border-[#FF5A1F]
-                    "
+            <div
+              ref={viewportRef}
+              className={styles.viewport}
+            >
+              <div
+                ref={trackRef}
+                className={styles.track}
+              >
+                {services.map((service, index) => (
+                  <article
+                    key={service.id}
+                    id={`service-${service.id}`}
+                    className={styles.panel}
+                    onFocusCapture={(event) => {
+                      if (
+                        event.target instanceof HTMLElement &&
+                        event.target.matches(":focus-visible")
+                      ) {
+                        goToService(index, false);
+                      }
+                    }}
                   >
-                    {service.cta}
-                  </span>
+                    <div className={styles.content}>
+                      <h3 className={styles.title}>
+                        {service.title}
+                      </h3>
 
-                  <span
-                    aria-hidden="true"
-                    className="button-arrow text-[18px] leading-none"
-                  >
-                    →
-                  </span>
-                </a>
+                      <p className={styles.benefit}>
+                        {service.benefit}
+                      </p>
+
+                      <p className={styles.description}>
+                        {service.description}
+                      </p>
+
+                      <ul className={styles.capabilities}>
+                        {service.capabilities.map(
+                          (capability) => (
+                            <li key={capability}>
+                              {capability}
+                            </li>
+                          ),
+                        )}
+                      </ul>
+
+                      <Link
+                        href={service.href}
+                        aria-label={`Learn more about ${service.title}`}
+                        className={styles.serviceLink}
+                      >
+                        Learn more
+                        <Arrow />
+                      </Link>
+                    </div>
+
+                    <div className={styles.visual}>
+                      <Image
+                        src={service.image}
+                        alt={service.imageAlt}
+                        fill
+                        sizes="
+                          (min-width: 1480px) 650px,
+                          (min-width: 900px) 45vw,
+                          90vw
+                        "
+                        className={styles.image}
+                      />
+                    </div>
+                  </article>
+                ))}
               </div>
-            </motion.article>
-          ))}
-        </motion.div>
+            </div>
+          </div>
+        </div>
 
-        {/* ====================================================
-            BOTTOM STATEMENT
-        ==================================================== */}
-        <div
-          className="
-            flex
-            flex-col
-            gap-6
-            border-b
-            border-[#071017]/10
-            py-7
+        {/* CLOSING STATEMENT */}
 
-            md:flex-row
-            md:items-center
-            md:justify-between
-          "
-        >
-          <p className="max-w-[800px] body-copy text-[#263640]">
-            Start with what your business needs most. Build one focused solution,
-            or connect the whole workflow.
+        <div className={styles.footer}>
+          <p>
+            One technical partner.
+            Connected solutions.
           </p>
 
           <Link
-            href="/contact" data-contact-source="services"
-            className="button-secondary
-              group
-              inline-flex
-              min-h-11
-              self-start
-              rounded-sm
-              shrink-0
-              items-center
-              gap-4
-              button-text
-              text-[#071017]
-              focus-visible:outline-2
-              focus-visible:outline-offset-4
-              focus-visible:outline-[#C2410C]
-            "
+            href="/contact"
+            data-contact-source="services"
+            className={styles.contactLink}
           >
-            <span className="border-b border-[#071017]/35 pb-[2px]">
-              Talk about your project
-            </span>
-
-            <span
-              aria-hidden="true"
-              className="button-arrow text-[18px]"
-            >
-              →
-            </span>
+            Let&apos;s build something together
+            <Arrow />
           </Link>
         </div>
+
       </Container>
     </section>
   );

@@ -1,3 +1,4 @@
+import { MarketingPageTransition } from "@/components/site/MarketingPageTransition";
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { Geist } from "next/font/google";
@@ -128,6 +129,8 @@ export default function RootLayout({
         <ConsoleEasterEgg />
 
         <PrivacyProvider>{children}</PrivacyProvider>
+        <MarketingPageTransition />
+
       </body>
     </html>
   );
