@@ -1,9 +1,9 @@
 .section {
-  --faq-bg: var(--marketing-bg-dark);
-  --faq-fg: var(--marketing-fg-dark);
-  --faq-muted: var(--marketing-muted-dark);
-  --faq-accent: var(--marketing-accent-on-dark);
-  --faq-line: var(--marketing-line-dark);
+  --faq-bg: var(--marketing-bg-light);
+  --faq-fg: var(--marketing-fg-light);
+  --faq-muted: var(--marketing-muted-light);
+  --faq-accent: var(--marketing-accent-on-light);
+  --faq-line: var(--marketing-line-light);
   --faq-ease: var(--marketing-ease);
 
   position: relative;
@@ -20,7 +20,7 @@
   min-width: 0;
 
   margin-inline: auto;
-  padding-block: 0 var(--marketing-section-space);
+  padding-block: var(--marketing-section-space);
 }
 
 .layout {
@@ -34,9 +34,6 @@
 
   max-width: var(--marketing-editorial);
   margin-inline: auto;
-  padding-top: clamp(32px, 4vw, 56px);
-
-  border-top: 1px solid var(--faq-line);
 }
 
 /* Editorial introduction */
@@ -270,7 +267,7 @@
 
 @media (max-width: 767px) {
   .container {
-    padding-block: 0 64px;
+    padding-block: 56px 64px;
   }
 
   .layout {
@@ -278,7 +275,6 @@
     max-width: 600px;
 
     gap: 32px;
-    padding-top: 36px;
   }
 
   .heading {

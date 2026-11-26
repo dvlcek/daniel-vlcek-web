@@ -468,12 +468,7 @@ export async function getBookingAvailability(
   const db =
     getDb();
 
-  const [
-    rules,
-    overrides,
-    bookings,
-  ] =
-    await Promise.all([
+  const [rules, overrides, bookings, externalBusyPeriods] = await Promise.all([
       db.availabilityRule.findMany({
         where: {
           enabled: true,
@@ -545,6 +540,61 @@ export async function getBookingAvailability(
           endsAt: true,
         },
       }),
+
+      // VLKO_BOOKING_PERF_V1: run Google and DB independently.
+      (async (): Promise<BusyPeriod[]> => {
+        const calendarProvider =
+            getCalendarProvider();
+
+          let externalBusyPeriods: BusyPeriod[] =
+            [];
+
+          if (calendarProvider) {
+            /*
+             * Important:
+             *
+             * If Google Calendar is configured but
+             * unreachable, we intentionally allow
+             * this error to propagate.
+             *
+             * Showing zero busy periods on an API
+             * failure could cause a double booking.
+             * Failing closed is safer.
+             */
+            const externalBusy =
+              await calendarProvider.getBusyPeriods(
+                {
+                  startsAt:
+                    rangeStart
+                      .toUTC()
+                      .toJSDate(),
+
+                  endsAt:
+                    rangeEndExclusive
+                      .toUTC()
+                      .toJSDate(),
+                },
+              );
+
+            externalBusyPeriods =
+              externalBusy.flatMap(
+                (
+                  period,
+                ): BusyPeriod[] => {
+                  const busy =
+                    normalizeBusyPeriod(
+                      period.startsAt,
+                      period.endsAt,
+                    );
+
+                  return busy
+                    ? [busy]
+                    : [];
+                },
+              );
+          }
+        return externalBusyPeriods;
+      })(),
     ]);
 
   /* =======================================================
@@ -567,61 +617,6 @@ export async function getBookingAvailability(
           : [];
       },
     );
-
-  /* =======================================================
-     GOOGLE CALENDAR BUSY PERIODS
-  ======================================================= */
-
-  const calendarProvider =
-    getCalendarProvider();
-
-  let externalBusyPeriods: BusyPeriod[] =
-    [];
-
-  if (calendarProvider) {
-    /*
-     * Important:
-     *
-     * If Google Calendar is configured but
-     * unreachable, we intentionally allow
-     * this error to propagate.
-     *
-     * Showing zero busy periods on an API
-     * failure could cause a double booking.
-     * Failing closed is safer.
-     */
-    const externalBusy =
-      await calendarProvider.getBusyPeriods(
-        {
-          startsAt:
-            rangeStart
-              .toUTC()
-              .toJSDate(),
-
-          endsAt:
-            rangeEndExclusive
-              .toUTC()
-              .toJSDate(),
-        },
-      );
-
-    externalBusyPeriods =
-      externalBusy.flatMap(
-        (
-          period,
-        ): BusyPeriod[] => {
-          const busy =
-            normalizeBusyPeriod(
-              period.startsAt,
-              period.endsAt,
-            );
-
-          return busy
-            ? [busy]
-            : [];
-        },
-      );
-  }
 
   const busyPeriods = [
     ...internalBusyPeriods,

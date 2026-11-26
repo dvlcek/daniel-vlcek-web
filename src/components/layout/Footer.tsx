@@ -38,7 +38,7 @@ export async function Footer({ variant = "site", bookingHref = "/contact", launc
   ];
 
   return (
-  <footer className={variant === "launch" ? "relative z-10 w-full pt-6 text-white sm:pt-8" : "relative z-10 w-full bg-[var(--marketing-bg-dark)] pt-6 text-white sm:pt-8"}>
+  <footer className={variant === "launch" ? "relative z-10 w-full pt-6 text-white sm:pt-8" : "relative z-10 w-full bg-[#080d12] pt-6 text-white sm:pt-8"}>
 
     {variant === "launch" ? (
       <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 -top-20 bottom-0 bg-[linear-gradient(180deg,transparent_0%,rgba(2,4,5,0.28)_35%,rgba(2,4,5,0.65)_100%)]" />

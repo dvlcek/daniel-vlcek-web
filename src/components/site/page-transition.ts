@@ -15,35 +15,30 @@ export function navigationTarget(href: string, current: string) {
   } catch { return null; }
 }
 
-/** One persistent, non-blocking overlay; routing is never intercepted or delayed. */
+/** One persistent overlay. Navigation itself is never delayed. */
 export function createPageTransition(cover: HTMLElement, mark: HTMLElement) {
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
-  // A single intact brand mark. Hold only the visual layer, never the router.
-  const signatureDuration = 520;
-  let delay: number | undefined;
-  let exitDelay: number | undefined;
-  let timeout: number | undefined;
+  const minimumVisible = 440;
+  let hold: number | undefined;
+  let safety: number | undefined;
   let shownAt: number | null = null;
   let exiting = false;
   let generation = 0;
-  const stopAnimations = () => {
-    cover.getAnimations().forEach(animation => animation.cancel());
-    mark.getAnimations().forEach(animation => animation.cancel());
-  };
+
   function clearTimers() {
-    window.clearTimeout(delay);
-    window.clearTimeout(exitDelay);
-    window.clearTimeout(timeout);
+    window.clearTimeout(hold);
+    window.clearTimeout(safety);
   }
   function reset() {
     generation++;
     clearTimers();
-    stopAnimations();
+    cover.getAnimations().forEach(animation => animation.cancel());
     shownAt = null;
     exiting = false;
+    delete cover.dataset.active;
     cover.style.visibility = "hidden";
     cover.style.opacity = "1";
-    mark.style.opacity = "0";
+    mark.style.opacity = "1";
   }
   function enabled() {
     return !reduced.matches && !document.hidden && typeof cover.animate === "function";
@@ -52,25 +47,19 @@ export function createPageTransition(cover: HTMLElement, mark: HTMLElement) {
     if (shownAt !== null) return;
     shownAt = performance.now();
     cover.style.visibility = "visible";
-    cover.style.opacity = "1";
-    mark.style.opacity = "1";
+    cover.dataset.active = "true";
     cover.animate([{ opacity: 0 }, { opacity: 1 }], {
-      duration: 120, easing: "ease-out", fill: "both",
+      duration: 160, easing: "ease-out", fill: "both",
     });
-    mark.animate([
-      { opacity: 0, transform: "translateY(3px) scale(.97)" },
-      { opacity: 1, transform: "translateY(0) scale(1)" },
-    ], { duration: 300, easing: "cubic-bezier(.22,1,.36,1)", fill: "both" });
   }
   function begin(path: string) {
     if (!enabled() || !isMarketingPath(window.location.pathname) || !isMarketingPath(path)) return;
-    reset();
-    const token = generation;
-    delay = window.setTimeout(() => {
-      if (token === generation && enabled()) show();
-    }, 100);
-    // Never leave a stalled or cancelled navigation covered indefinitely.
-    timeout = window.setTimeout(reset, 6500);
+    if (exiting) reset();
+    clearTimers();
+    generation++;
+    show();
+    // A failed or cancelled navigation cannot leave the overlay on indefinitely.
+    safety = window.setTimeout(reset, 6500);
   }
   function commit(from: string, to: string) {
     if (from === to) return;
@@ -80,26 +69,22 @@ export function createPageTransition(cover: HTMLElement, mark: HTMLElement) {
     show();
     exiting = true;
     const token = ++generation;
-    // Routing is already committed. Give the signature a short visual window,
-    // then reveal the destination; slow navigations get no extra hold.
-    const hold = Math.max(0, signatureDuration - (performance.now() - (shownAt ?? performance.now())));
-    exitDelay = window.setTimeout(() => {
+    hold = window.setTimeout(() => {
       if (token !== generation) return;
       if (!enabled()) { reset(); return; }
-      // The entrance is complete. Fade the cover and mark together.
       cover.getAnimations().forEach(animation => animation.cancel());
-      const exit = cover.animate([
-        { opacity: 1 }, { opacity: 0 }
-      ], { duration: 300, easing: "cubic-bezier(.4,0,.2,1)", fill: "both" });
-      exit.onfinish = () => { if (generation === token) reset(); };
-    }, hold);
-    timeout = window.setTimeout(() => { if (generation === token) reset(); }, 1200);
+      const exit = cover.animate([{ opacity: 1 }, { opacity: 0 }], {
+        duration: 280, easing: "cubic-bezier(.4,0,.2,1)", fill: "both",
+      });
+      exit.onfinish = () => { if (token === generation) reset(); };
+    }, Math.max(0, minimumVisible - (performance.now() - (shownAt ?? performance.now()))));
+    safety = window.setTimeout(() => { if (token === generation) reset(); }, 1200);
   }
   const handleNavigation = (event: Event) => {
-    const path = (event as CustomEvent<string>).detail;
-    if (typeof path === "string") begin(path);
+    const target = (event as CustomEvent<string>).detail;
+    if (typeof target === "string") begin(target);
   };
-  const handleEscape = (event: KeyboardEvent) => { if (event.key === "Escape" || event.key === "Tab") reset(); };
+  const handleKey = (event: KeyboardEvent) => { if (event.key === "Escape" || event.key === "Tab") reset(); };
   const handleVisibility = () => { if (document.hidden) reset(); };
   const handleMotion = () => { if (reduced.matches) reset(); };
   const handlePointer = () => { if (shownAt !== null) reset(); };
@@ -107,7 +92,7 @@ export function createPageTransition(cover: HTMLElement, mark: HTMLElement) {
   window.addEventListener(NAVIGATION_EVENT, handleNavigation);
   window.addEventListener("popstate", reset);
   window.addEventListener("pagehide", reset);
-  window.addEventListener("keydown", handleEscape);
+  window.addEventListener("keydown", handleKey);
   document.addEventListener("visibilitychange", handleVisibility);
   reduced.addEventListener("change", handleMotion);
   reset();
@@ -117,7 +102,7 @@ export function createPageTransition(cover: HTMLElement, mark: HTMLElement) {
     window.removeEventListener(NAVIGATION_EVENT, handleNavigation);
     window.removeEventListener("popstate", reset);
     window.removeEventListener("pagehide", reset);
-    window.removeEventListener("keydown", handleEscape);
+    window.removeEventListener("keydown", handleKey);
     document.removeEventListener("visibilitychange", handleVisibility);
     reduced.removeEventListener("change", handleMotion);
   } };

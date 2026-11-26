@@ -50,6 +50,28 @@ function isDateKey(
    GET /api/booking/availability
 ========================================================= */
 
+// VLKO_BOOKING_PERF_V1: coalesce concurrent public reads only; no stored results.
+const pendingAvailability = new Map<string, ReturnType<typeof getBookingAvailability>>();
+const MAX_PENDING_KEYS = 32;
+
+function loadAvailability(
+  fromDate: string | undefined,
+  days: number | undefined,
+  fresh: boolean,
+): ReturnType<typeof getBookingAvailability> {
+  const input = { fromDate, days };
+  if (fresh) return getBookingAvailability(input);
+  const key = JSON.stringify([fromDate ?? null, days ?? 14]);
+  const existing = pendingAvailability.get(key);
+  if (existing) return existing;
+  if (pendingAvailability.size >= MAX_PENDING_KEYS) return getBookingAvailability(input);
+  const pending = getBookingAvailability(input).finally(() => {
+    pendingAvailability.delete(key);
+  });
+  pendingAvailability.set(key, pending);
+  return pending;
+}
+
 export async function GET(
   request: NextRequest,
 ) {
@@ -105,18 +127,16 @@ export async function GET(
       );
     }
 
-    const availability =
-      await getBookingAvailability({
-        fromDate:
-          from ?? undefined,
+    const startedAt = performance.now();
+    const availability = await loadAvailability(
+      from ?? undefined,
+      days,
+      params.get("fresh") === "1",
+    );
 
-        days,
-      });
-
-    return noStoreJson({
-      ok: true,
-      ...availability,
-    });
+    const response = noStoreJson({ ok: true, ...availability });
+    response.headers.set("Server-Timing", `availability;dur=${(performance.now() - startedAt).toFixed(1)}`);
+    return response;
   } catch (error) {
     console.error(
       "Booking availability API error:",

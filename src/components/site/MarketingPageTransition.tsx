@@ -3,6 +3,7 @@
 import { useLayoutEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { createPageTransition } from "./page-transition";
+import { MarketingSiteMotion } from "./MarketingReveal";
 import styles from "./MarketingPageTransition.module.css";
 
 export function MarketingPageTransition() {
@@ -26,8 +27,11 @@ export function MarketingPageTransition() {
   }, [pathname]);
 
   return (
-    <div ref={cover} className={styles.cover} aria-hidden="true">
-      <span ref={mark} className={styles.mark} />
-    </div>
+    <>
+      <div ref={cover} className={styles.cover} aria-hidden="true">
+        <span ref={mark} className={styles.mark} />
+      </div>
+      <MarketingSiteMotion pathname={pathname} coverRef={cover} />
+    </>
   );
 }

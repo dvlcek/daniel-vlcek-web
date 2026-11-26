@@ -22,6 +22,9 @@ export function isGoogleCalendarConfigured(): boolean {
    PROVIDER
 ========================================================= */
 
+// VLKO_BOOKING_PERF_V1: reuse the OAuth client within a warm runtime.
+let cachedProvider: CalendarProvider | null = null;
+
 export function getCalendarProvider():
   | CalendarProvider
   | null {
@@ -29,5 +32,6 @@ export function getCalendarProvider():
     return null;
   }
 
-  return new GoogleCalendarProvider();
+  cachedProvider ??= new GoogleCalendarProvider();
+  return cachedProvider;
 }

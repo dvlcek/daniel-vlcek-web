@@ -118,75 +118,53 @@ let availabilityPromise:
   | Promise<AvailabilityResponse>
   | null = null;
 
-async function requestAvailability(
-  force = false,
-): Promise<AvailabilityResponse> {
-  const cacheIsFresh =
-    cachedAvailability !== null &&
-    Date.now() -
-      cachedAvailabilityAt <
-      AVAILABILITY_CACHE_MS;
+// VLKO_BOOKING_PERF_V1: keep the existing 30-second browser cache.
+let pendingIsFresh = false;
 
-  if (
-    !force &&
-    cacheIsFresh &&
-    cachedAvailability
-  ) {
-    return cachedAvailability;
+function getFreshAvailability(): AvailabilityResponse | null {
+  return cachedAvailability !== null && Date.now() - cachedAvailabilityAt < AVAILABILITY_CACHE_MS
+    ? cachedAvailability : null;
+}
+
+function invalidateAvailability(): void {
+  cachedAvailability = null;
+  cachedAvailabilityAt = 0;
+  availabilityPromise = null;
+  pendingIsFresh = false;
+}
+
+function requestAvailability(force = false): Promise<AvailabilityResponse> {
+  if (!force) {
+    const cached = getFreshAvailability();
+    if (cached) return Promise.resolve(cached);
+    if (availabilityPromise) return availabilityPromise;
+  } else {
+    if (availabilityPromise && pendingIsFresh) return availabilityPromise;
+    invalidateAvailability();
   }
 
-  if (
-    !force &&
-    availabilityPromise
-  ) {
-    return availabilityPromise;
-  }
+  const url = `/api/booking/availability?days=${AVAILABILITY_DAYS}${force ? "&fresh=1" : ""}`;
+  const promise: Promise<AvailabilityResponse> = fetch(url, { method: "GET", cache: "no-store" })
+    .then(async (response) => {
+      const result = (await response.json()) as AvailabilityResponse;
+      if (!response.ok || !result.ok) {
+        throw new Error(result.message ?? "Could not load availability.");
+      }
+      if (availabilityPromise === promise) {
+        cachedAvailability = result;
+        cachedAvailabilityAt = Date.now();
+      }
+      return result;
+    })
+    .finally(() => {
+      if (availabilityPromise === promise) {
+        availabilityPromise = null;
+        pendingIsFresh = false;
+      }
+    });
 
-  const promise =
-    fetch(
-      `/api/booking/availability?days=${AVAILABILITY_DAYS}`,
-      {
-        method: "GET",
-        cache: "no-store",
-      },
-    )
-      .then(
-        async (
-          response,
-        ) => {
-          const result =
-            (await response.json()) as
-              AvailabilityResponse;
-
-          if (
-            !response.ok ||
-            !result.ok
-          ) {
-            throw new Error(
-              result.message ??
-                "Could not load availability.",
-            );
-          }
-
-          cachedAvailability =
-            result;
-
-          cachedAvailabilityAt =
-            Date.now();
-
-          return result;
-        },
-      )
-      .finally(
-        () => {
-          availabilityPromise =
-            null;
-        },
-      );
-
-  availabilityPromise =
-    promise;
-
+  availabilityPromise = promise;
+  pendingIsFresh = force;
   return promise;
 }
 
@@ -2634,19 +2612,13 @@ export function BookingWizard() {
     availability,
     setAvailability,
   ] =
-    useState<AvailabilityResponse | null>(
-      cachedAvailability,
-    );
+    useState<AvailabilityResponse | null>(getFreshAvailability);
 
   const [
     availabilityStatus,
     setAvailabilityStatus,
   ] =
-    useState<RequestStatus>(
-      cachedAvailability
-        ? "idle"
-        : "loading",
-    );
+    useState<RequestStatus>(availability ? "idle" : "loading");
 
   const [
     availabilityError,
@@ -2752,54 +2724,26 @@ export function BookingWizard() {
       [],
     );
 
-  const loadAvailability =
-    useCallback(
-      async (
-        force =
-          false,
-      ) => {
-        if (
-          !availability
-        ) {
-          setAvailabilityStatus(
-            "loading",
-          );
-        }
+  const availabilityRequestId = useRef(0);
 
-        setAvailabilityError(
-          "",
-        );
+  const loadAvailability = useCallback(async (force = false) => {
+    const requestId = ++availabilityRequestId.current;
+    if (force) setAvailability(null);
+    setAvailabilityStatus("loading");
+    setAvailabilityError("");
+    try {
+      const result = await requestAvailability(force);
+      if (requestId !== availabilityRequestId.current) return;
+      applyAvailability(result);
+      setAvailabilityStatus("idle");
+    } catch (error) {
+      if (requestId !== availabilityRequestId.current) return;
+      setAvailability(null);
+      setAvailabilityStatus("error");
+      setAvailabilityError(error instanceof Error ? error.message : "Could not load availability.");
+    }
+  }, [applyAvailability]);
 
-        try {
-          const result =
-            await requestAvailability(
-              force,
-            );
-
-          applyAvailability(
-            result,
-          );
-
-          setAvailabilityStatus(
-            "idle",
-          );
-        } catch (error) {
-          setAvailabilityStatus(
-            "error",
-          );
-
-          setAvailabilityError(
-            error instanceof Error
-              ? error.message
-              : "Could not load availability.",
-          );
-        }
-      },
-      [
-        applyAvailability,
-        availability,
-      ],
-    );
 
   useEffect(
     () => {
@@ -3018,11 +2962,8 @@ export function BookingWizard() {
           ),
         );
 
-        cachedAvailability =
-          null;
-
-        cachedAvailabilityAt =
-          0;
+        invalidateAvailability();
+        availabilityRequestId.current += 1;
 
         setSubmitStatus(
           "idle",
